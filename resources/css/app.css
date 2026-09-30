@@ -81,7 +81,7 @@ svg.lucide { width:18px; height:18px; stroke-width:1.7; flex-shrink:0; }
 .visual-miniapp { background:#eae7f3; }
 .visual-analysis { background:#f0eedb; }
 .visual-spreadsheet,.visual-files { background:#e3eee6; }
-.visual-presentation,.visual-meeting { background:#e4ecf4; }
+.visual-presentation,.visual-meeting,.visual-software { background:#e4ecf4; }
 .visual-work-tool,.visual-knowledge { background:#eae7f3; }
 .visual-report,.visual-creator { background:#f2e8de; }
 .visual-label { position:absolute; left:16px; top:15px; font-size:10px; padding:3px 8px; background:#ffffffed; color:#536157; border-radius:3px; }

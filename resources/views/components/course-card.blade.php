@@ -1,5 +1,5 @@
 @props(['course'])
-<article class="course-card" data-course-card data-category="{{ $course['category'] }}" data-search="{{ $course['title'] }} {{ $course['question'] }} {{ $course['tag'] }}">
+<article class="course-card" data-course-card data-category="{{ $course['category'] }}" data-search="{{ $course['title'] }} {{ $course['question'] }} {{ $course['tag'] }} {{ $course['description'] }}">
     <a class="course-visual visual-{{ $course['image'] }}" href="{{ route('series.show', $course['slug']) }}" aria-label="查看{{ $course['title'] }}">
         <img src="{{ asset('images/'.$course['image'].'.svg') }}" alt="{{ $course['outcome'] }}" width="800" height="480" loading="lazy">
         <span class="visual-label">{{ $course['available'] ? '第一课免费' : '正在筹备' }}</span>
