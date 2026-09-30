@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+<rect width="800" height="480" fill="#e9e5f2"/>
+<rect x="110" y="120" width="235" height="269" rx="5" fill="#f6f4fa" stroke="#d7d0e4"/>
+<text x="132" y="152" fill="#8a7ea6" font-family="Arial,sans-serif" font-size="11">YOUR NEXT IDEA</text>
+<text x="132" y="196" fill="#514262" font-family="Arial,sans-serif" font-size="28" font-weight="700">Small app.</text><text x="132" y="232" fill="#514262" font-family="Arial,sans-serif" font-size="28" font-weight="700">Real things.</text>
+<path d="M135 262h156m-156 11h127" stroke="#d3cbdc" stroke-width="4"/>
+<rect x="132" y="302" width="112" height="35" rx="4" fill="#e4dced"/><text x="146" y="324" fill="#806a99" font-family="Arial,sans-serif" font-size="10">BUILD YOUR IDEA</text>
+<rect x="391" y="32" width="239" height="416" rx="32" fill="#d2c9df"/>
+<rect x="383" y="27" width="239" height="416" rx="32" fill="#fff" stroke="#a89db8" stroke-width="2"/>
+<rect x="395" y="39" width="215" height="392" rx="22" fill="#f9f8fb"/>
+<rect x="465" y="40" width="78" height="13" rx="6" fill="#b4a7c3"/>
+<text x="415" y="71" fill="#61526f" font-family="Arial,sans-serif" font-size="10" font-weight="700">9:41</text><rect x="583" y="63" width="14" height="7" rx="2" stroke="#918398"/>
+<text x="415" y="113" fill="#b0a5bd" font-family="Arial,sans-serif" font-size="9">GOOD MORNING</text><text x="415" y="137" fill="#564068" font-family="Arial,sans-serif" font-size="20" font-weight="700">One small step.</text>
+<rect x="414" y="155" width="176" height="95" rx="6" fill="#e3ddec"/><text x="429" y="182" fill="#79608e" font-family="Arial,sans-serif" font-size="9">TODAY'S PLAN</text><text x="429" y="207" fill="#5d476d" font-family="Arial,sans-serif" font-size="16" font-weight="700">Make it happen.</text>
+<rect x="429" y="227" width="145" height="4" rx="2" fill="#d0c2df"/><rect x="429" y="227" width="63" height="4" rx="2" fill="#9275ad"/>
+<text x="415" y="280" fill="#6e607b" font-family="Arial,sans-serif" font-size="10" font-weight="700">MY PROJECTS</text>
+<rect x="415" y="295" width="175" height="39" rx="5" fill="#fff" stroke="#eee9f3"/><rect x="425" y="305" width="19" height="19" rx="4" fill="#ded5e9"/><path d="M452 310h73m-73 9h47" stroke="#b5a8c2" stroke-width="3"/><circle cx="575" cy="314" r="5" stroke="#d0c2df"/>
+<rect x="415" y="344" width="175" height="39" rx="5" fill="#fff" stroke="#eee9f3"/><rect x="425" y="354" width="19" height="19" rx="4" fill="#e0e9d8"/><path d="M452 359h83m-83 9h57" stroke="#b5a8c2" stroke-width="3"/><circle cx="575" cy="363" r="5" stroke="#d0c2df"/>
+<path d="M395 397h215" stroke="#e8e2ed"/><circle cx="442" cy="413" r="5" fill="#8c73a4"/><circle cx="503" cy="413" r="5" fill="#d6cde1"/><circle cx="566" cy="413" r="5" fill="#d6cde1"/>
+<rect x="578" y="311" width="98" height="51" rx="5" fill="#f8f5fc" stroke="#c7b9d9"/><path d="M594 331l5 5 10-11" stroke="#9074aa" stroke-width="2"/><text x="618" y="340" fill="#8a759e" font-family="Arial,sans-serif" font-size="10">DONE</text>
+</svg>

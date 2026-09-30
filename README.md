@@ -1,3 +1,38 @@
+# AI100分
+
+10分钟，解决一步。100分钟，解决一个真实问题。
+
+## 当前版本
+
+Laravel / Blade 前台 MVP 预览，采用 Tailwind CSS / Vite 与 Lucide 图标。包括首页、问题筛选与搜索、系列详情、免费第一课图文学习、验收清单下载、本机学习记录、购买订阅说明和直播准备状态。
+
+当前目录包含10个真实问题：网站、小程序、自媒体分析、Excel处理、PPT汇报、工作小工具、文件整理、调研报告、个人资料库和会议行动清单。网站第一课可试看，其余九个系列规划中。
+
+后台、真实账号、支付、订阅、录播视频和服务端学习进度尚未接入。浏览器学习记录不参与权限判断。查看 `MVP.md`、`DECISIONS.md` 与 `TODO.md` 了解完整目标及本轮范围。
+
+## 本地运行
+
+需要 PHP 8.3+、Composer 和支持 Vite 8 的 Node.js；当前开发环境为 PHP 8.5.7、Node.js 22.13.0。
+
+```shell
+composer install
+npm ci
+npm run build
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+新环境先从 `.env.example` 建立 `.env` 并执行 `php artisan key:generate`。前台预览使用 `SESSION_DRIVER=file`，无需执行数据库迁移。访问 http://127.0.0.1:8000 。
+
+## 验证
+
+```shell
+php artisan test
+```
+
+测试覆盖前台页面、免费正文与下载、未发布资料的服务端限制，以及 Series 内的 Lesson 定位。未来业务功能接入时，继续补齐项目约定的权限、支付、订阅与进度测试。
+
+## Laravel
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

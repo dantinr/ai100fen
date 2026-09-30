@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+<rect width="800" height="480" fill="#d8eae0"/>
+<rect x="105" y="78" width="594" height="365" rx="6" fill="#9db8a5" opacity=".25"/>
+<rect x="92" y="62" width="594" height="365" rx="6" fill="#fff"/>
+<path d="M92 92h594" stroke="#e6ece7"/>
+<circle cx="108" cy="77" r="3" fill="#c7d3c9"/><circle cx="119" cy="77" r="3" fill="#c7d3c9"/><circle cx="130" cy="77" r="3" fill="#c7d3c9"/>
+<rect x="246" y="70" width="246" height="14" rx="3" fill="#f2f5f2"/>
+<text x="325" y="80" fill="#87988b" font-family="Arial,sans-serif" font-size="8">my-first-website.com</text>
+<text x="118" y="122" fill="#203e2c" font-family="Arial,sans-serif" font-size="12" font-weight="700">FORM / STUDIO</text>
+<text x="516" y="121" fill="#869089" font-family="Arial,sans-serif" font-size="8">WORK</text><text x="560" y="121" fill="#869089" font-family="Arial,sans-serif" font-size="8">ABOUT</text><text x="611" y="121" fill="#869089" font-family="Arial,sans-serif" font-size="8">CONTACT</text>
+<rect x="118" y="143" width="542" height="221" fill="#edf2e9"/>
+<path d="M445 143h215v221H445z" fill="#d1dece"/>
+<path d="M449 327l53-82 43 13 63-107 52 47v166H449z" fill="#a9c09e"/>
+<path d="M489 329l60-30 17-17 68 19 26-8v71H489z" fill="#86a082"/>
+<path d="M528 209h71v140h-71z" fill="#f4f2e6"/>
+<path d="M599 209l26 15v125h-26z" fill="#dadfce"/>
+<path d="M528 209l36-15 61 30-26-15z" fill="#f9f8ee"/>
+<rect x="543" y="229" width="42" height="55" fill="#718679"/><path d="M564 229v55m-21-29h42" stroke="#e0e6d9" stroke-width="3"/>
+<rect x="549" y="306" width="24" height="43" fill="#9baf96"/>
+<text x="140" y="177" fill="#6f886f" font-family="Arial,sans-serif" font-size="8">A SPACE FOR YOUR IDEAS</text>
+<text x="140" y="225" fill="#2c4834" font-family="Arial,sans-serif" font-size="33" font-weight="700">Make room</text><text x="140" y="264" fill="#2c4834" font-family="Arial,sans-serif" font-size="33" font-weight="700">for your ideas.</text>
+<rect x="140" y="282" width="166" height="3" fill="#b9c8b6"/><rect x="140" y="292" width="132" height="3" fill="#c6d2c3"/>
+<rect x="140" y="318" width="83" height="24" rx="2" fill="#2b573c"/><text x="152" y="333" fill="#fff" font-family="Arial,sans-serif" font-size="7">EXPLORE WORK</text><path d="M208 329l4 4-4 4m4-4h-7" stroke="#e0efd9"/>
+<text x="118" y="394" fill="#8c998c" font-family="Arial,sans-serif" font-size="9">Your idea. Your space. Your website.</text><text x="631" y="394" fill="#486b49" font-family="Arial,sans-serif" font-size="9">01 / 03</text>
+<rect x="603" y="363" width="115" height="39" rx="4" fill="#f8fcf7" stroke="#c1d6c3"/><circle cx="621" cy="383" r="8" fill="#e0efda"/><path d="M617 383l3 3 5-6" stroke="#417c4d" stroke-width="1.5"/><text x="636" y="386" fill="#4c7856" font-family="Arial,sans-serif" font-size="10">ONLINE</text>
+</svg>
