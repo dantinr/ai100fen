@@ -6,7 +6,7 @@
 
 Laravel / Blade 前台 MVP 预览，采用 Tailwind CSS / Vite 与 Lucide 图标。包括首页、问题筛选与搜索、系列详情、免费第一课图文学习、验收清单下载、本机学习记录、购买订阅说明和直播准备状态。
 
-当前目录包含10个真实问题：网站、小程序、自媒体分析、Excel处理、PPT汇报、工作小工具、文件整理、调研报告、个人资料库和会议行动清单。网站第一课可试看，其余九个系列规划中。
+当前目录包含11个真实问题：网站、小程序、自媒体分析、创作者Agent创作计划、Excel处理、PPT汇报、工作小工具、文件整理、调研报告、个人资料库和会议行动清单。网站第一课可试看，其余十个系列规划中。
 
 后台、真实账号、支付、订阅、录播视频和服务端学习进度尚未接入。浏览器学习记录不参与权限判断。查看 `MVP.md`、`DECISIONS.md` 与 `TODO.md` 了解完整目标及本轮范围。
 
@@ -18,10 +18,11 @@ Laravel / Blade 前台 MVP 预览，采用 Tailwind CSS / Vite 与 Lucide 图标
 composer install
 npm ci
 npm run build
-php artisan serve --host=127.0.0.1 --port=8000
 ```
 
-新环境先从 `.env.example` 建立 `.env` 并执行 `php artisan key:generate`。前台预览使用 `SESSION_DRIVER=file`，无需执行数据库迁移。访问 http://127.0.0.1:8000 。
+新环境先从 `.env.example` 建立 `.env` 并执行 `php artisan key:generate`。前台预览使用 `SESSION_DRIVER=file`，无需执行数据库迁移。本地域名已配置为 [ai100fen.local](http://ai100fen.local)，`APP_URL=http://ai100fen.local`，Web服务入口为项目的 `public` 目录。
+
+未配置本地域名时，也可执行 `php artisan serve --host=127.0.0.1 --port=8000`，通过 http://127.0.0.1:8000 预览；对应环境的 `APP_URL` 设置为该地址。
 
 ## 验证
 
