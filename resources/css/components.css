@@ -69,6 +69,16 @@ svg.lucide { stroke-width:1.7; }
 .home-live p { color:var(--color-text-muted); }
 .site-footer { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); color:var(--color-text-muted); }
 .footer-brand { font-weight:var(--weight-strong); color:var(--color-text-muted); }
+.form-field>label { font-weight:var(--weight-strong); }
+.form-control { color:var(--color-text); background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-input); }
+.form-control[aria-invalid="true"] { border-color:var(--color-danger); }
+.form-control[readonly] { color:var(--color-text-muted); background:var(--color-surface-alt); }
+.form-help,.account-summary p { color:var(--color-text-muted); }
+.form-error { color:var(--color-danger); }
+.form-status { color:var(--color-success); }
+.form-checkbox input { accent-color:var(--color-primary); }
+.auth-switch a { font-weight:var(--weight-strong); text-decoration:underline; text-underline-offset:3px; }
+.account-panel { background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); }
 .page-heading h1 { font-weight:var(--weight-strong); }
 .search-field { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-input); color:var(--color-text-muted); }
 .search-field input { border:0; outline:0; background:transparent; color:var(--color-text); }

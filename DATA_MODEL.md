@@ -44,7 +44,11 @@ created_at
 updated_at
 ```
 
-status：
+当前账号实现（D-026）沿用Laravel初始迁移的`users`：除上述`status`外其余字段已存在；`email`唯一并在注册/登录时去空格、转小写，`password`通过模型hashed cast加密，`remember_token`用于记住登录。昵称最多50个字符，密码至少8个字符且遵守bcrypt的72字节输入限制，不存储明文密码。
+
+`email_verified_at`保留为空，当前未接入邮箱验证；注册不授予管理、购买或订阅权限。`password_reset_tokens`为框架预留表，找回密码流程尚未启用；默认文件会话，`sessions`表仅为切换数据库会话时的框架预留。当前学习进度仍保存在浏览器，没有用户关联的LessonProgress记录。
+
+`status`是未来账号停用功能的目标字段，本次不创建该字段、不模拟管理能力。未来值：
 
 ```text
 active

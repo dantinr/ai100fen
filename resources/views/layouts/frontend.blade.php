@@ -20,7 +20,7 @@
                 <a href="{{ route('live') }}" @class(['active' => request()->routeIs('live')]) @if(request()->routeIs('live')) aria-current="page" @endif>直播</a>
                 <a href="{{ route('me') }}" @class(['active' => request()->routeIs('me')]) @if(request()->routeIs('me')) aria-current="page" @endif>我的100分</a>
             </nav>
-            <div class="header-actions"><a class="login-link" href="{{ route('login') }}">登录</a><a class="button button-small button-dark" href="{{ route('series.index') }}">开始解决问题<i data-lucide="arrow-up-right"></i></a><button class="icon-button menu-toggle" aria-label="展开导航" aria-expanded="false" aria-controls="main-navigation"><i data-lucide="menu"></i></button></div>
+            <div class="header-actions"><a class="login-link" href="{{ auth()->check() ? route('me') : route('login') }}">{{ auth()->check() ? '个人中心' : '登录' }}</a><a class="button button-small button-dark" href="{{ route('series.index') }}">开始解决问题<i data-lucide="arrow-up-right"></i></a><button class="icon-button menu-toggle" aria-label="展开导航" aria-expanded="false" aria-controls="main-navigation"><i data-lucide="menu"></i></button></div>
         </div>
     </header>
     <main id="main">@yield('content')</main>

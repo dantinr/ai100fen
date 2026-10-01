@@ -4,6 +4,19 @@ import { updateUfoProgress } from './ufo';
 const icons = { ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays };
 createIcons({ icons });
 
+document.querySelectorAll('[data-submit-form]').forEach((form) => {
+    const button = form.querySelector('button[type="submit"]');
+    const label = button.innerHTML;
+    form.addEventListener('submit', () => {
+        button.disabled = true;
+        button.textContent = '正在提交…';
+    });
+    window.addEventListener('pageshow', () => {
+        button.disabled = false;
+        button.innerHTML = label;
+    });
+});
+
 let toastTimer;
 function toast(message) {
     const target = document.querySelector('#toast');

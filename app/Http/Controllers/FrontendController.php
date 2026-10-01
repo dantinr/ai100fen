@@ -63,19 +63,4 @@ class FrontendController extends Controller
     {
         return view('frontend.live');
     }
-
-    public function me(): View
-    {
-        return view('frontend.me', ['series' => $this->catalog->all()]);
-    }
-
-    public function login(): View
-    {
-        return view('frontend.auth', ['register' => false]);
-    }
-
-    public function register(): View
-    {
-        return view('frontend.auth', ['register' => true]);
-    }
 }
