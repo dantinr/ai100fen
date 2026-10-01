@@ -8,7 +8,7 @@ class FrontendPreviewTest extends TestCase
 {
     public function test_public_frontend_pages_render(): void
     {
-        foreach (['/', '/series', '/series/build-a-website', '/series/build-a-miniapp', '/series/analyze-your-content', '/series/plan-your-next-creation', '/series/merge-excel-files', '/series/create-a-presentation', '/series/build-a-work-tool', '/series/build-your-own-software', '/series/remix-a-game', '/series/organize-your-files', '/series/write-a-research-report', '/series/build-a-knowledge-library', '/series/turn-meetings-into-actions', '/pricing', '/live', '/me', '/login', '/register'] as $path) {
+        foreach (['/', '/series', '/series/build-a-website', '/series/add-website-support', '/series/build-a-miniapp', '/series/analyze-your-content', '/series/plan-your-next-creation', '/series/merge-excel-files', '/series/create-a-presentation', '/series/build-a-work-tool', '/series/build-your-own-software', '/series/remix-a-game', '/series/organize-your-files', '/series/write-a-research-report', '/series/build-a-knowledge-library', '/series/turn-meetings-into-actions', '/pricing', '/live', '/me', '/login', '/register'] as $path) {
             $this->get($path)->assertOk()->assertSee('AI100分');
         }
     }
