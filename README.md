@@ -32,6 +32,43 @@ php artisan test
 
 测试覆盖前台页面、免费正文与下载、未发布资料的服务端限制，以及 Series 内的 Lesson 定位。未来业务功能接入时，继续补齐项目约定的权限、支付、订阅与进度测试。
 
+## 临时预览部署（2026-10-01）
+
+- 访问地址：https://ai100.aicsi.cn；服务器：39.106.113.140。
+- 项目目录：`/var/www/ai100fen`；Nginx仅公开`/var/www/ai100fen/public`。
+- 服务：Nginx与PHP 8.5 FPM，套用`deploy/nginx/ai100.aicsi.cn.conf`。独立域名配置，HTTP跳转HTTPS。
+- 使用服务器已有Certbot账号申请证书，已有`certbot.timer`自动续期及Nginx重载钩子。
+- 环境参考`deploy/preview.env.example`；服务器生成独立APP_KEY，APP_DEBUG=false，文件会话与缓存，同步队列。前台预览不连接业务数据库、不执行迁移。
+- robots.txt、页面noindex与Nginx的X-Robots-Tag继续禁止抓取与索引。
+
+前端资源在本机构建，服务器不安装Node或执行npm构建。后续更新时，先确保源码提交已推送，并在同一版本运行测试与构建：
+
+```powershell
+php artisan test
+npm run build
+tar -czf .local/deploy/ai100fen-preview-build.tar.gz -C public build
+scp .local/deploy/ai100fen-preview-build.tar.gz root@39.106.113.140:/tmp/
+```
+
+服务器确认将要部署的提交与本机构建版本一致；更新前备份代码、public/build及运行时配置，保留原APP_KEY：
+
+```bash
+set -e
+cd /var/www/ai100fen
+git pull --ff-only origin main
+tar -xzf /tmp/ai100fen-preview-build.tar.gz -C public
+COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R u=rwX,g=rwX,o= storage bootstrap/cache
+```
+
+`.env`由root拥有、www-data组可读、权限640；仅storage和bootstrap/cache需要Web进程写入。密钥不上传至Git。Nginx首次启用或配置变更时先`nginx -t`，再重载服务。当前HTTP配置备份位于`/var/backups/ai100fen/nginx-http-20261001.conf`。
+
+部署后检查首页、课程列表、试看正文与清单、构建资源、robots.txt，以及`.env`、`.git`、日志和未开放资料的访问限制。当前服务仍是前台预览，账号、购买、订阅与后台待实现。
+
 ## Laravel
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>

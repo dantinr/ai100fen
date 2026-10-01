@@ -104,3 +104,10 @@
 - 决策：public/robots.txt使用User-agent: *和Disallow: /；公共页面布局添加noindex, nofollow指令。
 - 原因：用户明确要求加入robots.txt、禁止索引；robots.txt控制抓取，页面指令用于声明不应索引。
 - 影响：当前全站声明禁止抓取和索引；后续若开放搜索收录，需同步调整robots.txt与页面指令。此改动不影响用户访问和课程权限。
+
+## D-018：临时部署前台预览站
+- 日期：2026-10-01
+- 状态：Accepted
+- 决策：按用户要求将当前前台MVP部署至39.106.113.140，项目位于/var/www/ai100fen，通过ai100.aicsi.cn提供HTTPS访问。复用现有Nginx、PHP 8.5 FPM、Composer及Certbot；前端在本机构建后上传。
+- 原因：用户要求先临时部署，并已解析指定域名。
+- 影响：新增独立Nginx站点与部署环境示例、更新说明。服务器APP_ENV=production且关闭调试，使用文件会话和缓存、同步队列，不连接业务数据库或执行迁移。保留D-017禁止索引规则并增加X-Robots-Tag响应头；应用密钥在服务器生成，不进入Git。现有前台预览范围不变。
