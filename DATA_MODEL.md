@@ -3,6 +3,8 @@
 > 本文定义MVP领域模型和推荐数据库结构。  
 > 原则：清晰、简单、可扩展，但不提前复杂化。
 
+课程业务约束以[`docs/COURSE_CONSTITUTION.md`](docs/COURSE_CONSTITUTION.md)为准，字段同步决策见D-023。当前前台仍使用`App\Support\FrontendCatalog`示例数组，尚无CourseSeries模型、`course_series`业务表或对应迁移；下文该表为实现目标，不是已存在的数据库结构。
+
 ---
 
 ## 1. 核心关系
@@ -78,8 +80,13 @@ title               varchar
 slug                varchar unique
 subtitle            varchar nullable
 description         text nullable
+category            enum('solve', 'create', 'explore') not null
+user_intent         text nullable
 problem_statement   text nullable
 final_outcome       text nullable
+completion_criteria json nullable
+agent_role          json nullable
+human_judgment_required json nullable
 cover                varchar nullable
 price                decimal(10,2) default 100.00
 status               varchar
@@ -96,6 +103,33 @@ draft
 published
 archived
 ```
+
+### 3.1 宪章字段语义
+
+| 字段 | 内容与约束 |
+| --- | --- |
+| `category` | 唯一主要价值类别：solve、create、explore；创建/编辑必填，不设置默认类别，也不按工具或职业自动推断 |
+| `user_intent` | 用户为什么开始任务，包括待解决的问题、待创作的作品或待验证的可能 |
+| `final_outcome` | 课程结束后的真实成果或有证据支持的实验结论 |
+| `completion_criteria` | 可逐项核对的最终验收条件；Explore需验收真实实验与证据结论，不强制实验成功 |
+| `agent_role` | Agent具体执行职责，如生成、修改、运行、部署或分析 |
+| `human_judgment_required` | 人必须作出的目标、选择、风险、观察和验收判断事项；是内容清单，不是boolean |
+
+后三个JSON字段采用有序字符串数组，Laravel实现时按`array`转换，先支持简单清单，不为本轮增加独立规则表或复杂编辑器。`problem_statement`保留为可选的问题背景，不能替代涵盖三类意图的`user_intent`；`final_outcome`复用原字段，不重复建列。
+
+### 3.2 草稿与发布校验
+
+- 创建或编辑时服务端检查category属于允许的三个值；正式CourseSeries不接受`build/work`、空值或多个主要类别。
+- 五个内容字段的nullable仅支持草稿逐步填写；进入`published`前六项必须完整，文本非空，三个JSON清单须为非空数组且每项为非空字符串。字段结构校验之外，内容审核仍须确认真实成果、可验证标准及人的关键判断。
+- Solve验收目标状态；Create验收实际成品；Explore验收实验过程、证据与明确结论，允许失败或证伪。不额外添加“实验成功才可完成”的布尔门槛。
+- 标准Series最终Lesson须对应整个Series验收；Lesson进度字段表示过程完成度，不能只凭播放时长自动认定任务达成。首版可由用户对照清单明确确认，无需增加复杂作业、考试或证书模型。
+- 未来权限与学习进度仍由服务端校验；category和验收内容不是购买或订阅权限依据。
+
+### 3.3 当前示例与迁移差距
+
+当前`FrontendCatalog`的`category=build/work`属于旧前台筛选，`question/outcome/deliverables`用于展示，尚未提供完整的六项宪章字段。迁移时逐门根据真实意图核定类别，补充成果、验收条件和人/Agent职责；不盲目执行`build→create`、`work→solve`或将deliverables直接当成验收标准。
+
+本轮只同步字段设计，不生成或执行数据库迁移、不改写示例内容。业务表实现及已有数据回填时，先审核类别和六项定义，再按草稿/发布约束导入；不能为了通过非空校验而批量填入默认类别。待办见`TODO.md`。
 
 不要把Series永久写死为10课。
 
@@ -161,15 +195,11 @@ updated_at
 (user_id, lesson_id)
 ```
 
-完成规则首版：
+完成规则首版：用户对照Lesson的可见阶段成果与验收方式，显式确认完成；最终Lesson同时核对整个Series的`completion_criteria`。达到播放/阅读进度阈值只表示过程进度，不能单独填写`completed_at`或授予100分。
 
-```text
-用户主动标记完成
-或
-progress_percent >= 指定阈值
-```
+标准Series每个已验收Lesson计10分，全部阶段及最终任务验收完成才到100分；非标准Series按配置计算。Solve依据问题目标状态，Create依据真实成品，Explore依据实验与证据结论，不能将实验失败视为未完成。
 
-建议先采用显式“完成”按钮，避免视频进度带来复杂边界。
+本段是服务端LessonProgress实现目标。当前预览只保存浏览器内网站第一课的验收记录（0或10分），不代表服务端进度或完整Series验收已实现。
 
 ---
 

@@ -139,3 +139,10 @@
 - 决策：依据THEME_SYSTEM，将D-021试版视觉抽为语义Token和默认Pop主题。拆分Base布局、组件外观、页面浓度及主题值，通过config/themes.php注册、APP_THEME全站选择；非法配置回退默认主题。布局统一输出html data-theme和body data-page，Vite仅加载选中的主题CSS及其图案资源。
 - 原因：用户要求网站主题化，需要整体替换视觉语言而保持页面结构、组件语义和业务行为稳定。直接复用Blade、CSS变量与现有Vite，无需动画库或用户偏好系统。
 - 影响：按钮、卡片、搜索、面板、进度、课程海报和UFO使用共享Token；Pop命名海报/StarBurst组件改为app-course-art/app-score-emblem。新增Future机制验证骨架，包含深色、字体、轻边框、圆角、光晕、网格和UFO/动画参数；不视为完整视觉定稿。课程目录、价格、访问、验收和本机进度规则不变，不创建迁移或后台设置。默认仍为Pop，用户级选择后置。
+
+## D-023：课程宪章约束同步
+- 日期：2026-10-01
+- 状态：Accepted
+- 决策：按用户要求将docs/COURSE_CONSTITUTION.md的课程体系最高规则同步到AGENTS、PRODUCT和DATA_MODEL。Series只能选solve/create/explore中的一个主要类别，定义用户意图、真实成果、完成标准及人/Agent职责；命名、首页课程入口、发现与推荐以真实任务为中心。Explore完成真实实验并产生明确、可解释、有证据的结论即可完成，失败或证伪也可达到100分。
+- 原因：此前文档只强调解决问题，缺少作品/探索价值、六项课程定义及分类发布约束，且允许仅靠进度阈值完成的表述与“做成才100分”不一致。
+- 影响：明确宪章优先级与必读路径；保留D-001标准10×10格式和D-002完成度含义，补充最终验收语义。CourseSeries目标结构增加category、user_intent、completion_criteria、agent_role、human_judgment_required，复用final_outcome；后三项使用JSON字符串清单，human_judgment_required不是布尔值，草稿逐步填写，正式发布前六项完整。旧build/work示例须逐门审核迁移，不机械映射。本轮仅修改文档，不改页面、示例目录、权限、价格或浏览器进度，不创建业务表或迁移；实施任务进入TODO。课程规则是对旧文档的补充与冲突澄清，不删除历史决策。
