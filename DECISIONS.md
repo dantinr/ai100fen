@@ -101,7 +101,8 @@
 
 ## D-017：全站禁止搜索引擎抓取与索引
 - 日期：2026-10-01
-- 状态：Accepted
+- 状态：Superseded
+- 替代决策：D-030。测试域名改为允许抓取并禁止索引；共享robots文件及原应用SEO策略保留。
 - 决策：public/robots.txt使用User-agent: *和Disallow: /；公共页面布局添加noindex, nofollow指令。
 - 原因：用户明确要求加入robots.txt、禁止索引；robots.txt控制抓取，页面指令用于声明不应索引。
 - 影响：当前全站声明禁止抓取和索引；后续若开放搜索收录，需同步调整robots.txt与页面指令。此改动不影响用户访问和课程权限。
@@ -190,3 +191,10 @@
 - 决策：按用户明确要求，日常上线固定为本地提交并push GitHub main及Gitee master，随后在服务器`/var/www/ai100fen`执行`git pull`。服务器保留GitHub origin和当前main分支，将上游设为Gitee HTTPS远程的master；一次性安装脚本负责配置，日常不再以手工上传或fetch/merge代替pull。
 - 原因：D-025已有post-merge自动刷新，但服务器访问GitHub多次过慢，导致近期需手工回退拉取。使用已有Gitee镜像作为生产拉取源，让常规命令保持简单且可执行。
 - 影响：补充D-025，沿用原有构建产物、仅快进、依赖安装、缓存刷新、提交记录同步及FPM重载Hook。push完成后仍须服务器pull、Hook成功及线上验证才算发布完成；没有新提交时不触发Hook，故障重试沿用refresh.sh。安装脚本保留不同的同名远程、自定义Hook和分叉历史并报告错误，不强制重置。不新增数据库迁移、应用环境变量、CI、云资源或业务功能。
+
+## D-030：测试域名允许抓取、禁止索引
+- 日期：2026-10-01
+- 状态：Accepted
+- 决策：按用户要求，仅对ai100.aicsi.cn测试/预览域名修改爬虫策略。由Nginx精确location提供独立robots文件，内容为User-agent: *及Allow: /；复用HTTPS现有noindex, nofollow响应头，在HTTP server补齐，覆盖重定向与错误响应。保留HTTPS跳转与应用已有等效meta。
+- 原因：原Disallow会阻止搜索引擎读取页面noindex，且修改共享public/robots.txt会影响其他环境。测试站虽以APP_ENV=production安全运行，抓取策略必须按站点隔离。
+- 影响：替代D-017的测试站抓取限制，生产共享SEO保持原样，不改Laravel业务、权限、认证、限流或后台。Nginx只安装指定测试站点配置，经备份、语法测试后reload；Git pull Hook不自动改系统配置。增加HTTP验证脚本及Cloudflare人工清单，当前DNS直连源站，无后台Cloudflare配置变更。无数据库迁移、应用环境变量、新依赖或前端构建变更。

@@ -996,3 +996,9 @@ AI100分不是为了让用户“学会更多知识”。
 - 上线脚本只校验构建产物、安装锁定PHP依赖、刷新缓存、同步公开提交记录快照、修复运行目录权限及重载PHP FPM；不得自动生成密钥、覆盖环境变量、执行数据库迁移或修改真实业务数据。
 - 提交记录遵循D-027：使用`php artisan project:sync-history`从当前Git HEAD生成`storage/app/private/commit-history.json`，生产git pull Hook自动执行，本地完成提交后手动同步。页面只读取快照，禁止依据请求参数执行Git或公开作者邮箱、完整提交正文和差异；缺失快照明确显示未同步。
 - Git更新与Hook执行不是原子发布，报错须明确报告并处理；不能将Git已更新当作部署成功，也不得用强制重置清除服务器本地修改。
+
+## 25. 测试站爬虫与SEO隔离
+
+- D-030仅作用于`ai100.aicsi.cn`测试域名：Nginx精确location提供`deploy/robots-testing.txt`的Allow规则，HTTP/HTTPS统一`X-Robots-Tag: noindex, nofollow`，优先复用已有响应头，避免重复。
+- 该预览站`APP_ENV=production`是运行安全设置，不代表这套robots策略适用于所有生产域名。不要为测试站改写共享`public/robots.txt`、应用SEO、业务权限、后台认证或必要安全防护。
+- Nginx系统配置变更须单独备份、限定测试站点、通过`nginx -t`后reload；常规git pull Hook继续不修改`/etc/nginx`。验证及Cloudflare人工清单见`deploy/CRAWLER_POLICY.md`。

@@ -71,6 +71,6 @@ git pull
 - 账号发布前已配置独立`ai100fen`数据库及项目账号，三份框架初始迁移均已完成，未执行Seeder；APP_KEY及非数据库环境值保持不变。账号初始化前的`.env`保存于仅root可访问的`/var/backups/ai100fen/accounts-20261001-162053`。
 - 已在`/var/www/ai100fen`启用Hook，并通过实际`git pull`验证自动安装依赖、刷新缓存与FPM重载。
 - 依据D-029，服务器当前main分支跟踪`gitee/master`，已核对两个仓库同一提交，并按本地push→服务器git pull验证发布。
-- 首页、问题池、价格页、免费第一课和清单下载正常；未开放清单与`.env`、`.git`继续拒绝访问，robots.txt继续禁止抓取。
+- 首页、问题池、价格页、免费第一课和清单下载正常；未开放清单与`.env`、`.git`继续拒绝访问。D-030将测试域名robots改为允许抓取，HTTP/HTTPS均使用noindex响应头；环境隔离、Nginx安装及Cloudflare人工清单见[CRAWLER_POLICY.md](CRAWLER_POLICY.md)。
 - 已核对全部6份构建资源的SHA256与本地一致，确认`.env`字节未变。
 - 切换前的构建产物、bootstrap缓存与`.env`保存在仅root可访问的`/var/backups/ai100fen/git-pull-20261001-154705`，旧构建遗留文件另行归档，不覆盖业务数据。
