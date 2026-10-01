@@ -9,17 +9,20 @@ use App\Services\CourseAccessService;
 use App\Services\FreeCourseRecommendationService;
 use App\Services\ProgressService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class FreeLabController extends Controller
 {
     public function index(Request $request, FreeCourseRecommendationService $recommendations)
     {
-        $validated = $request->validate(['q' => ['nullable', 'string', 'max:300']]);
-        $courses = CourseSeries::freeLab()->with(['lessons' => fn ($query) => $query->where('status', 'published')])->orderBy('id')->get();
+        $validated = $request->validate(['q' => ['nullable', 'string', 'max:300'], 'category' => ['nullable', 'string', Rule::in(['solve', 'create', 'explore'])]]);
+        $category = $validated['category'] ?? null;
+        $courses = CourseSeries::freeLab()->when($category, fn ($query) => $query->where('category', $category))
+            ->with(['lessons' => fn ($query) => $query->where('status', 'published')])->orderBy('id')->get();
         $question = $validated['q'] ?? '';
 
-        return view('frontend.free.index', compact('courses', 'question') + [
+        return view('frontend.free.index', compact('courses', 'question', 'category') + [
             'recommendations' => $recommendations->recommend($question, $courses),
         ]);
     }

@@ -113,6 +113,16 @@ class FreeLabTest extends TestCase
         $this->getJson('/free?q='.str_repeat('x', 301))->assertUnprocessable();
     }
 
+    public function test_home_intent_destinations_filter_real_courses_and_reject_invalid_categories(): void
+    {
+        foreach (['solve' => 'merge-csv-report', 'create' => 'personal-intro-page', 'explore' => 'compare-prompts'] as $category => $slug) {
+            $this->get('/free?category='.$category)->assertOk()->assertViewHas('courses', fn ($courses) => $courses->count() === 1 && $courses->first()->slug === $slug);
+        }
+        $this->get('/free?category=solve&q=网页')->assertOk()->assertSee('这个方向暂时没有匹配的免费任务')->assertDontSee('Paul：可以从「做一个能打开的个人介绍网页');
+        $this->getJson('/free?category=build')->assertUnprocessable();
+        $this->getJson('/free?category[]=solve')->assertUnprocessable();
+    }
+
     public function test_installer_is_idempotent_and_preserves_edits_and_progress(): void
     {
         $course = CourseSeries::first();

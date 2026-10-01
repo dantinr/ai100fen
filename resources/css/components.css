@@ -461,3 +461,15 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .free-check input { accent-color:var(--color-success); }
 .free-outline-link[aria-current=page] { font-weight:700; color:var(--color-text); text-decoration:underline; text-underline-offset:5px; }
 .free-error { color:var(--color-danger); }
+.home-intent-card { color:var(--color-text); background:var(--color-surface); border:var(--border-width-strong) solid var(--color-border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-card); transition:transform var(--motion-fast) var(--ease-default),box-shadow var(--motion-fast) var(--ease-default); }
+.home-intent-kicker { font-weight:var(--weight-strong); }
+.home-intent-kicker svg { color:var(--color-action-text); padding:6px; box-sizing:content-box; border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-sm); }
+.home-intent-card[data-intent=solve] .home-intent-kicker svg { background:var(--color-primary); }
+.home-intent-card[data-intent=create] .home-intent-kicker svg { background:var(--color-secondary); }
+.home-intent-card[data-intent=explore] .home-intent-kicker svg { background:var(--color-accent); }
+.home-intent-card p { color:var(--color-text-muted); }
+.home-intent-action { font-weight:var(--weight-strong); }
+.home-intent-card:focus-visible { outline:3px solid var(--color-secondary); outline-offset:5px; }
+.free-categories a { color:var(--color-text); background:var(--color-surface); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-button); }
+.free-categories a[aria-current=page] { background:var(--color-accent); color:var(--color-action-text); font-weight:var(--weight-strong); }
+@media(hover:hover) and (prefers-reduced-motion:no-preference) { .home-intent-card:hover { transform:var(--transform-hover); box-shadow:var(--shadow-card-hover); } }

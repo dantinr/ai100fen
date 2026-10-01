@@ -650,6 +650,17 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .my-course-image .art-icon svg { width:24px; height:24px; }
 .my-course-image .art-caption { display:none; }
 .free-main { max-width:1180px; }
+.home-intents { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; margin-top:28px; }
+.home-intent-card { display:flex; flex-direction:column; min-width:0; padding:25px; }
+.home-intent-kicker { display:flex; justify-content:space-between; align-items:center; font-size:12px; letter-spacing:.08em; }
+.home-intent-kicker svg { width:26px; height:26px; }
+.home-intent-card h2 { font-size:24px; margin:18px 0 12px; }
+.home-intent-card p { font-size:13px; line-height:1.8; flex:1; }
+.home-intent-action { display:flex; align-items:center; gap:10px; font-size:12px; margin-top:22px; }
+.home-intent-action svg { width:16px; height:16px; }
+.free-categories { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 24px; }
+.free-categories a { display:flex; align-items:center; min-height:44px; padding:8px 12px; font-size:12px; }
+@media(max-width:760px) { .home-intents { grid-template-columns:1fr; gap:18px; } .home-intent-card { padding:22px; } .home-intent-card h2 { font-size:22px; } }
 .free-hero { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:30px; }
 .free-hero h1 { font-size:clamp(32px,5vw,52px); margin:12px 0; }
 .free-hero p { max-width:630px; line-height:1.8; }
