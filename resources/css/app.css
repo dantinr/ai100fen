@@ -79,7 +79,7 @@ svg.lucide { width:18px; height:18px; stroke-width:1.7; flex-shrink:0; }
 .course-card:hover .course-visual>img { transform:scale(1.025); }
 .visual-website,.visual-support { background:#d6eae1; }
 .visual-miniapp { background:#eae7f3; }
-.visual-analysis { background:#f0eedb; }
+.visual-analysis,.visual-digital-assets { background:#f0eedb; }
 .visual-spreadsheet,.visual-files { background:#e3eee6; }
 .visual-presentation,.visual-meeting,.visual-software { background:#e4ecf4; }
 .visual-work-tool,.visual-knowledge,.visual-game { background:#eae7f3; }
