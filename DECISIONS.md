@@ -146,3 +146,10 @@
 - 决策：按用户要求将docs/COURSE_CONSTITUTION.md的课程体系最高规则同步到AGENTS、PRODUCT和DATA_MODEL。Series只能选solve/create/explore中的一个主要类别，定义用户意图、真实成果、完成标准及人/Agent职责；命名、首页课程入口、发现与推荐以真实任务为中心。Explore完成真实实验并产生明确、可解释、有证据的结论即可完成，失败或证伪也可达到100分。
 - 原因：此前文档只强调解决问题，缺少作品/探索价值、六项课程定义及分类发布约束，且允许仅靠进度阈值完成的表述与“做成才100分”不一致。
 - 影响：明确宪章优先级与必读路径；保留D-001标准10×10格式和D-002完成度含义，补充最终验收语义。CourseSeries目标结构增加category、user_intent、completion_criteria、agent_role、human_judgment_required，复用final_outcome；后三项使用JSON字符串清单，human_judgment_required不是布尔值，草稿逐步填写，正式发布前六项完整。旧build/work示例须逐门审核迁移，不机械映射。本轮仅修改文档，不改页面、示例目录、权限、价格或浏览器进度，不创建业务表或迁移；实施任务进入TODO。课程规则是对旧文档的补充与冲突澄清，不删除历史决策。
+
+## D-024：Apache 2.0开源协议与仓库入口
+- 日期：2026-10-01
+- 状态：Accepted
+- 决策：按用户明确要求，AI100分项目采用Apache License 2.0；根目录LICENSE使用Apache官网完整原文，README及Composer/npm项目许可证标识同步为Apache-2.0。公共页脚增加https://github.com/dantinr/ai100fen链接，在新标签页打开并设置noopener noreferrer。
+- 原因：明确项目开源条款，并让网站访客直接访问当前源码仓库。
+- 影响：Laravel及其他第三方依赖保留原许可证和版权声明；不改变课程内容、定价、访问权限或主题配置，无数据库迁移及环境变量变更。

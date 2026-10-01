@@ -24,7 +24,18 @@
         </div>
     </header>
     <main id="main">@yield('content')</main>
-    <footer class="site-footer"><div class="shell footer-inner"><a class="footer-brand" href="{{ route('home') }}">AI100分<span class="brand-dot">.</span></a><span>10分钟，解决一步。100分，代表完成。</span><div><a href="{{ route('series.index') }}">100分钟</a><a href="{{ route('pricing') }}">购买与订阅</a><span>© {{ date('Y') }} AI100分</span></div></div></footer>
+    <footer class="site-footer">
+        <div class="shell footer-inner">
+            <a class="footer-brand" href="{{ route('home') }}">AI100分<span class="brand-dot">.</span></a>
+            <span>10分钟，解决一步。100分，代表完成。</span>
+            <div>
+                <a href="{{ route('series.index') }}">100分钟</a>
+                <a href="{{ route('pricing') }}">购买与订阅</a>
+                <a href="https://github.com/dantinr/ai100fen" target="_blank" rel="noopener noreferrer" aria-label="AI100分 GitHub 仓库（新标签页打开）">GitHub</a>
+                <span>© {{ date('Y') }} AI100分</span>
+            </div>
+        </div>
+    </footer>
     <dialog id="availability-dialog" class="availability-dialog" aria-labelledby="dialog-title"><button class="icon-button dialog-close" data-close-dialog aria-label="关闭"><i data-lucide="x"></i></button><span class="dialog-symbol"><i data-lucide="clock-3"></i></span><h2 id="dialog-title">购买暂未开放</h2><p id="dialog-message">课程与支付服务正在准备中。你可以先体验免费的第一课。</p><a class="button button-primary" href="{{ route('lessons.show', ['slug' => 'build-a-website', 'lessonSlug' => 'server-and-ip']) }}">先完成第一个10分<i data-lucide="arrow-right"></i></a><button class="text-button" data-close-dialog>继续浏览</button></dialog>
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 </body>

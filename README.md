@@ -132,6 +132,10 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## 开源协议
+
+AI100分项目采用 [Apache License 2.0](LICENSE) 开源，完整条款见根目录的 `LICENSE`。项目仓库：[dantinr/ai100fen](https://github.com/dantinr/ai100fen)。
+
+Laravel及其他第三方依赖保留各自的许可证和版权声明。
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
