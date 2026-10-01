@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="AI100分，从真实问题出发。10分钟解决一步，100分钟做成一个可验收的结果。">
     <title>@yield('title', 'AI100分 · 把一个真实问题做成')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
