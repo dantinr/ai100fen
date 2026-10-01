@@ -33,6 +33,21 @@
 .is-celebrating .ufo-ship { animation:ufo-celebrate 1.6s ease-out; }
 .is-celebrating .ufo-completion { animation:ufo-badge .5s ease-out; }
 .ufo-empty { margin:0 auto 6px; width:115px; }
+.ufo-nav-label { padding:4px 8px; margin:0 -8px; border-radius:999px; transition:color .25s ease,background-color .25s ease,box-shadow .25s ease; }
+.ufo-nav-scene { position:absolute; top:0; left:50%; opacity:0; transform:translate(-50%,-5px); pointer-events:none; transition:opacity .25s ease,transform .25s ease; }
+.ufo-nav-scene .ufo-widget { width:52px; }
+.ufo-nav-scene .ufo-widget[data-state] .ufo-ship,.ufo-nav-scene .ufo-widget[data-state] .ufo-lights { animation:none; }
+.ufo-nav-scene .ufo-beam { opacity:0; transform:scaleY(.8); transform-origin:160px 153px; animation:none; transition:opacity .3s ease,transform .3s ease; }
+.ufo-nav-link:focus-visible .ufo-nav-label { color:#65420c; background:#fff3cc; box-shadow:0 0 0 1px #e9d49b; }
+@media(min-width:761px) and (hover:hover) and (pointer:fine) {
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-nav-label { color:#65420c; background:#fff3cc; box-shadow:0 0 0 1px #e9d49b; }
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-nav-scene { opacity:1; transform:translate(-50%,0); }
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-widget[data-state] .ufo-ship { animation:ufo-nav-float 2.8s ease-in-out infinite; }
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-beam { opacity:.3; transform:scaleY(1); animation:ufo-nav-beam 2.8s .3s ease-in-out infinite; }
+}
+@media(max-width:760px),(hover:none),(pointer:coarse) { .ufo-nav-scene { display:none; } }
+@keyframes ufo-nav-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+@keyframes ufo-nav-beam { 0%,100% { opacity:.3; } 50% { opacity:.18; } }
 @keyframes ufo-hover { 0%,100% { transform:translateY(0) rotate(-1deg); } 50% { transform:translateY(-8px) rotate(1deg); } }
 @keyframes ufo-breathe { 0%,100% { opacity:1; } 50% { opacity:.65; } }
 @keyframes ufo-scan { 0%,100% { transform:rotate(-7deg); opacity:.15; } 50% { transform:rotate(7deg); opacity:.35; } }
