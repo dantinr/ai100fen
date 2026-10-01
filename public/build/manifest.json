@@ -1,0 +1,49 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-Cj4pvVW4.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/themes/future.css": {
+    "file": "assets/future-DKRgLBin.css",
+    "name": "future",
+    "names": [
+      "future.css"
+    ],
+    "src": "resources/css/themes/future.css",
+    "isEntry": true,
+    "assets": [
+      "assets/pattern-BLE-W_IJ.svg"
+    ]
+  },
+  "resources/css/themes/pop.css": {
+    "file": "assets/pop-sk5Ykhkw.css",
+    "name": "pop",
+    "names": [
+      "pop.css"
+    ],
+    "src": "resources/css/themes/pop.css",
+    "isEntry": true,
+    "assets": [
+      "assets/pattern-Cy1_1Mo0.svg"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Dj3XKV4z.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/themes/future/pattern.svg": {
+    "file": "assets/pattern-BLE-W_IJ.svg",
+    "src": "resources/themes/future/pattern.svg"
+  },
+  "resources/themes/pop/pattern.svg": {
+    "file": "assets/pattern-Cy1_1Mo0.svg",
+    "src": "resources/themes/pop/pattern.svg"
+  }
+}

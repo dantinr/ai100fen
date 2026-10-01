@@ -25,6 +25,7 @@ AI100分帮助用户使用 AI / Agent **解决一个问题、创作一个作品�
 
 ### 2026-10-01
 
+- 更新发布方式：构建产物随源码提交，服务器通过git pull自动刷新依赖与缓存；操作说明见[deploy/README.md](deploy/README.md)。
 - 精简README，保留项目介绍与更新日志。
 - 添加Apache 2.0协议和页脚GitHub链接、logo。
 - 同步课程宪章到开发规范、产品定义与数据模型，明确Solve / Create / Explore及验收规则；页面分类迁移待实现。

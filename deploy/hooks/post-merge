@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+# Only the production checkout opts into automatic deployment.
+[ "$(git config --local --get ai100fen.deploy || true)" = "true" ] || exit 0
+
+project_root=$(git rev-parse --show-toplevel)
+exec sh "$project_root/deploy/refresh.sh"
