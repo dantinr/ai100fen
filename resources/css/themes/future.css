@@ -115,4 +115,15 @@ html[data-theme="future"] {
     --ufo-label-surface: #ffffff;
     --tracking-heading: -.01em;
     --tracking-display: -.02em;
+    --paul-skin: #a0dbb2;
+    --paul-skin-shadow: #538a75;
+    --paul-stroke: #65f4ff;
+    --paul-stroke-width: 1.8;
+    --paul-eye: #0c1e22;
+    --paul-suit: #111a30;
+    --paul-suit-accent: #8c7cff;
+    --paul-light: #f5f7ff;
+    --paul-fx: #a7ff6a;
+    --paul-sweat: #65f4ff;
+    --paul-breathe-duration: 4200ms;
 }

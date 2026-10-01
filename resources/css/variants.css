@@ -26,6 +26,7 @@ body[data-page="lesson"],body[data-page="account"],body[data-page="checkout"] { 
 [data-page="lesson"] .button { border-width:var(--border-width-default); box-shadow:var(--shadow-sm); }
 [data-page="account"] .auth-surface { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); box-shadow:var(--shadow-button); }
 [data-page="account"] .auth-unavailable { border-color:var(--color-border-muted); }
+[data-page="lesson"] .paul-avatar[data-state="idle"] *,[data-page="account"] .paul-avatar[data-state="idle"] *,[data-page="checkout"] .paul-avatar[data-state="idle"] * { animation:none; }
 [data-page="question-pool"] .questions-main>.page-heading .eyebrow { background:var(--color-highlight); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-badge); }
 [data-page="question-pool"] .me-empty { background:var(--color-highlight); box-shadow:var(--shadow-card); }
 [data-page="question-pool"] .me-empty:before { background-image:var(--theme-pattern); background-size:var(--pattern-size); opacity:var(--decoration-opacity); }

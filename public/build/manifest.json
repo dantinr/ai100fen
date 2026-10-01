@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-DaXRO2AO.css",
+    "file": "assets/app-BL_w1soI.css",
     "name": "app",
     "names": [
       "app.css"
@@ -9,7 +9,7 @@
     "isEntry": true
   },
   "resources/css/themes/future.css": {
-    "file": "assets/future-0-w4wXsu.css",
+    "file": "assets/future-BofpWzl8.css",
     "name": "future",
     "names": [
       "future.css"
@@ -21,7 +21,7 @@
     ]
   },
   "resources/css/themes/pop.css": {
-    "file": "assets/pop-DrI1z9ny.css",
+    "file": "assets/pop-DyCnqHx-.css",
     "name": "pop",
     "names": [
       "pop.css"
@@ -33,7 +33,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-3xFfCTT8.js",
+    "file": "assets/app-DIlEjrq8.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

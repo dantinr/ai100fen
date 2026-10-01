@@ -69,6 +69,19 @@ svg.lucide { stroke-width:1.7; }
 .home-live p { color:var(--color-text-muted); }
 .site-footer { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); color:var(--color-text-muted); }
 .footer-brand { font-weight:var(--weight-strong); color:var(--color-text-muted); }
+.footer-paul-link { background:transparent; border:0; color:inherit; }
+.footer-paul-link:hover { text-decoration:underline; text-underline-offset:3px; }
+.paul-trigger-label { border:var(--border-width-thin) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-round); background:var(--color-primary); color:var(--color-action-text); font-weight:var(--weight-strong); }
+.paul-panel { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-surface); color:var(--color-text); border-radius:var(--radius-card); box-shadow:var(--shadow-card); }
+.paul-panel-header h2 { font-weight:var(--weight-heading); }
+.paul-panel-header h2 span,.paul-panel-header p,.paul-panel-footer { color:var(--color-text-muted); font-weight:var(--weight-body); }
+.paul-reply { background:var(--color-surface-alt); border:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-md); }
+.paul-quick-actions button { border:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); background:var(--color-surface); color:var(--color-text); border-radius:var(--radius-button); }
+.paul-quick-actions button:hover,.paul-quick-actions button[aria-pressed="true"] { background:var(--color-highlight); border-color:var(--color-border-strong); }
+.paul-next-actions a { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-button); }
+.paul-next-actions a:first-child { background:var(--color-primary); color:var(--color-action-text); font-weight:var(--weight-strong); }
+.paul-next-actions a:hover { text-decoration:underline; text-underline-offset:3px; }
+.paul-panel-footer button { color:var(--color-text-muted); background:transparent; border:0; text-decoration:underline; text-underline-offset:3px; }
 .form-field>label { font-weight:var(--weight-strong); }
 .form-control { color:var(--color-text); background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-input); }
 .form-control[aria-invalid="true"] { border-color:var(--color-danger); }

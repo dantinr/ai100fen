@@ -1,5 +1,7 @@
 # AI100分 PAUL_EXPRESSION_SPECS.md
 
+> 当前落地（2026-10-01，D-028）：`paul-avatar` Blade组件提供small/medium/large及idle、idea、got_it、so_so、awkward状态。原创SVG分层控制头部、眼睛、嘴、手臂与效果，Pop/Future共用几何并通过Token换肤；支持手机与减少动态效果，学习/账号/购买页禁用idle循环。thinking、typing、happy未实现，不模拟AI生成或任务完成。
+
 ## 1. 文档定位
 
 本文件定义 Paul 的视觉状态、动作、表情与动画规范。
