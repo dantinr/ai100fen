@@ -1,4 +1,5 @@
 import { createIcons, ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays } from 'lucide';
+import { updateUfoProgress } from './ufo';
 
 const icons = { ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays };
 createIcons({ icons });
@@ -121,8 +122,8 @@ function renderProgress() {
         const currentScore = target.dataset.progressFor === 'build-a-website' ? score : 0;
         target.querySelector('[data-score]').textContent = currentScore;
         const segments = target.querySelector('.progress-segments');
-        segments.setAttribute('aria-label', `当前完成${currentScore}分`);
         [...segments.children].forEach((segment, index) => segment.classList.toggle('filled', index < currentScore / 10));
+        updateUfoProgress(target, currentScore);
     });
     if (progress.completed) document.querySelectorAll('[data-lesson-row="server-and-ip"]').forEach((row) => {
         row.classList.add('is-completed');
