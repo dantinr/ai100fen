@@ -40,6 +40,10 @@ git pull
 
 有新提交时，post-merge自动校验资源、按锁文件安装生产PHP依赖，刷新Laravel配置、路由与视图缓存，恢复运行目录权限并平滑重载PHP 8.5 FPM。
 
+同时执行`php artisan project:sync-history`，将当前Git HEAD的真实提交记录保存到私有`storage/app/private/commit-history.json`，供`/commits`页面读取。运行环境须可执行Git并保留完整仓库历史；无需GitHub Token、API或数据库。不会公开作者邮箱、完整提交正文或差异。同步失败会保留旧快照并中止本次刷新，修复后重跑`sh deploy/refresh.sh`。
+
+本地开发完成提交后执行同一命令更新预览数据。快照不进入Git，页面未同步时会明确提示；后续没有新提交而只想刷新记录，可以单独执行该命令。
+
 脚本不修改`.env`或APP_KEY，不执行数据库迁移，不更改Nginx配置。PHP扩展、新服务、环境变量或数据库结构变化仍须单独评审处理。
 
 ## 发布与故障处理

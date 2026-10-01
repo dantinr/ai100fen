@@ -21,6 +21,11 @@ html[data-theme="future"] {
     --color-border-muted: rgba(101,244,255,.2);
     --color-highlight: #122b3b;
     --color-success-surface: #14372b;
+    --color-activity-0: #111a30;
+    --color-activity-1: #183827;
+    --color-activity-2: #286d38;
+    --color-activity-3: #68bb47;
+    --color-activity-4: #a7ff6a;
     --color-art-build: #103128;
     --color-art-work: #17293f;
     --color-code-bg: #050816;

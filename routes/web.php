@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommitHistoryController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,7 @@ Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FrontendController:
 Route::get('/pricing', [FrontendController::class, 'pricing'])->name('pricing');
 Route::get('/live', [FrontendController::class, 'live'])->name('live');
 Route::view('/questions', 'frontend.questions')->name('questions');
+Route::get('/commits', CommitHistoryController::class)->name('commits');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:30,1,login:')->name('login.store');

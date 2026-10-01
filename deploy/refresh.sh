@@ -37,6 +37,7 @@ COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --prefer-dist --no-interact
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+php artisan project:sync-history
 chown -R www-data:www-data storage bootstrap/cache
 chmod -R u=rwX,g=rwX,o= storage bootstrap/cache
 systemctl reload php8.5-fpm

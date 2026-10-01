@@ -21,6 +21,11 @@ html[data-theme="pop"] {
     --color-border-muted: #b5b5b5;
     --color-highlight: #ffd84d;
     --color-success-surface: #b8ef55;
+    --color-activity-0: #f0f0e9;
+    --color-activity-1: #def2b5;
+    --color-activity-2: #afd968;
+    --color-activity-3: #65a943;
+    --color-activity-4: #286534;
     --color-art-build: #b8ef55;
     --color-art-work: #ffd84d;
     --color-code-bg: #111111;

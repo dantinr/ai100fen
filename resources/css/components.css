@@ -79,6 +79,24 @@ svg.lucide { stroke-width:1.7; }
 .form-checkbox input { accent-color:var(--color-primary); }
 .auth-switch a { font-weight:var(--weight-strong); text-decoration:underline; text-underline-offset:3px; }
 .account-panel { background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); }
+.contribution-panel { background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); box-shadow:var(--shadow-sm); }
+.contribution-heading h2 { font-weight:var(--weight-display); }
+.contribution-heading h2 small { color:var(--color-text-muted); font-weight:var(--weight-medium); }
+.contribution-heading>p,.contribution-weekdays,.contribution-month,.contribution-footer,.commit-content p,.commit-list-heading p,.commit-pagination,.commit-sync-note,.commit-empty { color:var(--color-text-muted); }
+.contribution-cell { background:var(--color-activity-0); border:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-xs); }
+.contribution-cell[data-level="1"] { background:var(--color-activity-1); }
+.contribution-cell[data-level="2"] { background:var(--color-activity-2); }
+.contribution-cell[data-level="3"] { background:var(--color-activity-3); }
+.contribution-cell[data-level="4"] { background:var(--color-activity-4); }
+.contribution-cell[data-outside] { visibility:hidden; }
+a.contribution-cell:hover,a.contribution-cell[aria-current="date"] { outline:2px solid var(--color-text); outline-offset:1px; }
+.commit-list { background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); overflow:hidden; }
+.commit-item+.commit-item { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); }
+.commit-dot { background:var(--color-accent); border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-round); }
+.commit-content h3 { font-weight:var(--weight-strong); }
+.commit-content h3 a:hover { text-decoration:underline; text-underline-offset:3px; }
+.commit-hash { font-family:var(--font-mono); background:var(--color-surface-alt); border:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-xs); }
+.commit-hash:hover { border-color:var(--color-border-strong); }
 .page-heading h1 { font-weight:var(--weight-strong); }
 .search-field { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-input); color:var(--color-text-muted); }
 .search-field input { border:0; outline:0; background:transparent; color:var(--color-text); }

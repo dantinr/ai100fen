@@ -99,6 +99,54 @@ svg.lucide { width:18px; height:18px; flex-shrink:0; }
 .account-panel { margin:0; padding:24px; align-content:start; }
 .account-panel h2 { font-size:18px; }
 .account-panel>.button { justify-self:start; }
+.commits-heading { display:flex; align-items:center; justify-content:space-between; gap:24px; }
+.commits-heading>.button { flex-shrink:0; }
+.contribution-panel { padding:28px; }
+.contribution-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:28px; }
+.contribution-heading h2 { font-size:44px; line-height:1.2; margin-top:8px; }
+.contribution-heading h2 small { font-size:14px; margin-left:12px; }
+.contribution-heading>p { font-size:13px; text-align:right; }
+.contribution-heading>p span { display:block; margin-top:4px; font-size:11px; }
+.contribution-scroll { overflow-x:auto; padding:6px; margin-inline:-6px; }
+.contribution-calendar { display:flex; gap:10px; min-width:880px; }
+.contribution-weekdays { display:grid; grid-template-rows:20px repeat(7,1fr); gap:4px; width:20px; flex-shrink:0; font-size:10px; text-align:center; align-items:center; }
+.contribution-weeks { display:flex; gap:4px; flex:1; min-width:0; }
+.contribution-week { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+.contribution-month { height:20px; font-size:10px; white-space:nowrap; }
+.contribution-cell { display:block; aspect-ratio:1; min-width:0; }
+.contribution-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-top:20px; font-size:11px; }
+.contribution-legend { display:flex; align-items:center; gap:5px; flex-shrink:0; }
+.contribution-legend .contribution-cell { width:13px; }
+.history-unavailable { margin-bottom:16px; font-size:13px; }
+.commit-list-section { margin-top:44px; scroll-margin-top:25px; }
+.commit-list-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:20px; }
+.commit-list-heading h2 { font-size:22px; }
+.commit-list-heading p { font-size:12px; margin-top:5px; }
+.commit-list { list-style:none; margin:0; padding:0; }
+.commit-item { display:flex; align-items:center; gap:18px; padding:21px 24px; }
+.commit-dot { width:9px; height:9px; flex-shrink:0; }
+.commit-content { min-width:0; flex:1; }
+.commit-content h3 { font-size:14px; line-height:1.6; overflow-wrap:anywhere; }
+.commit-content p { display:flex; flex-wrap:wrap; gap:8px 16px; font-size:11px; margin-top:5px; }
+.commit-hash { display:inline-flex; align-items:center; gap:7px; flex-shrink:0; font-size:11px; padding:5px 9px; }
+.commit-hash>svg { width:13px; height:13px; }
+.commit-empty { text-align:center; padding:45px 20px; font-size:13px; }
+.commit-pagination { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-top:20px; font-size:12px; }
+.commit-pagination>div { display:flex; gap:12px; }
+.commit-sync-note { font-size:11px; margin-top:24px; }
+@media(max-width:760px) {
+    .commits-heading { align-items:flex-start; flex-direction:column; gap:16px; }
+    .contribution-panel { padding:20px; }
+    .contribution-heading { margin-bottom:20px; }
+    .contribution-heading h2 { font-size:36px; }
+    .contribution-heading>p { text-align:left; }
+    .contribution-footer { align-items:flex-start; flex-direction:column-reverse; }
+    .commit-list-section { margin-top:32px; }
+    .commit-item { flex-wrap:wrap; gap:12px; padding:18px; }
+    .commit-content { flex-basis:calc(100% - 30px); }
+    .commit-hash { margin-left:21px; }
+    .commit-list-heading h2 { font-size:19px; }
+}
 @media(max-width:760px) { .account-grid { grid-template-columns:1fr; gap:18px; } .account-panel { padding:20px; } }
 .page-main { min-height:calc(100vh - 173px); padding-top:40px; padding-bottom:64px; }
 .page-heading { margin:10px 0 37px; }

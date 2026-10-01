@@ -4,6 +4,37 @@ import { updateUfoProgress } from './ufo';
 const icons = { ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays };
 createIcons({ icons });
 
+document.querySelectorAll('[data-contribution-grid]').forEach((grid) => {
+    const cells = [...grid.querySelectorAll('[data-contribution-cell]')];
+    const detail = document.querySelector('[data-contribution-detail]');
+    const scroll = document.querySelector('[data-contribution-scroll]');
+    const defaultLabel = detail.textContent;
+    scroll.scrollLeft = scroll.scrollWidth;
+    grid.addEventListener('keydown', (event) => {
+        const index = cells.indexOf(event.target);
+        if (index < 0) return;
+        const directions = { ArrowUp: -1, ArrowDown: 1, ArrowLeft: -7, ArrowRight: 7 };
+        let next;
+        if (event.key in directions) next = index + directions[event.key];
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = cells.length - 1;
+        else return;
+        event.preventDefault();
+        next = Math.max(0, Math.min(cells.length - 1, next));
+        cells[next].focus();
+    });
+    cells.forEach((cell) => {
+        cell.addEventListener('focus', () => {
+            cells.forEach((item) => { item.tabIndex = item === cell ? 0 : -1; });
+            detail.textContent = cell.dataset.label;
+        });
+        cell.addEventListener('pointerenter', () => { detail.textContent = cell.dataset.label; });
+        cell.addEventListener('pointerleave', () => {
+            detail.textContent = cells.includes(document.activeElement) ? document.activeElement.dataset.label : defaultLabel;
+        });
+    });
+});
+
 document.querySelectorAll('[data-submit-form]').forEach((form) => {
     const button = form.querySelector('button[type="submit"]');
     const label = button.innerHTML;
