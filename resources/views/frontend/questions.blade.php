@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 @section('title', '问题池 · AI100分')
 @section('content')
-<div class="shell page-main">
+<div class="shell page-main questions-main">
     <div class="page-heading">
         <span class="eyebrow">从真实问题，找到下一步</span>
         <h1>问题池</h1>

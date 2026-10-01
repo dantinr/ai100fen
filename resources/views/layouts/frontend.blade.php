@@ -8,7 +8,7 @@
     <title>@yield('title', 'AI100分 · 把一个真实问题做成')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body @class(['pop-theme', 'pop-home' => request()->routeIs('home'), 'pop-reading' => request()->routeIs('lessons.*'), 'pop-account' => request()->routeIs('login', 'register'), 'pop-pricing' => request()->routeIs('pricing'), 'pop-questions' => request()->routeIs('questions')])>
     <a class="skip-link" href="#main">跳到正文</a>
     <header class="site-header">
         <div class="shell header-inner">
