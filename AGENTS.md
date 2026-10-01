@@ -990,6 +990,7 @@ AI100分不是为了让用户“学会更多知识”。
 ## 24. Git pull 发布约束
 
 - 当前预览站采用D-025：开发机运行`npm run build`，把`public/build`与源码一起提交、推送，服务器通过`git pull`更新；不要再单独上传构建压缩包。
+- D-029明确日常流程：本地完成检查后`git push origin main`及`git push gitee HEAD:master`，服务器在`/var/www/ai100fen`执行`git pull`。服务器当前main跟踪`gitee/master`，保留GitHub origin；日常不使用手工fetch/merge或上传文件代替pull。push完成不代表已上线，须确认服务器pull及Hook成功并验证页面。
 - 涉及前台模板、CSS、JS、主题资源、Vite或npm依赖的变更，发布前必须重新构建并提交最新manifest及资源，运行适用测试。不得提交`.env`、`vendor`、`node_modules`或`public/hot`。
 - 只有配置`ai100fen.deploy=true`的生产检出执行post-merge上线Hook；其他本地检出保持关闭。一次性配置、日常更新及错误重试见`deploy/README.md`。
 - 上线脚本只校验构建产物、安装锁定PHP依赖、刷新缓存、同步公开提交记录快照、修复运行目录权限及重载PHP FPM；不得自动生成密钥、覆盖环境变量、执行数据库迁移或修改真实业务数据。

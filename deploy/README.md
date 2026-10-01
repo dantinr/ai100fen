@@ -1,8 +1,19 @@
-# Git pull 更新上线
+# 本地 push，服务器 pull
 
 当前预览站：`https://ai100.aicsi.cn`，服务器目录：`/var/www/ai100fen`。
 
 前端在开发机执行`npm run build`，将`public/build`与源码一起提交、推送。服务器直接使用仓库中的构建产物，不需要Node或手工上传资源。
+
+## 本地推送
+
+完成代码检查和适用测试；涉及前端变更时先构建，再提交并推送两个仓库：
+
+```sh
+git push origin main
+git push gitee HEAD:master
+```
+
+GitHub使用main，Gitee使用master，两者应包含同一个已验证提交。推送完成后，在服务器执行下文的`git pull`发布。
 
 ## 服务器一次性配置
 
@@ -12,7 +23,7 @@
 sh deploy/enable-git-pull.sh /var/www/ai100fen
 ```
 
-这会在该仓库的本地Git配置中启用`deploy/hooks`、`ai100fen.deploy=true`及仅快进更新。已有自定义Hook时安装会停止，避免覆盖。其他开发检出默认不执行上线操作。
+这会添加Gitee HTTPS远程并将服务器当前分支的上游设为`gitee/master`，同时启用`deploy/hooks`、`ai100fen.deploy=true`及仅快进更新。保留原GitHub origin与服务器本地分支名称（当前为main）；服务器近期访问GitHub过慢，日常pull固定从Gitee拉取。已有自定义Hook、不同的同名远程或分叉历史时安装会停止，避免覆盖。其他开发检出默认不执行上线操作。
 
 ## 账号系统首次初始化
 
@@ -35,6 +46,7 @@ php artisan migrate:status
 以root进入项目目录后，只需：
 
 ```sh
+cd /var/www/ai100fen
 git pull
 ```
 
@@ -48,7 +60,8 @@ git pull
 
 ## 发布与故障处理
 
-- 发布前运行`npm run build`及`php artisan test`，检查并提交最新`public/build`；不要提交`.env`、`vendor`、`node_modules`或`public/hot`。
+- 本地运行适用测试；前端变更须运行`npm run build`，检查并提交最新`public/build`，再push；不要提交`.env`、`vendor`、`node_modules`或`public/hot`。
+- 日常发布遵循本地push、服务器pull，pull成功后检查Hook结果和线上页面；手工上传资源或fetch/merge不作为常规上线流程。
 - 保持服务器检出干净；发现本地业务修改时先保留并处理，不使用强制重置覆盖。
 - Git更新和Hook部署不是原子操作；Hook报错不会回滚已经更新的源码。检查错误后执行`sh deploy/refresh.sh`重试，不要把“Already up to date”当作部署重试。
 - 回滚先明确要恢复的提交，再按对应锁文件、构建产物与缓存恢复；脚本不自动回滚业务数据。
@@ -57,6 +70,7 @@ git pull
 
 - 账号发布前已配置独立`ai100fen`数据库及项目账号，三份框架初始迁移均已完成，未执行Seeder；APP_KEY及非数据库环境值保持不变。账号初始化前的`.env`保存于仅root可访问的`/var/backups/ai100fen/accounts-20261001-162053`。
 - 已在`/var/www/ai100fen`启用Hook，并通过实际`git pull`验证自动安装依赖、刷新缓存与FPM重载。
+- 依据D-029，服务器当前main分支跟踪`gitee/master`，已核对两个仓库同一提交，并按本地push→服务器git pull验证发布。
 - 首页、问题池、价格页、免费第一课和清单下载正常；未开放清单与`.env`、`.git`继续拒绝访问，robots.txt继续禁止抓取。
 - 已核对全部6份构建资源的SHA256与本地一致，确认`.env`字节未变。
 - 切换前的构建产物、bootstrap缓存与`.env`保存在仅root可访问的`/var/backups/ai100fen/git-pull-20261001-154705`，旧构建遗留文件另行归档，不覆盖业务数据。
