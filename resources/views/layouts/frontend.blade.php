@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="{{ $theme['id'] }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="AI100分，从真实问题出发。10分钟解决一步，100分钟做成一个可验收的结果。">
     <title>@yield('title', 'AI100分 · 把一个真实问题做成')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', $theme['stylesheet'], 'resources/js/app.js'])
 </head>
-<body @class(['pop-theme', 'pop-home' => request()->routeIs('home'), 'pop-reading' => request()->routeIs('lessons.*'), 'pop-account' => request()->routeIs('login', 'register'), 'pop-pricing' => request()->routeIs('pricing'), 'pop-questions' => request()->routeIs('questions')])>
+<body class="app-ui" data-page="{{ $pageVariant }}">
     <a class="skip-link" href="#main">跳到正文</a>
     <header class="site-header">
         <div class="shell header-inner">

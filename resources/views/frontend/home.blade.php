@@ -4,7 +4,7 @@
     <section class="home-heading ufo-home-heading">
         <div class="home-heading-copy">
             <div class="eyebrow"><span class="status-dot"></span>从一个真实问题开始</div>
-            <h1>你现在想解决<br><span class="pop-headline-mark">什么问题<span class="heading-question">？</span></span></h1>
+            <h1>你现在想解决<br><span class="headline-mark">什么问题<span class="heading-question">？</span></span></h1>
             <p>用 AI 帮你解决{{ count($series) }}个真实问题。每门课程100元，订阅299元/月，全部课程随便看。</p>
             <div class="heading-meta"><span><i data-lucide="timer"></i>10分钟，解决一步</span><span><i data-lucide="flag"></i>100分钟，完成一个问题</span><span><i data-lucide="circle-check"></i>每一步，都有结果</span></div>
             <a class="button button-dark ufo-home-start" href="{{ route('lessons.show', ['slug' => 'build-a-website', 'lessonSlug' => 'server-and-ip']) }}">免费开始第一个10分<i data-lucide="arrow-right"></i></a>
@@ -13,11 +13,11 @@
             <span class="ufo-sticker" aria-hidden="true">LET’S MAKE IT!</span>
             <x-ufo-widget size="large" />
             <p>先完成一小步。<span>再把一个问题做成。</span></p>
-            <x-pop-starburst label="100分" caption="代表完成" />
+            <x-app-score-emblem label="100分" caption="代表完成" />
         </div>
     </section>
     <section class="catalog-section" aria-label="选择要解决的问题" data-catalog>
-        <div class="pop-catalog-heading"><h2>选一个问题，开始做成。</h2><a class="text-link" href="{{ route('questions') }}">看看问题池<i data-lucide="arrow-up-right"></i></a></div>
+        <div class="catalog-heading"><h2>选一个问题，开始做成。</h2><a class="text-link" href="{{ route('questions') }}">看看问题池<i data-lucide="arrow-up-right"></i></a></div>
         <div class="catalog-toolbar"><div class="filter-tabs" role="group" aria-label="问题类型"><button class="active" data-filter="all" aria-pressed="true">全部问题<span>{{ str_pad((string) count($series), 2, '0', STR_PAD_LEFT) }}</span></button><button data-filter="build" aria-pressed="false">创造一个作品</button><button data-filter="work" aria-pressed="false">解决工作问题</button></div><a class="text-link all-series" href="{{ route('series.index') }}">全部100分钟<i data-lucide="arrow-right"></i></a></div>
         <div class="course-grid">@foreach($series as $course)<x-course-card :course="$course" />@endforeach</div>
         <div class="empty-results" hidden><i data-lucide="search-x"></i><h3>暂时没有匹配的问题</h3><button class="text-button" data-reset-filters>查看全部问题</button></div>

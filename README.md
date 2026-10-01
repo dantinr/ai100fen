@@ -24,6 +24,12 @@ npm run build
 
 未配置本地域名时，也可执行 `php artisan serve --host=127.0.0.1 --port=8000`，通过 http://127.0.0.1:8000 预览；对应环境的 `APP_URL` 设置为该地址。
 
+## 全站主题
+
+默认使用Pop，设置`.env`中的`APP_THEME=pop`或`APP_THEME=future`后执行`php artisan config:clear`；生产环境使用`php artisan config:cache`刷新配置。Future目前为主题机制验证骨架。未知配置回退默认Pop，不通过网址参数或浏览器偏好切换。
+
+主题注册表为`config/themes.php`。共享结构、外观和页面浓度分别在`resources/css/base.css`、`components.css`、`variants.css`，主题Token在`resources/css/themes`，图案在`resources/themes`。Vite构建两套轻量主题，页面只加载选中的一套。新增主题需注册并添加Vite入口、实现同一Token契约，详细规则见`docs/THEME_SYSTEM.md`。
+
 ## 验证
 
 ```shell

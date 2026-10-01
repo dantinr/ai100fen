@@ -1,0 +1,409 @@
+/* Component appearance uses semantic tokens supplied by the active theme. */
+* { letter-spacing:0; }
+body { color:var(--color-text); background:var(--color-surface); font-family:var(--font-body); }
+a { color:inherit; text-decoration:none; }
+:focus-visible { outline:var(--border-width-strong) var(--border-style-default) var(--color-border); outline-offset:var(--border-width-hero); }
+button { border:0; background:none; color:inherit; }
+svg.lucide { stroke-width:1.7; }
+.site-header { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); background:var(--color-surface); }
+.brand { font-weight:var(--weight-heading); }
+.brand-dot { color:var(--color-text); }
+.brand-mark { border-radius:var(--radius-card); background:var(--color-success-surface); font-weight:var(--weight-display); }
+.main-nav>a { color:var(--color-text-muted); }
+.main-nav>a.active { color:var(--color-text); font-weight:var(--weight-strong); }
+.main-nav>a.active:after { background:var(--color-text); }
+.login-link { color:var(--color-text-muted); }
+.button { border:var(--border-width-thin) var(--border-style-default) transparent; border-radius:var(--radius-button); font-weight:var(--weight-strong); transition:background var(--motion-fast), border-color var(--motion-fast); }
+.button-dark { color:var(--color-text-inverse); background:var(--color-text); }
+.button-dark:hover { background:var(--color-surface-alt); }
+.button-primary { background:var(--color-text); color:var(--color-text-inverse); }
+.button-primary:hover { background:var(--color-surface-alt); }
+.button-outline { border-color:var(--color-border); background:var(--color-surface); }
+.button-outline:hover { background:var(--color-bg); border-color:var(--color-border); }
+.button-disabled,.button:disabled { background:var(--color-surface-alt); color:var(--color-text-muted); }
+.icon-button { border-radius:var(--radius-sm); }
+.icon-button:hover { background:var(--color-bg); }
+.skip-link { background:var(--color-surface); }
+.eyebrow { color:var(--color-text-muted); font-weight:var(--weight-medium); }
+.status-dot { border-radius:var(--radius-round); background:var(--color-text); }
+.home-heading h1 { font-weight:var(--weight-strong); }
+.heading-question { color:var(--color-text); }
+.home-heading>p,.page-heading>p { color:var(--color-text-muted); }
+.heading-meta { color:var(--color-text-muted); }
+.filter-tabs button { border-radius:var(--radius-sm); color:var(--color-text-muted); }
+.filter-tabs button.active { background:var(--color-surface-alt); color:var(--color-text-muted); font-weight:var(--weight-strong); }
+.filter-tabs button:hover { background:var(--color-bg); }
+.filter-tabs button>span { color:var(--color-text-muted); }
+.text-link { color:var(--color-text-muted); font-weight:var(--weight-medium); }
+.text-link:hover { color:var(--color-text); }
+.course-card { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-lg); transition:border-color var(--motion-fast); background:var(--color-surface); }
+.course-card:hover { border-color:var(--color-border); }
+.course-visual>img { transition:transform var(--motion-scan); }
+.course-card:hover .course-visual>img { transform:scale(1.025); }
+.visual-website,.visual-support { background:var(--color-surface-alt); }
+.visual-miniapp { background:var(--color-surface-alt); }
+.visual-analysis,.visual-digital-assets { background:var(--color-surface-alt); }
+.visual-spreadsheet,.visual-files { background:var(--color-surface-alt); }
+.visual-presentation,.visual-meeting,.visual-software,.visual-agent { background:var(--color-surface-alt); }
+.visual-work-tool,.visual-knowledge,.visual-game { background:var(--color-surface-alt); }
+.visual-report,.visual-creator { background:var(--color-surface-alt); }
+.visual-label { background:var(--color-surface); color:var(--color-text-muted); border-radius:var(--radius-xs); }
+.course-kicker { color:var(--color-text-muted); }
+.course-kicker>span:first-child { color:var(--color-text); }
+.course-card h3 { font-weight:var(--weight-strong); }
+.course-card-content>p { color:var(--color-text-muted); }
+.course-card-bottom { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); color:var(--color-text-muted); }
+.course-arrow { background:var(--color-surface-alt); border-radius:var(--radius-round); color:var(--color-text-muted); }
+.course-arrow:hover { background:var(--color-success-surface); color:var(--color-text); }
+.first-step-band { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.first-step-icon { background:var(--color-surface-alt); color:var(--color-text); border-radius:var(--radius-round); }
+.first-step-band h2 { font-weight:var(--weight-strong); }
+.first-step-band p { color:var(--color-text-muted); }
+.section-heading h2 { font-weight:var(--weight-strong); }
+.method-number { color:var(--color-text-muted); }
+.method-steps h3 { font-weight:var(--weight-strong); }
+.method-steps p { color:var(--color-text-muted); }
+.home-live { border-left:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.live-status { color:var(--color-text-muted); }
+.home-live h3 { font-weight:var(--weight-strong); }
+.home-live p { color:var(--color-text-muted); }
+.site-footer { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); color:var(--color-text-muted); }
+.footer-brand { font-weight:var(--weight-strong); color:var(--color-text-muted); }
+.page-heading h1 { font-weight:var(--weight-strong); }
+.search-field { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-input); color:var(--color-text-muted); }
+.search-field input { border:0; outline:0; background:transparent; color:var(--color-text); }
+.search-field:focus-within { border-color:var(--color-border-strong); }
+.catalog-note { color:var(--color-text-muted); }
+.catalog-note p>span { color:var(--color-text-muted); }
+.empty-results { color:var(--color-text-muted); }
+.empty-results h3 { color:var(--color-text); }
+.text-button { color:var(--color-text); }
+.breadcrumb { color:var(--color-text-muted); }
+.breadcrumb a:hover { color:var(--color-text); }
+.series-heading h1 { font-weight:var(--weight-strong); }
+.series-question { color:var(--color-text-muted); }
+.series-image { border-radius:var(--radius-md); }
+.outcome-section h2 { font-weight:var(--weight-strong); }
+.check-list li { color:var(--color-text-muted); }
+.check-list svg { color:var(--color-text); }
+.muted { color:var(--color-text-muted); }
+.outline-row { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.outline-row:hover { background:var(--color-surface-alt); }
+.outline-score { color:var(--color-text-muted); font-weight:var(--weight-strong); }
+.outline-score small { font-weight:var(--weight-body); }
+.outline-row h3 { font-weight:var(--weight-strong); }
+.outline-row p { color:var(--color-text-muted); }
+.outline-state { color:var(--color-text-muted); }
+.outline-state.free { color:var(--color-text); background:var(--color-surface-alt); border-radius:var(--radius-xs); }
+.outline-row>svg { color:var(--color-text-muted); }
+.outline-row.is-completed .outline-score { color:var(--color-text); }
+.purchase-panel { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); }
+.purchase-panel h2 { font-weight:var(--weight-strong); }
+.purchase-panel>p { color:var(--color-text-muted); }
+.series-progress>div:first-child { color:var(--color-text-muted); }
+.series-progress strong { font-weight:var(--weight-strong); color:var(--color-text); }
+.series-progress strong small { color:var(--color-text-muted); font-weight:var(--weight-body); }
+.progress-segments>span { background:var(--color-surface-alt); border-radius:var(--radius-xs); }
+.progress-segments>span.filled { background:var(--color-text); }
+.purchase-price { color:var(--color-text-muted); }
+.purchase-price strong { color:var(--color-text); font-weight:var(--weight-strong); }
+.purchase-price small { font-weight:var(--weight-body); color:var(--color-text-muted); }
+.membership-link { color:var(--color-text-muted); }
+.prerequisites h3 { font-weight:var(--weight-strong); }
+.prerequisites li { color:var(--color-text-muted); }
+.prerequisites svg { color:var(--color-text-muted); }
+.prerequisites>p { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); color:var(--color-text-muted); }
+.preparing-outline { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.preparing-outline svg { color:var(--color-text-muted); }
+.preparing-outline h3 { font-weight:var(--weight-strong); }
+.preparing-outline p { color:var(--color-text-muted); }
+.lesson-heading h1 { font-weight:var(--weight-strong); }
+.lesson-heading p { color:var(--color-text-muted); }
+.lesson-preview { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-md); }
+.preview-address { background:var(--color-surface-alt); color:var(--color-text-muted); }
+.preview-window-dots { color:var(--color-text-muted); }
+.hello-website { background:var(--color-surface-alt); }
+.hello-website>span:first-child { color:var(--color-text-muted); }
+.hello-website h2 { font-weight:var(--weight-strong); }
+.hello-website h2>span { color:var(--color-text); }
+.hello-website>p { color:var(--color-text-muted); }
+.hello-website-line { background:var(--color-surface-alt); }
+.hello-result { color:var(--color-text-muted); }
+.video-status { color:var(--color-text-muted); }
+.video-status a { color:var(--color-text); }
+.lesson-goal { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.lesson-goal>svg { color:var(--color-text); }
+.lesson-goal h2 { font-weight:var(--weight-strong); }
+.lesson-goal p { color:var(--color-text-muted); }
+.lesson-tabs { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.lesson-tabs button { border-bottom:var(--border-width-default) var(--border-style-default) transparent; color:var(--color-text-muted); }
+.lesson-tabs button[aria-selected=true] { border-color:var(--color-border-strong); color:var(--color-text); font-weight:var(--weight-strong); }
+.lesson-intro { color:var(--color-text-muted); }
+.instruction-steps li>span { color:var(--color-text); background:var(--color-surface-alt); border-radius:var(--radius-round); }
+.instruction-steps h3 { font-weight:var(--weight-strong); }
+.instruction-steps p { color:var(--color-text-muted); }
+.panel-title { font-weight:var(--weight-strong); }
+.code-block { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-md); background:var(--color-code-surface); }
+.code-block>div { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); color:var(--color-text-muted); }
+.code-block pre { font-family:var(--font-mono); color:var(--color-text-muted); }
+.code-heading { font-weight:var(--weight-strong); }
+.code-dark { background:var(--color-code-bg); border-color:var(--color-border); }
+.code-dark>div { border-color:var(--color-border); color:var(--color-code-text); }
+.code-dark pre { color:var(--color-code-text); }
+.acceptance-checks label { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-sm); }
+.acceptance-checks input { accent-color:var(--color-text); }
+.acceptance-checks label>svg { color:var(--color-text); }
+.acceptance-checks label:has(input:checked) { background:var(--color-surface-alt); border-color:var(--color-border); }
+.download-link { color:var(--color-text-muted); border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.completion-action p { color:var(--color-text-muted); }
+.lesson-bottom-nav { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.lesson-sidebar { border-left:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.lesson-series-name { font-weight:var(--weight-strong); }
+.lesson-series-name svg { color:var(--color-text-muted); }
+.lesson-navigation a { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-xs); }
+.lesson-navigation a.current { background:var(--color-surface-alt); color:var(--color-text); }
+.lesson-navigation a>span:first-child { color:var(--color-text-muted); }
+.lesson-navigation svg { color:var(--color-text-muted); }
+.lesson-navigation a:hover { background:var(--color-bg); }
+.locked-lesson { background:var(--color-bg); }
+.locked-lesson h2 { font-weight:var(--weight-strong); }
+.locked-lesson p { color:var(--color-text-muted); }
+.locked-note { color:var(--color-text-muted); }
+.price-card { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); }
+.price-card h2 { font-weight:var(--weight-strong); }
+.price-card>p { color:var(--color-text-muted); }
+.plan-price { font-weight:var(--weight-strong); }
+.plan-price small { color:var(--color-text-muted); font-weight:var(--weight-body); }
+.subscription-card { border-color:var(--color-border); background:var(--color-surface-alt); }
+.plan-label { background:var(--color-success-surface); border-radius:var(--radius-xs); color:var(--color-text-muted); }
+.pricing-note { color:var(--color-text-muted); }
+.faq-section h2 { font-weight:var(--weight-strong); }
+.faq-section details { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.faq-section details[open] summary svg { transform:rotate(45deg); }
+.faq-section details p { color:var(--color-text-muted); }
+.live-art { background:var(--color-surface-alt); }
+.live-art-label { color:var(--color-text-muted); }
+.live-art-title { font-weight:var(--weight-strong); }
+.live-art-title>span { color:var(--color-text); }
+.live-art-bottom { color:var(--color-text-muted); }
+.badge { border-radius:var(--radius-xs); }
+.badge-yellow { background:var(--color-surface-alt); color:var(--color-text-muted); }
+.live-information h2 { font-weight:var(--weight-strong); }
+.live-information>p { color:var(--color-text-muted); }
+.live-detail { color:var(--color-text-muted); }
+.replay-empty { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); background:var(--color-surface-alt); color:var(--color-text-muted); }
+.me-summary { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.me-summary>div>span { color:var(--color-text-muted); }
+.me-summary strong { font-weight:var(--weight-strong); }
+.me-summary strong small { color:var(--color-text-muted); font-weight:var(--weight-body); }
+.local-record { color:var(--color-text-muted); }
+.me-section-title h2 { font-weight:var(--weight-strong); }
+.empty-symbol,.dialog-symbol { background:var(--color-surface-alt); color:var(--color-text-muted); border-radius:var(--radius-round); }
+.me-empty h2 { font-weight:var(--weight-strong); }
+.me-empty p { color:var(--color-text-muted); }
+.local-record-note { color:var(--color-text-muted); border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.my-course-row { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.my-course-image { border-radius:var(--radius-sm); }
+.my-course-row h3 { font-weight:var(--weight-strong); }
+.my-course-row p { color:var(--color-text-muted); }
+.auth-surface h1 { font-weight:var(--weight-strong); }
+.auth-surface>p { color:var(--color-text-muted); }
+.auth-unavailable { border-block:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.auth-unavailable>svg { color:var(--color-text-muted); }
+.auth-unavailable h2 { font-weight:var(--weight-strong); }
+.auth-unavailable p { color:var(--color-text-muted); }
+.error-main h1 { font-weight:var(--weight-strong); }
+.error-main p { color:var(--color-text-muted); }
+.availability-dialog { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-lg); color:var(--color-text); }
+.availability-dialog::backdrop { background:var(--color-backdrop); }
+.availability-dialog h2 { font-weight:var(--weight-strong); }
+.availability-dialog p { color:var(--color-text-muted); }
+.toast { transform:translateX(-50%); background:var(--color-surface-alt); border-radius:var(--radius-md); color:var(--color-text-inverse); box-shadow:var(--shadow-md); }
+@media(max-width:760px) { .main-nav { background:var(--color-surface); border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); box-shadow:var(--shadow-md); } .home-live { border-left:0; border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); } .lesson-sidebar { border-left:0; border-top:var(--border-width-thin) var(--border-style-default) var(--color-border); } }
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; animation:none !important; } }
+.ufo-ship { transform-origin:160px 120px; }
+.ufo-widget[data-state="idle"] .ufo-ship { animation:var(--animation-idle) var(--motion-idle) var(--ease-default) infinite; }
+.ufo-widget[data-state="idle"] .ufo-lights { animation:ufo-breathe var(--motion-breathe) var(--ease-default) infinite; }
+.ufo-widget[data-state="flying"] .ufo-ship { transform:var(--ufo-flight); }
+.ufo-widget[data-state="scanning"] .ufo-beam { transform-origin:160px 153px; animation:ufo-scan var(--motion-idle-scan) var(--ease-default) infinite; }
+.ufo-widget[data-state="completed"] .ufo-halo { opacity:.2; }
+.ufo-size-small[data-state="idle"] .ufo-ship { animation:none; }
+.ufo-size-small .ufo-beam { opacity:.3; }
+.home-heading-copy>p { color:var(--color-text-muted); }
+.ufo-explorer { border-radius:var(--radius-round); background:var(--color-highlight); }
+.ufo-sticker { background:var(--color-surface-alt); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-badge); box-shadow:var(--shadow-sticker); font-weight:var(--weight-heading); letter-spacing:1px; transform:rotate(var(--tilt-sticker)); }
+.ufo-explorer>p { color:var(--color-text-muted); font-weight:var(--weight-strong); }
+.ufo-explorer>p>span { color:var(--color-text-muted); font-weight:var(--weight-body); }
+.ufo-path .progress-segments>span { border-radius:0; }
+.ufo-path .progress-segments>span.filled { background:var(--color-surface-alt); }
+.ufo-path-nodes>span { border-radius:var(--radius-round); background:var(--color-surface-alt); border:var(--border-width-default) var(--border-style-default) var(--color-border); }
+.ufo-path-nodes>span.is-reached { background:var(--color-surface-alt); }
+.ufo-path-marker { transition:left var(--motion-progress) var(--ease-default); }
+.ufo-path-labels { color:var(--color-text-muted); }
+.ufo-completion { background:var(--color-surface-alt); border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-sm); color:var(--color-text-muted); }
+.is-celebrating .ufo-ship { animation:var(--animation-complete) var(--motion-complete) var(--ease-emphasis); }
+.is-celebrating .ufo-completion { animation:ufo-badge var(--motion-normal) var(--ease-emphasis); }
+.ufo-nav-label { border-radius:var(--radius-round); transition:color var(--motion-enter) var(--ease-default),background-color var(--motion-enter) var(--ease-default),box-shadow var(--motion-enter) var(--ease-default); }
+.ufo-nav-scene { opacity:0; transform:translate(-50%,-5px); transition:opacity var(--motion-enter) var(--ease-default),transform var(--motion-enter) var(--ease-default); }
+.ufo-nav-scene .ufo-widget[data-state] .ufo-ship,.ufo-nav-scene .ufo-widget[data-state] .ufo-lights { animation:none; }
+.ufo-nav-scene .ufo-beam { opacity:0; transform:scaleY(.8); transform-origin:160px 153px; animation:none; transition:opacity var(--motion-scan) var(--ease-default),transform var(--motion-scan) var(--ease-default); }
+.ufo-nav-link:focus-visible .ufo-nav-label { color:var(--color-text-muted); background:var(--color-surface-alt); box-shadow:0 0 0 var(--border-width-default) var(--color-border-strong); }
+@media(min-width:761px) and (hover:hover) and (pointer:fine) {
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-nav-label { color:var(--color-text-muted); background:var(--color-surface-alt); box-shadow:0 0 0 var(--border-width-default) var(--color-border-strong); }
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-nav-scene { opacity:1; transform:translate(-50%,0); }
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-widget[data-state] .ufo-ship { animation:ufo-nav-float var(--motion-hover) var(--ease-default) infinite; }
+    .ufo-nav-link:is(:hover,:focus-visible) .ufo-beam { opacity:var(--scan-opacity); transform:scaleY(1); animation:ufo-nav-beam var(--motion-hover) var(--motion-scan) var(--ease-default) infinite; }
+}
+@keyframes ufo-nav-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+@keyframes ufo-nav-beam { 0%,100% { opacity:var(--scan-opacity); } 50% { opacity:calc(var(--scan-opacity) * .6); } }
+@keyframes ufo-hover { 0%,100% { transform:translateY(0) rotate(-1deg); } 50% { transform:translateY(-8px) rotate(1deg); } }
+@keyframes ufo-breathe { 0%,100% { opacity:1; } 50% { opacity:.65; } }
+@keyframes ufo-scan { 0%,100% { transform:rotate(-7deg); opacity:.15; } 50% { transform:rotate(var(--tilt-sticker)); opacity:.35; } }
+@keyframes ufo-celebrate { 0%,100% { transform:translateY(0); } 35% { transform:translateY(-14px) rotate(-5deg); } 65% { transform:translateY(-6px) rotate(3deg); } }
+@keyframes ufo-badge { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+@media(max-width:760px) {
+    .ufo-explorer { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); background:var(--color-highlight); }
+    .my-course-row .ufo-path-nodes>span { border-width:var(--border-width-thin); }
+}
+@media(prefers-reduced-motion:reduce) { .ufo-widget *,.ufo-path-marker,.ufo-completion { animation:none !important; transition:none !important; } }
+body.app-ui { background:var(--color-bg); color:var(--color-text); }
+.app-ui :focus-visible { outline:var(--focus-width) var(--border-style-default) var(--color-border-strong); outline-offset:5px; }
+.app-ui .site-header { background:var(--color-surface); border-bottom:var(--border-strong); }
+.app-ui .brand { font-weight:var(--weight-display); }
+.app-ui .brand-mark { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); box-shadow:var(--shadow-sm); transform:rotate(var(--tilt-brand)); }
+.app-ui .brand-dot { color:var(--color-secondary); }
+.app-ui .heading-question { color:var(--color-text); }
+.app-ui .main-nav>a { color:var(--color-text-muted); font-weight:var(--weight-strong); }
+.app-ui .main-nav>a.active { color:var(--color-text); }
+.app-ui .main-nav>a.active:after { background:var(--color-text); }
+.app-ui .ufo-nav-link:focus-visible .ufo-nav-label { color:var(--color-text); background:var(--color-highlight); box-shadow:0 0 0 var(--border-width-default) var(--color-border-strong); }
+.app-ui .login-link { color:var(--color-text); font-weight:var(--weight-strong); }
+.app-ui .button { border:var(--border-strong); border-radius:var(--radius-button); background:var(--color-primary); color:var(--color-action-text); box-shadow:var(--shadow-button); font-weight:var(--weight-heading); transition:transform var(--motion-fast) var(--ease-default),box-shadow var(--motion-fast) var(--ease-default),background-color var(--motion-fast) var(--ease-default); }
+.app-ui .button-small { border-width:var(--border-width-default); }
+.app-ui .button-outline { background:var(--color-surface); color:var(--color-text); }
+.app-ui .button-disabled,.app-ui .button:disabled { border:var(--border-width-default) dashed var(--color-border); color:var(--color-text-muted); background:var(--color-bg); box-shadow:none; }
+.app-ui .icon-button { border-radius:var(--radius-md); }
+.app-ui .icon-button:hover { background:var(--color-highlight); }
+.app-ui .text-link { color:var(--color-text); font-weight:var(--weight-strong); }
+.app-ui .text-link:hover { color:var(--color-text); text-decoration:underline; }
+.app-ui .text-button { color:var(--color-text); text-decoration:underline; }
+.app-ui .eyebrow { color:var(--color-text-muted); font-weight:var(--weight-strong); }
+.app-ui .status-dot { background:var(--color-secondary); border:var(--border-width-thin) var(--border-style-default) var(--color-border-strong); }
+.app-ui :is(.heading-meta,.course-kicker,.course-card-bottom,.breadcrumb,.outline-state,.purchase-price,.membership-link,.prerequisites>p,.pricing-note,.local-record,.local-record-note,.live-detail,.catalog-note,.catalog-note p>span) { color:var(--color-text-muted); }
+.app-ui :is(.page-heading h1,.series-heading h1,.section-heading h2,.me-section-title h2) { font-weight:var(--weight-heading); letter-spacing:var(--tracking-heading); }
+.app-ui .site-footer { border-top:var(--border-strong); background:var(--color-surface); color:var(--color-text-muted); }
+.app-ui .footer-brand { color:var(--color-text); font-weight:var(--weight-heading); }
+.app-ui .ufo-home-heading { background:var(--color-surface); border:var(--border-width-hero) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-lg); box-shadow:var(--shadow-panel); }
+.app-ui .home-heading h1 { font-weight:var(--weight-display); letter-spacing:var(--tracking-display); }
+.app-ui .headline-mark { background:var(--headline-mark); }
+.app-ui .ufo-explorer { border:var(--border-strong); border-radius:var(--radius-md); background:var(--color-highlight); }
+.app-ui .ufo-explorer:before { background-image:var(--theme-pattern); background-size:var(--pattern-size); opacity:var(--decoration-opacity); }
+.app-ui .ufo-explorer>p { color:var(--color-text); font-weight:var(--weight-heading); }
+.app-ui .ufo-explorer>p>span { color:var(--color-text-muted); }
+.app-ui .ufo-sticker { background:var(--color-surface); border-color:var(--color-border-strong); box-shadow:var(--shadow-sticker); }
+.app-ui .app-score-emblem { background:var(--color-text); clip-path:var(--shape-emblem); transform:rotate(var(--tilt-emblem)); }
+.app-ui .app-score-emblem:before { background:var(--color-success-surface); clip-path:inherit; }
+.app-ui .app-score-emblem strong { font-weight:var(--weight-display); }
+.app-ui .app-score-emblem span { font-weight:var(--weight-strong); }
+.app-ui .catalog-heading h2 { font-weight:var(--weight-heading); letter-spacing:var(--tracking-heading); }
+.app-ui .filter-tabs button { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-sm); color:var(--color-text); background:var(--color-surface); font-weight:var(--weight-strong); }
+.app-ui .filter-tabs button.active { background:var(--color-success-surface); color:var(--color-text); box-shadow:var(--shadow-sticker); font-weight:var(--weight-heading); }
+.app-ui .filter-tabs button:hover { background:var(--color-highlight); }
+.app-ui .filter-tabs button>span { color:var(--color-text); }
+.app-ui .course-card { border:var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-card); background:var(--color-surface); transition:transform var(--motion-fast) var(--ease-default),box-shadow var(--motion-fast) var(--ease-default); }
+.app-ui .course-visual { border-bottom:var(--border-strong); }
+.app-ui .app-course-art { background:var(--color-art-build); }
+.app-ui .art-work { background:var(--color-art-work); }
+.app-ui .app-course-art:before { background-image:var(--theme-pattern); background-size:var(--pattern-size); opacity:var(--decoration-opacity); }
+.app-ui .art-time { font-family:var(--font-display); font-weight:var(--weight-display); letter-spacing:-.06em; }
+.app-ui .art-time small { letter-spacing:.18em; }
+.app-ui .art-icon { background:var(--color-surface); border:var(--border-strong); border-radius:var(--radius-round); box-shadow:var(--shadow-button); transform:rotate(var(--tilt-art)); }
+.app-ui .art-icon svg { stroke-width:2; }
+.app-ui .art-caption { font-weight:var(--weight-strong); }
+.app-ui .art-caption>span { font-weight:var(--weight-medium); }
+.app-ui .visual-label { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-badge); font-weight:var(--weight-strong); color:var(--color-text); background:var(--color-surface); }
+.app-ui .visual-website .visual-label { background:var(--color-surface); }
+.app-ui .course-kicker>span:first-child { color:var(--color-text); font-weight:var(--weight-strong); }
+.app-ui .course-card h3 { font-weight:var(--weight-heading); }
+.app-ui .course-card-bottom { border-top:var(--border-width-default) var(--border-style-default) var(--color-border-strong); }
+.app-ui .course-arrow { background:var(--color-highlight); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-sm); color:var(--color-text); }
+.app-ui .first-step-band { border:var(--border-strong); border-radius:var(--radius-md); background:var(--color-highlight); box-shadow:var(--shadow-button); }
+.app-ui .first-step-icon { background:var(--color-surface); color:var(--color-text); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); }
+.app-ui .first-step-band h2 { font-weight:var(--weight-heading); }
+.app-ui .first-step-band p { color:var(--color-text-muted); }
+.app-ui .first-step-band .button { background:var(--color-surface); color:var(--color-text); }
+.app-ui .home-method,.app-ui .home-live { border:var(--border-strong); border-radius:var(--radius-md); background:var(--color-surface); }
+.app-ui .home-live { border-left:var(--border-strong); }
+.app-ui .method-number { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-success-surface); border-radius:var(--radius-badge); color:var(--color-text); font-weight:var(--weight-heading); }
+.app-ui .method-steps h3 { font-weight:var(--weight-heading); }
+.app-ui :is(.method-steps p,.home-live>p,.live-status) { color:var(--color-text-muted); }
+.app-ui .search-field { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-surface); border-radius:var(--radius-input); color:var(--color-text); }
+.app-ui .search-field:focus-within { outline:var(--focus-width) var(--border-style-default) var(--color-border-strong); outline-offset:var(--border-width-strong); }
+.app-ui .search-field input:focus-visible { outline:none; }
+.app-ui .series-image { border:var(--border-strong); border-radius:var(--radius-md); box-shadow:var(--shadow-button); }
+.app-ui .purchase-panel { border:var(--border-strong); background:var(--color-surface); border-radius:var(--radius-md); box-shadow:var(--shadow-card); }
+.app-ui .purchase-panel h2 { font-weight:var(--weight-heading); }
+.app-ui .series-progress strong { color:var(--color-text); font-weight:var(--weight-heading); }
+.app-ui .series-progress>div:first-child,.app-ui .series-progress strong small { color:var(--color-text-muted); }
+.app-ui .ufo-path .progress-segments { background:var(--color-text); }
+.app-ui .ufo-path .progress-segments>span { background:var(--color-text); }
+.app-ui .ufo-path .progress-segments>span.filled { background:var(--color-secondary); }
+.app-ui .ufo-path-nodes>span { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-surface); }
+.app-ui .ufo-path-nodes>span.is-reached { background:var(--color-secondary); }
+.app-ui .ufo-path-labels { color:var(--color-text-muted); }
+.app-ui .ufo-completion { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); color:var(--color-text); }
+.app-ui .outline-row { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); background:var(--color-surface); }
+.app-ui .outline-row:hover { background:var(--color-bg); }
+.app-ui .outline-score { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); border-radius:var(--radius-badge); color:var(--color-text); font-weight:var(--weight-heading); }
+.app-ui .outline-state.free { color:var(--color-text); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-success-surface); font-weight:var(--weight-strong); }
+.app-ui .outline-row.is-completed .outline-score { color:var(--color-text); background:var(--color-success-surface); }
+.app-ui .check-list li { color:var(--color-text-muted); }
+.app-ui .check-list svg { color:var(--color-text); }
+.app-ui .prerequisites>p { border-top-width:var(--border-width-default); }
+.app-ui .preparing-outline { border:var(--border-width-default) dashed var(--color-border-strong); background:var(--color-surface); }
+.app-ui .preparing-outline svg { color:var(--color-text); }
+.app-ui .me-summary { background:var(--color-highlight); border:var(--border-strong); border-radius:var(--radius-md); box-shadow:var(--shadow-button); }
+.app-ui .me-summary strong { font-weight:var(--weight-display); }
+.app-ui .me-summary strong small { color:var(--color-text-muted); }
+.app-ui .my-course-row { border:var(--border-strong); border-radius:var(--radius-md); background:var(--color-surface); box-shadow:var(--shadow-button); }
+.app-ui .my-course-image { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); }
+.app-ui .me-empty { background:var(--color-surface); border:var(--border-strong); border-radius:var(--radius-md); }
+.app-ui .me-empty h2 { font-weight:var(--weight-heading); }
+.app-ui .local-record-note { border-top:var(--border-width-default) var(--border-style-default) var(--color-border-strong); }
+.app-ui .badge,.app-ui .plan-label { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); color:var(--color-text); font-weight:var(--weight-strong); border-radius:var(--radius-badge); }
+.app-ui .live-art { border:var(--border-strong); background:var(--color-highlight); box-shadow:var(--shadow-card); border-radius:var(--radius-md); }
+.app-ui :is(.live-art-label,.live-art-bottom) { color:var(--color-text-muted); }
+.app-ui .live-art-title { font-weight:var(--weight-heading); }
+.app-ui .live-art-title>span { color:var(--color-text); }
+.app-ui .replay-empty { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-surface); color:var(--color-text-muted); border-radius:var(--radius-md); }
+.app-ui .price-card { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-surface); box-shadow:var(--shadow-button); }
+.app-ui .subscription-card { background:var(--color-bg); }
+.app-ui .plan-price { font-weight:var(--weight-heading); }
+.app-ui .plan-price small { color:var(--color-text-muted); }
+.app-ui .faq-section details { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
+.app-ui .availability-dialog { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); background:var(--color-surface); box-shadow:var(--shadow-card); }
+.app-ui .availability-dialog::backdrop { background:var(--color-backdrop); }
+.app-ui .dialog-symbol { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); color:var(--color-text); border-radius:var(--radius-md); }
+.app-ui .toast { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); color:var(--color-text); box-shadow:var(--shadow-button); }
+@media(hover:hover) and (pointer:fine) {
+    .app-ui .ufo-nav-link:hover .ufo-nav-label { color:var(--color-text); background:var(--color-highlight); box-shadow:0 0 0 var(--border-width-default) var(--color-border-strong); }
+    .app-ui .button:not(:disabled):not(.button-disabled):hover { transform:var(--transform-hover); box-shadow:var(--shadow-hover); background:var(--color-secondary); color:var(--color-action-text); }
+    .app-ui .course-card:hover { transform:var(--transform-hover); box-shadow:var(--shadow-card-hover); border-color:var(--color-border-strong); }
+}
+.app-ui .button:not(:disabled):not(.button-disabled):active { transform:var(--transform-press); box-shadow:var(--shadow-pressed); }
+@media(max-width:760px) {
+    .app-ui .main-nav { border-bottom:var(--border-strong); box-shadow:var(--shadow-nav); }
+    .app-ui .ufo-home-heading { border-width:var(--border-width-strong); box-shadow:var(--shadow-mobile-panel); }
+    .app-ui .my-course-row .ufo-path-nodes>span { border-width:var(--border-width-thin); }
+}
+@media(prefers-reduced-motion:reduce) {
+    .app-ui .button,.app-ui .course-card { transition:none; }
+    .app-ui .button:not(:disabled):not(.button-disabled):hover,.app-ui .button:not(:disabled):not(.button-disabled):active,.app-ui .course-card:hover { transform:none; }
+}
+
+/* Theme-controlled illustration and motion, shared geometry and behavior. */
+html { color-scheme:var(--color-scheme); }
+h1,h2,h3 { font-family:var(--font-heading); }
+.ufo-widget svg { filter:var(--ufo-filter); }
+@keyframes ufo-future-hover { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-5px); } }
+@keyframes ufo-future-pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); } }

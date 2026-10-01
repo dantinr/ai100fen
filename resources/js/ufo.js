@@ -1,6 +1,11 @@
 const flightTimers = new WeakMap();
 const celebrationTimers = new WeakMap();
 
+function motionDuration(element, token) {
+    const value = getComputedStyle(element).getPropertyValue(token).trim();
+    return parseFloat(value) * (value.endsWith('ms') ? 1 : 1000);
+}
+
 // Presentation only: the caller supplies course progress; this never grants access.
 export function updateUfoProgress(target, progress) {
     const path = target.querySelector('[data-ufo-path]');
@@ -30,10 +35,10 @@ export function updateUfoProgress(target, progress) {
     if (previous !== null && !reducedMotion) {
         if (score === 100 && previous < 100) {
             target.classList.add('is-celebrating');
-            celebrationTimers.set(target, setTimeout(() => target.classList.remove('is-celebrating'), 1800));
+            celebrationTimers.set(target, setTimeout(() => target.classList.remove('is-celebrating'), motionDuration(widget, '--motion-complete')));
         } else if (score < 100) {
             widget.dataset.state = 'flying';
-            flightTimers.set(widget, setTimeout(() => { widget.dataset.state = 'idle'; }, 900));
+            flightTimers.set(widget, setTimeout(() => { widget.dataset.state = 'idle'; }, motionDuration(widget, '--motion-progress')));
         }
     }
 }
