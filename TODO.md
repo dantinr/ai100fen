@@ -28,6 +28,7 @@
 - [x] 保留默认Pop并建立Future骨架，验证Pop→Future→Pop、按需样式、桌面/手机页面及搜索、导航、弹窗与现有进度
 - [x] 阅读课程宪章并同步AGENTS、PRODUCT、DATA_MODEL，明确三类价值、六项定义、课程命名、首页发现与100分验收规则（D-023）
 - [x] 添加Apache 2.0开源协议，同步README与项目包元数据，并在公共页脚加入GitHub仓库链接及SVG标识（D-024）
+- [x] 精简README为当前项目介绍与按日期整理的更新日志，移除Laravel模板介绍及详细运行、部署说明
 - [ ] 逐门审核16个示例Series的唯一solve/create/explore类别，补齐用户意图、最终成果、可验证验收及人/Agent职责，不机械映射build/work
 - [ ] 前台首页与课程发现从build/work迁移为Solve/Create/Explore三入口，按意图与成果呈现和筛选，沿用现有价格与访问规则
 - [ ] 实现CourseSeries六项宪章字段与服务端发布校验，并在LessonProgress实现中落实可见步骤/最终任务验收，Explore允许有证据结论的失败实验完成
