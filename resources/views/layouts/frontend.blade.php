@@ -16,6 +16,7 @@
             <nav class="main-nav" aria-label="主导航" id="main-navigation">
                 <a href="{{ route('home') }}" @class(['active' => request()->routeIs('home')]) @if(request()->routeIs('home')) aria-current="page" @endif>首页</a>
                 <a href="{{ route('series.index') }}" @class(['active' => request()->routeIs('series.*', 'lessons.*')]) @if(request()->routeIs('series.*', 'lessons.*')) aria-current="page" @endif>100分钟</a>
+                <a href="{{ route('free.index') }}" @class(['active' => request()->routeIs('free.*')]) @if(request()->routeIs('free.*')) aria-current="page" @endif>免费实验室</a>
                 <x-ufo-nav-link :href="route('questions')" :active="request()->routeIs('questions')">问题池</x-ufo-nav-link>
                 <a href="{{ route('live') }}" @class(['active' => request()->routeIs('live')]) @if(request()->routeIs('live')) aria-current="page" @endif>直播</a>
                 <a href="{{ route('me') }}" @class(['active' => request()->routeIs('me')]) @if(request()->routeIs('me')) aria-current="page" @endif>我的100分</a>
@@ -30,6 +31,7 @@
             <span>10分钟，解决一步。100分，代表完成。</span>
             <div>
                 <a href="{{ route('series.index') }}">100分钟</a>
+                <a href="{{ route('free.index') }}">免费实验室</a>
                 <a href="{{ route('pricing') }}">购买与订阅</a>
                 <a href="{{ route('commits') }}">提交记录</a>
                 <button class="footer-paul-link" type="button" data-paul-open hidden>Paul向导</button>

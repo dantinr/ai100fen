@@ -198,3 +198,11 @@
 - 决策：按用户要求，仅对ai100.aicsi.cn测试/预览域名修改爬虫策略。由Nginx精确location提供独立robots文件，内容为User-agent: *及Allow: /；复用HTTPS现有noindex, nofollow响应头，在HTTP server补齐，覆盖重定向与错误响应。保留HTTPS跳转与应用已有等效meta。
 - 原因：原Disallow会阻止搜索引擎读取页面noindex，且修改共享public/robots.txt会影响其他环境。测试站虽以APP_ENV=production安全运行，抓取策略必须按站点隔离。
 - 影响：替代D-017的测试站抓取限制，生产共享SEO保持原样，不改Laravel业务、权限、认证、限流或后台。Nginx只安装指定测试站点配置，经备份、语法测试后reload；Git pull Hook不自动改系统配置。增加HTTP验证脚本及Cloudflare人工清单，当前DNS直连源站，无后台Cloudflare配置变更。无数据库迁移、应用环境变量、新依赖或前端构建变更。
+
+
+## D-031：Free Lab完整免费任务与账号验收进度
+- 日期：2026-10-01
+- 状态：Accepted
+- 决策：按用户明确的FREE LAB MVP新增`/free`。此前没有真实课程模型，本次补齐共用CourseSeries、Lesson、LessonProgress，免费任务不另建模型；以Series.is_free表达完整免费，Lesson.is_free仅表达付费课程的单步试看。首批采用用户确认的个人介绍网页、CSV汇总、Prompt对照实验，分别Create/Solve/Explore，六项宪章定义齐备。每个为10–15分钟的一Lesson特殊完整小任务，验收权重100分；标准100分钟Series和原价格保持。
+- 原因：先让访客不付费、不登录也能得到真实小成果，再用账号保存明确验收记录；用户明确要求完整任务，不能把试看包装成完整免费或假装已有课程表。
+- 影响：新增三张表的非破坏性迁移与仅新增固定slug的幂等安装命令，生产需独立审阅后手动执行，pull Hook继续不迁移。服务端统一检查发布、所属及免费权限，保存只关联当前用户并校验清单结构、事务锁与唯一约束；分数来自Lesson验收权重，不接受前端分数。访客勾选仅当前页有效，登录不自动导入；登录后主动确认保存，个人中心分开显示账号记录和旧本机试看。Paul规则匹配真实、发布、完整免费课程，不接外部API、不存聊天，完整聊天和付费权限继续后置。复用现有Pop/Future主题Token，无新依赖、环境变量或后台入口。部分推进D-008/D-023/D-026的课程及进度后置项，保留旧16个方向的审核迁移待办。

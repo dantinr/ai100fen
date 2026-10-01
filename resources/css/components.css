@@ -448,3 +448,16 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .ufo-widget svg { filter:var(--ufo-filter); }
 @keyframes ufo-future-hover { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-5px); } }
 @keyframes ufo-future-pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); } }
+.free-panel,.free-card,.free-progress-row { background:var(--color-surface); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-card); box-shadow:var(--shadow-card); }
+.free-card { border-width:var(--border-width-strong); }
+.free-badge { color:var(--color-text); background:var(--color-accent); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-badge); font-weight:600; }
+.free-task-icon { color:var(--color-text); background:var(--color-primary); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-card); box-shadow:var(--shadow-sm); }
+.free-note,.free-card-meta { color:var(--color-text-muted); }
+.free-question-form input,.free-paul-form input { background:var(--color-bg); color:var(--color-text); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-input); }
+.free-question-form input:focus-visible,.free-paul-form input:focus-visible { outline:3px solid var(--color-secondary); outline-offset:3px; }
+.free-recommendations { background:var(--color-surface-alt); border-radius:var(--radius-card); }
+.free-preview-note { border-top:var(--border-width-default) solid var(--color-border); }
+.free-code { background:var(--color-bg); color:var(--color-text); border-radius:var(--radius-sm); border:var(--border-width-default) solid var(--color-border); }
+.free-check input { accent-color:var(--color-success); }
+.free-outline-link[aria-current=page] { font-weight:700; color:var(--color-text); text-decoration:underline; text-underline-offset:5px; }
+.free-error { color:var(--color-danger); }

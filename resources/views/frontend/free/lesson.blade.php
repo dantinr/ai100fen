@@ -1,0 +1,41 @@
+@extends('layouts.frontend')
+@section('title', $series->title.' · 免费实验室 · AI100分')
+@section('content')
+<div class="shell page-main free-learning">
+    <a class="text-link" href="{{ route('free.index') }}"><i data-lucide="arrow-left"></i>免费实验室</a>
+    <header class="free-lesson-heading"><span class="free-badge">完整免费 · {{ strtoupper($series->category) }}</span><h1>{{ $series->title }}</h1><p>{{ $series->final_outcome }}</p><span class="free-note">约 {{ $series->minutes }} 分钟 · 图文实践 · 验收后完成100分</span></header>
+    <div class="free-learning-grid">
+        <article class="free-lesson-content">
+            <section class="free-panel"><h2>你要做成什么？</h2><p>{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p></section>
+            <section class="free-panel"><h2>跟着这几步做</h2>@foreach($lesson->steps as $step)<div class="free-step"><h3>{{ $step['title'] }}</h3><p>{{ $step['body'] }}</p></div>@endforeach</section>
+            <section class="free-panel"><div class="free-section-heading"><h2>交给 Agent 的 Prompt</h2><button class="text-button" type="button" data-copy="free-prompt">复制 Prompt<i data-lucide="copy"></i></button></div><pre id="free-prompt" class="free-code">{{ $lesson->prompt }}</pre></section>
+            @if($lesson->code)
+                <details class="free-panel free-source"><summary>查看完整示例：{{ $lesson->code_filename }}</summary><button class="text-button" type="button" data-copy="free-code">复制代码<i data-lucide="copy"></i></button><pre id="free-code" class="free-code">{{ $lesson->code }}</pre></details>
+            @endif
+            <section class="free-panel"><h2>资料与可运行起点</h2><div class="free-downloads">@foreach($lesson->resources as $resource)<a class="text-link" href="{{ route('free.resource', [$series, $lesson->slug, $resource['name']]) }}"><i data-lucide="download"></i>{{ $resource['label'] }}<small>{{ $resource['name'] }}</small></a>@endforeach</div></section>
+            <section class="free-panel" aria-labelledby="free-check-title">
+                <h2 id="free-check-title">亲自验收，才算做成</h2><p>逐项检查实际成果后再勾选。这里只保存你的验收确认，不会自动检查电脑里的文件。</p>
+                <form data-free-progress action="{{ route('free.progress', [$series, $lesson->slug]) }}" method="post">
+                    @csrf
+                    @foreach($lesson->checks as $index => $check)
+                        <label class="free-check"><input type="hidden" name="checks[{{ $index }}]" value="0"><input type="checkbox" name="checks[{{ $index }}]" value="1" @checked($progress?->checks[$index] ?? false)><span>{{ $check }}</span></label>
+                    @endforeach
+                    @auth
+                        <button class="button button-primary" type="submit" data-free-save>保存验收进度<i data-lucide="check"></i></button>
+                        <p class="free-note" data-free-status role="status">{{ session('free-progress-saved') ? '已保存到你的账号。' : '进度保存到当前账号，可跨设备继续；全部验收后完成100分。' }}</p>
+                    @else
+                        <p class="free-note">你可以直接完成全部任务。访客的勾选仅在当前页面生效；登录后可保存到账号。</p><a class="button button-dark" href="{{ route('login', ['redirect' => route('free.lesson', [$series, $lesson->slug], false)]) }}">登录并保存进度<i data-lucide="arrow-right"></i></a>
+                    @endauth
+                    @error('checks')<p class="free-error" role="alert">{{ $message }}</p>@enderror
+                </form>
+            </section>
+        </article>
+        <aside class="free-sidebar"><div class="free-panel">
+            <span class="eyebrow">你的任务路线</span><h2>{{ $lesson->title }}</h2><p>已验收进度：<strong data-free-percent>{{ $progress?->progress_percent ?? 0 }}%</strong></p><p class="free-note">这是当前步骤的验收进度；完整任务全部通过才达到100分。</p>
+            <p>任务完成：<strong data-free-score>{{ $score }}</strong> / 100分</p>
+            @foreach($lessons as $item)<a class="free-outline-link" href="{{ route('free.lesson', [$series, $item->slug]) }}" @if($item->id === $lesson->id) aria-current="page" @endif>{{ $item->position }}. {{ $item->title }}</a>@endforeach
+            <details class="free-roles"><summary>Agent 做什么，人判断什么？</summary><h3>Agent 负责</h3><ul>@foreach($series->agent_role as $item)<li>{{ $item }}</li>@endforeach</ul><h3>你来判断</h3><ul>@foreach($series->human_judgment_required as $item)<li>{{ $item }}</li>@endforeach</ul></details>
+        </div></aside>
+    </div>
+</div>
+@endsection

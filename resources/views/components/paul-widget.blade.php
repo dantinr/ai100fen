@@ -11,6 +11,11 @@
                 <button type="button" data-paul-choice="other" aria-pressed="false">找不到对应课程</button>
             </div>
             <div class="paul-next-actions" data-paul-next><a href="{{ route('lessons.show', ['slug' => 'build-a-website', 'lessonSlug' => 'server-and-ip']) }}">先免费体验第一课</a><a href="{{ route('series.index') }}">看看100分钟课程</a></div>
+            <form class="free-paul-form" action="{{ route('free.index') }}" method="get">
+                <label for="paul-free-question">想做什么？我帮你找免费完整任务</label>
+                <input id="paul-free-question" name="q" maxlength="300" required placeholder="比如：把订单表合并汇总">
+                <button class="button button-small button-primary" type="submit">找免费任务<i data-lucide="arrow-right"></i></button>
+            </form>
             <footer class="paul-panel-footer"><span>每一小步，都算数。</span><button type="button" data-paul-hide hidden>暂时隐藏向导</button></footer>
         </section>
     </details>

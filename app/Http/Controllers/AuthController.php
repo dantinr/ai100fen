@@ -13,8 +13,13 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function login(): View
+    public function login(Request $request): View
     {
+        $returnTo = $request->query('redirect');
+        if (is_string($returnTo) && preg_match('#\A/free/[a-z0-9-]+/[a-z0-9-]+\z#', $returnTo)) {
+            $request->session()->put('url.intended', url($returnTo));
+        }
+
         return view('frontend.auth', ['register' => false]);
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Services\CourseAccessService;
+
 /** Curated preview content, independent of future persisted courses and entitlements. */
 class FrontendCatalog
 {
@@ -295,7 +297,7 @@ class FrontendCatalog
 
     public function canPreview(array $series, array $lesson): bool
     {
-        return $series['available'] && $lesson['is_free'];
+        return app(CourseAccessService::class)->canPreviewLegacy($series, $lesson);
     }
 
     public function previewContent(array $series, array $lesson): array

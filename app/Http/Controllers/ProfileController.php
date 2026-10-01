@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Models\LessonProgress;
 use App\Support\FrontendCatalog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,13 @@ class ProfileController extends Controller
 {
     public function show(Request $request, FrontendCatalog $catalog): View
     {
-        return view('frontend.me', ['series' => $catalog->all(), 'user' => $request->user()]);
+        return view('frontend.me', [
+            'series' => $catalog->all(), 'user' => $request->user(),
+            'freeProgress' => LessonProgress::where('user_id', $request->user()->id)
+                ->whereHas('lesson.series', fn ($query) => $query->freeLab())
+                ->whereHas('lesson', fn ($query) => $query->where('status', 'published'))
+                ->with('lesson.series')->orderByDesc('updated_at')->get(),
+        ]);
     }
 
     public function update(UpdateProfileRequest $request): RedirectResponse

@@ -39,7 +39,7 @@ php artisan migrate:status
 
 当前只执行框架已存在的三份初始迁移，建立用户、密码重置Token、会话、缓存和队列表；账号会话与缓存继续使用文件。不要运行`migrate:fresh`、`db:seed`或示例账号Seeder。后续无数据库/环境变化的发布仍只需`git pull`；新迁移必须另行审阅与手动执行。
 
-目前未配置真实邮件投递，不开放忘记密码或邮箱验证；已登录用户可在个人中心修改密码。服务端学习记录、购买和订阅尚未接入。
+目前未配置真实邮件投递，不开放忘记密码或邮箱验证；已登录用户可在个人中心修改密码。D-031免费任务账号进度已接入；旧付费课程、购买和订阅仍未接入。
 
 ## 日常更新
 
@@ -74,3 +74,17 @@ git pull
 - 首页、问题池、价格页、免费第一课和清单下载正常；未开放清单与`.env`、`.git`继续拒绝访问。D-030将测试域名robots改为允许抓取，HTTP/HTTPS均使用noindex响应头；环境隔离、Nginx安装及Cloudflare人工清单见[CRAWLER_POLICY.md](CRAWLER_POLICY.md)。
 - 已核对全部6份构建资源的SHA256与本地一致，确认`.env`字节未变。
 - 切换前的构建产物、bootstrap缓存与`.env`保存在仅root可访问的`/var/backups/ai100fen/git-pull-20261001-154705`，旧构建遗留文件另行归档，不覆盖业务数据。
+
+
+## Free Lab首次初始化（D-031）
+
+本地push、服务器pull后，新增路由需要三张课程学习表。审阅`2026_10_01_180000_create_course_learning_tables`，确认目标项目数据库和迁移状态，再独立执行一次：
+
+```sh
+php artisan migrate --force --no-interaction
+php artisan free-lab:install
+```
+
+迁移只建course_series、lessons、lesson_progress，不修改users或原课程数组。内容命令只新增不存在的首批三个slug；不覆盖编辑、不重置记录、不写示例用户，重复执行新增0。不能用migrate:fresh、通用db:seed代替。后续无数据库/新内容变更时仍只需git pull；Hook不自动运行上述命令。
+
+验证`/free`、三个任务页面、Paul推荐、下载及未登录进度保存拒绝；当前测试域名继续允许抓取并返回noindex响应头。登录验收的跨用户隔离与幂等由测试覆盖，不在线上创建测试账号。
