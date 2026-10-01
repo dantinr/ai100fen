@@ -20,7 +20,7 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
 fi
 
-existing_hooks=$(git config --local --get core.hooksPath || true)
+existing_hooks=$(git config --get core.hooksPath || true)
 if [ -n "$existing_hooks" ] && [ "$existing_hooks" != "deploy/hooks" ]; then
     printf '%s\n' 'Existing hooksPath detected; preserve it and review setup first.' >&2
     exit 1
