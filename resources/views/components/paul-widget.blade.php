@@ -1,8 +1,8 @@
 <div class="paul-widget" data-paul-widget>
     <details class="paul-disclosure">
-        <summary class="paul-trigger" aria-label="Paul外星向导" aria-controls="paul-panel"><x-paul-avatar size="small" /><span class="paul-trigger-label">Paul</span></summary>
-        <section class="paul-panel" id="paul-panel" aria-label="Paul外星向导">
-            <header class="paul-panel-header"><div><h2>Paul<span>外星向导</span></h2><p>先把第一步做成。</p></div><button class="icon-button paul-close" type="button" data-paul-close aria-label="关闭Paul面板" hidden><i data-lucide="x"></i></button></header>
+        <summary class="paul-trigger" aria-label="Z外星向导" aria-controls="paul-panel"><x-paul-avatar size="small" /><span class="paul-trigger-label">Z</span></summary>
+        <section class="paul-panel" id="paul-panel" aria-label="Z外星向导">
+            <header class="paul-panel-header"><div><h2>Z<span>外星向导</span></h2><p>先把第一步做成。</p></div><button class="icon-button paul-close" type="button" data-paul-close aria-label="关闭Z面板" hidden><i data-lucide="x"></i></button></header>
             <div class="paul-conversation"><x-paul-avatar size="large" /><p class="paul-reply" data-paul-reply aria-live="polite" aria-atomic="true">你今天想干嘛？解决一个问题，做个作品，还是探索新可能？</p></div>
             <div class="paul-quick-actions" aria-label="选择你想做的事" data-paul-choices hidden>
                 <button type="button" data-paul-choice="solve" aria-pressed="false">解决一个问题</button>

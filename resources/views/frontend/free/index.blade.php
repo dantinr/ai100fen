@@ -7,22 +7,22 @@
         <x-paul-avatar state="idea" size="large" />
     </section>
     <section class="free-panel" aria-labelledby="free-paul-title">
-        <span class="eyebrow">PAUL 帮你选第一步</span><h2 id="free-paul-title">你现在想做什么？</h2>
+        <span class="eyebrow">Z 帮你选第一步</span><h2 id="free-paul-title">你现在想做什么？</h2>
         <form class="free-question-form" action="{{ route('free.index') }}" method="get">
             @if($category)<input type="hidden" name="category" value="{{ $category }}">@endif
             <label class="sr-only" for="free-question">描述你想完成的任务</label>
             <input id="free-question" name="q" value="{{ $question }}" maxlength="300" placeholder="比如：我想做一份个人介绍网页" required>
-            <button class="button button-dark" type="submit">请 Paul 推荐<i data-lucide="arrow-right"></i></button>
+            <button class="button button-dark" type="submit">请 Z 推荐<i data-lucide="arrow-right"></i></button>
         </form>
         @error('q')<p class="free-error" role="alert">{{ $message }}</p>@enderror
         <p class="free-note">按问题关键词匹配已发布的免费任务；当前不是实时 AI 对话。请勿填写私人资料。</p>
         @if($question !== '')
             <div class="free-recommendations" role="status">
             @forelse($recommendations as $match)
-                <p><strong>Paul：可以从「{{ $match['course']->title }}」开始。</strong><br>{{ $match['reason'] }}</p>
+                <p><strong>Z：可以从「{{ $match['course']->title }}」开始。</strong><br>{{ $match['reason'] }}</p>
                 <a class="text-link" href="{{ route('free.lesson', [$match['course'], $match['course']->lessons->first()->slug]) }}">开始这个免费任务<i data-lucide="arrow-right"></i></a>
             @empty
-                <p>{{ $category ? 'Paul：这个方向暂时没有匹配的免费任务。可以切换方向，或看看更多课程。' : 'Paul：目前这三个任务还接不住你的问题。可以先从下面选一个，也可以去看看更多课程方向。' }}</p><a class="text-link" href="{{ route('series.index') }}">看看100分钟课程</a>
+                <p>{{ $category ? 'Z：这个方向暂时没有匹配的免费任务。可以切换方向，或看看更多课程。' : 'Z：目前这三个任务还接不住你的问题。可以先从下面选一个，也可以去看看更多课程方向。' }}</p><a class="text-link" href="{{ route('series.index') }}">看看100分钟课程</a>
             @endforelse
             </div>
         @endif

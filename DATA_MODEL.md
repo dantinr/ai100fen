@@ -153,7 +153,7 @@ D-038新增`course_series.sort_order`（unsigned integer、默认1000、有索�
 - `lessons`：id、course_series_id、slug、title、position、score（累计展示分值）、points（本步验收权重）、minutes、is_free（默认false，仅代表该Lesson试看）、status、intro、goal、steps（JSON标题/正文）、prompt、可空code/code_filename、resources（JSON文件名/说明/文本）、checks（JSON验收清单）、时间戳。唯一(course_series_id,slug)，无课数硬限制。当前图文内容未建视频或独立附件表。
 - `lesson_progress`：id、user_id、lesson_id、checks（JSON布尔数组）、progress_percent（0–100整数）、last_position_seconds（预留0）、completed_at、时间戳。唯一(user_id,lesson_id)，外键限制删除。ProgressService在事务中锁当前用户，幂等保存本人记录；不接受客户端user_id、分数、完成时间或会员状态。
 
-Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一个付费试看步骤。CourseAccessService统一服务端检查所属关系、发布状态与免费配置，旧数组试看经兼容方法保持原规则。Free Lab读取/下载/保存额外限制完整免费系列；Paul只查询已发布且所有步骤已发布的完整免费课程，不推荐付费试看。
+Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一个付费试看步骤。CourseAccessService统一服务端检查所属关系、发布状态与免费配置，旧数组试看经兼容方法保持原规则。Free Lab读取/下载/保存额外限制完整免费系列；Z只查询已发布且所有步骤已发布的完整免费课程，不推荐付费试看。
 
 进度百分比=已确认清单项/全部项，只有全部明确确认才写completed_at；取消任一项撤销完成状态。系列分数=已验收published Lesson的points / 全系列points ×100，未发布步骤不获得分数，不硬编码10课。首批每Series一Lesson，score与points均100；标准10课可配置points各10、score依次10至100。
 

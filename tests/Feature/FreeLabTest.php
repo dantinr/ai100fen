@@ -51,7 +51,7 @@ class FreeLabTest extends TestCase
         $this->assertTrue($access->canAccess($course, $lesson));
         $this->get("/free/{$course->slug}/{$lesson->slug}?is_free=1&purchased=1&subscription=active")->assertNotFound();
         $this->get("/free/{$course->slug}/{$lesson->slug}/resources/index.html")->assertNotFound();
-        $this->get('/free?q=个人介绍网页')->assertOk()->assertDontSee('Paul：可以从「'.$course->title);
+        $this->get('/free?q=个人介绍网页')->assertOk()->assertDontSee('Z：可以从「'.$course->title);
         $course->update(['is_free' => true, 'status' => 'draft']);
         $this->assertFalse($access->canAccess($course, $lesson));
         $this->get("/free/{$course->slug}/{$lesson->slug}")->assertNotFound();
@@ -106,7 +106,7 @@ class FreeLabTest extends TestCase
     public function test_paul_recommends_real_relevant_courses_and_handles_unknown_or_unsafe_text(): void
     {
         foreach (['网页作品' => '做一个能打开的个人介绍网页', '合并订单汇总' => '把几份 CSV 合成一张汇总表', '验证提示词对照实验' => '用对照实验选出更合适的 Prompt'] as $question => $title) {
-            $this->get('/free?q='.urlencode($question))->assertOk()->assertSee('Paul：可以从「'.$title.'」开始。');
+            $this->get('/free?q='.urlencode($question))->assertOk()->assertSee('Z：可以从「'.$title.'」开始。');
         }
         $this->get('/free?q='.urlencode('修理自行车'))->assertSee('目前这三个任务还接不住');
         $this->get('/free?q='.urlencode('<script>alert(1)</script>'))->assertOk()->assertDontSee('<script>alert(1)</script>', false);
@@ -118,7 +118,7 @@ class FreeLabTest extends TestCase
         foreach (['solve' => 'merge-csv-report', 'create' => 'personal-intro-page', 'explore' => 'compare-prompts'] as $category => $slug) {
             $this->get('/free?category='.$category)->assertOk()->assertViewHas('courses', fn ($courses) => $courses->count() === 1 && $courses->first()->slug === $slug);
         }
-        $this->get('/free?category=solve&q=网页')->assertOk()->assertSee('这个方向暂时没有匹配的免费任务')->assertDontSee('Paul：可以从「做一个能打开的个人介绍网页');
+        $this->get('/free?category=solve&q=网页')->assertOk()->assertSee('这个方向暂时没有匹配的免费任务')->assertDontSee('Z：可以从「做一个能打开的个人介绍网页');
         $this->getJson('/free?category=build')->assertUnprocessable();
         $this->getJson('/free?category[]=solve')->assertUnprocessable();
     }

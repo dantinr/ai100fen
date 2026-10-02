@@ -1144,7 +1144,7 @@ AI100分
 - 更换主题：设置`.env`中的`APP_THEME=future`，本地执行`php artisan config:clear`；生产使用`php artisan config:cache`。恢复时设为`pop`并刷新配置。初次运行须先`npm run build`。
 - 新主题应登记注册表与Vite入口，复制现有Token契约后填入自身视觉值，并在`resources/themes/{theme}`提供被CSS引用的资产；无需修改业务页面或Controller。
 - D-027提交方块墙新增`--color-activity-0`至`--color-activity-4`五级强度Token，Pop和Future均已实现；新主题须实现这些Token，提交数量与统计规则不随主题变化。
-- D-028的Paul复用同一分层SVG及状态接口；新主题须实现`--paul-skin`、`--paul-skin-shadow`、`--paul-stroke`、`--paul-stroke-width`、`--paul-eye`、`--paul-suit`、`--paul-suit-accent`、`--paul-light`、`--paul-fx`、`--paul-sweat`及`--paul-breathe-duration`，其他动作时长使用共享Motion Token。结构与响应式放在base，外观放在components，低浓度页的idle限制放在variants，不复制主题组件。
+- D-028的外星向导现按D-040更名为Z，复用同一分层SVG及状态接口；`paul-*`内部标识与Token保留兼容，不用作对外显示名；新主题须实现`--paul-skin`、`--paul-skin-shadow`、`--paul-stroke`、`--paul-stroke-width`、`--paul-eye`、`--paul-suit`、`--paul-suit-accent`、`--paul-light`、`--paul-fx`、`--paul-sweat`及`--paul-breathe-duration`，其他动作时长使用共享Motion Token。结构与响应式放在base，外观放在components，低浓度页的idle限制放在variants，不复制主题组件。
 - 本轮不增加主题选择器、用户偏好、业务表、数据库迁移或后台设置。
 
 ## Pop兼容与Future骨架
