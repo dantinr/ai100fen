@@ -993,7 +993,8 @@ AI100分不是为了让用户“学会更多知识”。
 - D-029明确日常流程：本地完成检查后`git push origin main`及`git push gitee HEAD:master`，服务器在`/var/www/ai100fen`执行`git pull`。服务器当前main跟踪`gitee/master`，保留GitHub origin；日常不使用手工fetch/merge或上传文件代替pull。push完成不代表已上线，须确认服务器pull及Hook成功并验证页面。
 - 涉及前台模板、CSS、JS、主题资源、Vite或npm依赖的变更，发布前必须重新构建并提交最新manifest及资源，运行适用测试。不得提交`.env`、`vendor`、`node_modules`或`public/hot`。
 - 只有配置`ai100fen.deploy=true`的生产检出执行post-merge上线Hook；其他本地检出保持关闭。一次性配置、日常更新及错误重试见`deploy/README.md`。
-- 上线脚本只校验构建产物、安装锁定PHP依赖、刷新缓存、同步公开提交记录快照、修复运行目录权限及重载PHP FPM；不得自动生成密钥、覆盖环境变量、执行数据库迁移或修改真实业务数据。
+- D-033规定服务器项目由`dante:dante`管理，`www-data`加入`dante`组；`/var/www`保留`root:root`。日常SSH、git pull、Composer和Artisan使用`dante`，Git本地配置`ai100fen.deployUser=dante`；root仅用于一次性系统配置。源码对Web进程只读，只有`storage`与`bootstrap/cache`共享可写，默认ACL维持新文件权限；不得使用777或给予部署用户任意sudo权限。
+- 上线脚本只校验构建产物、安装锁定PHP依赖、刷新缓存、同步公开提交记录快照及通过受限sudo重载PHP FPM；运行目录权限在一次性配置中设置，常规Hook不再依赖root修复。不得自动生成密钥、覆盖环境变量、执行数据库迁移或修改真实业务数据。
 - 提交记录遵循D-027：使用`php artisan project:sync-history`从当前Git HEAD生成`storage/app/private/commit-history.json`，生产git pull Hook自动执行，本地完成提交后手动同步。页面只读取快照，禁止依据请求参数执行Git或公开作者邮箱、完整提交正文和差异；缺失快照明确显示未同步。
 - Git更新与Hook执行不是原子发布，报错须明确报告并处理；不能将Git已更新当作部署成功，也不得用强制重置清除服务器本地修改。
 

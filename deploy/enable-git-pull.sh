@@ -1,14 +1,19 @@
 #!/bin/sh
 set -eu
 
-if [ "$(id -u)" -ne 0 ]; then
-    printf '%s\n' 'Run setup as root on the AI100fen server.' >&2
+if [ "$(id -u)" -eq 0 ]; then
+    printf '%s\n' 'Run Git setup as the non-root owner after enable-deploy-user.sh.' >&2
     exit 1
 fi
 
 cd "${1:-/var/www/ai100fen}"
 project_root=$(git rev-parse --show-toplevel)
 cd "$project_root"
+deployment_user=$(git config --local --get ai100fen.deployUser || true)
+if [ -z "$deployment_user" ] || [ "$(id -un)" != "$deployment_user" ] || [ "$(stat -c %U "$project_root")" != "$deployment_user" ]; then
+    printf '%s\n' 'The current user must be the configured checkout owner.' >&2
+    exit 1
+fi
 test -f artisan
 test -f composer.lock
 command -v php >/dev/null

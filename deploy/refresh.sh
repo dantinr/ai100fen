@@ -4,10 +4,18 @@ set -eu
 project_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$project_root"
 
-if [ "$(git config --local --get ai100fen.deploy || true)" != "true" ] || [ "$(id -u)" -ne 0 ]; then
-    printf '%s\n' 'Deployment requires the enabled production checkout and root.' >&2
+deployment_user=$(git config --local --get ai100fen.deployUser || true)
+if [ "$(git config --local --get ai100fen.deploy || true)" != "true" ] || [ -z "$deployment_user" ] || [ "$(id -u)" -eq 0 ] || [ "$(id -un)" != "$deployment_user" ] || [ "$(stat -c %U "$project_root")" != "$deployment_user" ]; then
+    printf '%s\n' 'Deployment requires the enabled checkout owned by its configured non-root deployment user.' >&2
     exit 1
 fi
+
+# Source and vendor files remain readable, but not writable, by the web group.
+# Runtime directories inherit their separately configured default write ACLs.
+umask 0027
+sudo -n -l /usr/bin/systemctl reload php8.5-fpm >/dev/null
+test -w storage
+test -w bootstrap/cache
 
 trap '
     deployment_status=$?
@@ -33,12 +41,10 @@ foreach ($manifest as $entry) {
 }
 '
 
-COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
+composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan project:sync-history
-chown -R www-data:www-data storage bootstrap/cache
-chmod -R u=rwX,g=rwX,o= storage bootstrap/cache
-systemctl reload php8.5-fpm
+sudo -n /usr/bin/systemctl reload php8.5-fpm
 printf 'Deployed AI100fen %s\n' "$(git rev-parse --short HEAD)"

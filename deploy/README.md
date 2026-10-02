@@ -17,9 +17,24 @@ GitHub使用main，Gitee使用master，两者应包含同一个已验证提交�
 
 ## 服务器一次性配置
 
-当前服务器已配置。新建同等环境的生产检出后，以root执行：
+当前服务器已配置。D-033使用`dante:dante`管理项目，`www-data`加入`dante`组；父目录`/var/www`保留`root:root 755`。新建同等环境的检出后，先以root执行一次权限配置：
 
 ```sh
+apt-get install -y --no-install-recommends acl
+sh deploy/enable-deploy-user.sh /var/www/ai100fen
+```
+
+脚本限定此项目，备份原归属、权限、ACL、Git配置和环境文件校验值至仅root可访问的`/var/backups/ai100fen/deploy-user-*`。保留已有`dante`账号和SSH密钥；账号不存在时才创建，公钥文件不存在时才从root的授权公钥初始化，不复制私钥。重载工作进程以更新组成员，不更改Nginx配置。
+
+源码目录750、文件640（保留必要的可执行位），默认ACL确保新文件对组只读；`.git`仅部署用户可访问，`.env`保持640且内容不变。`storage`和`bootstrap/cache`采用2770目录及共享写入默认ACL，使部署用户和Web进程都能写入；Web进程不能修改源码、依赖、构建资源或Git。运行文件由实际创建者拥有，不要求所有运行文件都属于dante。不得对整个`/var/www`递归改归属或设置777。
+
+`/etc/sudoers.d/ai100fen-deploy`只授予`dante`免密执行`/usr/bin/systemctl reload php8.5-fpm`，不加入sudo组、不授予任意命令权限。
+
+随后以`dante`登录并配置Git更新：
+
+```sh
+ssh dante@39.106.113.140
+cd /var/www/ai100fen
 sh deploy/enable-git-pull.sh /var/www/ai100fen
 ```
 
@@ -43,14 +58,15 @@ php artisan migrate:status
 
 ## 日常更新
 
-以root进入项目目录后，只需：
+以`dante`登录服务器进入项目目录后，只需：
 
 ```sh
+ssh dante@39.106.113.140
 cd /var/www/ai100fen
 git pull
 ```
 
-有新提交时，post-merge自动校验资源、按锁文件安装生产PHP依赖，刷新Laravel配置、路由与视图缓存，恢复运行目录权限并平滑重载PHP 8.5 FPM。
+有新提交时，post-merge以`dante`校验资源、按锁文件安装生产PHP依赖，刷新Laravel配置、路由与视图缓存，通过受限sudo平滑重载PHP 8.5 FPM。普通发布不再以root执行Composer、Laravel或修复权限；运行目录依靠一次性配置的默认ACL保持共享写入。若权限被外部操作破坏，由运维审阅后重新运行权限配置，不能临时放宽源码写入权限。
 
 同时执行`php artisan project:sync-history`，将当前Git HEAD的真实提交记录保存到私有`storage/app/private/commit-history.json`，供`/commits`页面读取。运行环境须可执行Git并保留完整仓库历史；无需GitHub Token、API或数据库。不会公开作者邮箱、完整提交正文或差异。同步失败会保留旧快照并中止本次刷新，修复后重跑`sh deploy/refresh.sh`。
 
