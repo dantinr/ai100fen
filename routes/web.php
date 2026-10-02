@@ -22,6 +22,8 @@ Route::get('/series/{slug}/lessons/{lessonSlug}', [FrontendController::class, 'l
 Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FrontendController::class, 'checklist'])->name('lessons.checklist');
 Route::get('/pricing', [FrontendController::class, 'pricing'])->name('pricing');
 Route::get('/live', [FrontendController::class, 'live'])->name('live');
+Route::get('/live/{session:slug}/enter', [\App\Http\Controllers\LiveEntryController::class, 'enter'])->name('live.enter');
+Route::get('/live/{session:slug}/replay', [\App\Http\Controllers\LiveEntryController::class, 'replay'])->name('live.replay');
 Route::get('/questions', QuestionTopicsController::class)->name('questions');
 Route::post('/questions/recommendations', [QuestionController::class, 'recommend'])->middleware('throttle:20,1,question-recommend:')->name('questions.recommend');
 Route::get('/commits', CommitHistoryController::class)->name('commits');

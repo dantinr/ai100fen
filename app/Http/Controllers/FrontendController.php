@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\CourseDisplayOrder;
 use App\Services\CourseRelationPresenter;
+use App\Services\LiveSchedule;
 use App\Support\FrontendCatalog;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -62,8 +63,10 @@ class FrontendController extends Controller
         return view('frontend.pricing');
     }
 
-    public function live(): View
+    public function live(LiveSchedule $schedule): View
     {
-        return view('frontend.live');
+        $month = request()->query('month');
+
+        return view('frontend.live', $schedule->forMonth(is_string($month) ? $month : null));
     }
 }

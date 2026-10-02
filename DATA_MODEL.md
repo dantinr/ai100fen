@@ -3,7 +3,7 @@
 > 本文定义MVP领域模型和推荐数据库结构。  
 > 原则：清晰、简单、可扩展，但不提前复杂化。
 
-课程业务约束以[`docs/COURSE_CONSTITUTION.md`](docs/COURSE_CONSTITUTION.md)为准，字段同步决策见D-023。D-031新增真实`course_series`、`lessons`、`lesson_progress`及对应Eloquent模型，当前承载三个免费完整任务。旧16个课程方向仍用`App\Support\FrontendCatalog`数组。下文的完整支付/直播等结构和课程扩展字段仍是目标，当前实际字段见3.4。
+课程业务约束以[`docs/COURSE_CONSTITUTION.md`](docs/COURSE_CONSTITUTION.md)为准，字段同步决策见D-023。D-031新增真实`course_series`、`lessons`、`lesson_progress`及对应Eloquent模型，当前承载三个免费完整任务。D-044新增公开直播`live_sessions`。旧16个课程方向仍用`App\Support\FrontendCatalog`数组。下文的支付、受限直播等结构和课程扩展字段仍是目标，当前实际字段见3.4及第10节。
 
 ---
 
@@ -394,13 +394,15 @@ AND expires_at > now
 
 ## 10. live_sessions
 
+D-044已实现此表：`slug`为自动生成的UUID；`ends_at`当前必填，时间以UTC存储、前台按北京时间展示。`status`实际支持`draft`、`scheduled`、`live`、`processing`、`replay`、`cancelled`；仅非草稿的公开场次可见，进入课堂只允许`live`且有HTTPS meeting_url，回放只允许`replay`且有HTTPS replay_url。当前`access_type`固定`public`，下方subscriber/series是待实现的目标，不可由后台选择；尚无课程关联表。
+
 ```text
 id
 title                 varchar
 slug                  varchar unique
 description           text nullable
 starts_at             timestamp
-ends_at               timestamp nullable
+ends_at               timestamp
 access_type            varchar
 meeting_provider       varchar nullable
 meeting_url            text nullable

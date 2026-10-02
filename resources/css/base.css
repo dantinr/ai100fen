@@ -419,20 +419,76 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .faq-section summary { cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:19px 0; font-size:14px; list-style:none; }
 .faq-section summary::-webkit-details-marker { display:none; }
 .faq-section details p { padding-bottom:23px; font-size:13px; line-height:1.9; }
-.live-stage { display:grid; grid-template-columns:1.15fr 1fr; gap:64px; margin-top:44px; align-items:center; }
-.live-art { padding:34px; aspect-ratio:1.5; display:flex; flex-direction:column; }
-.live-art-label { display:flex; align-items:center; gap:10px; font-size:11px; }
-.live-art-title { font-size:36px; line-height:1.55; margin:28px 0; }
-.live-art-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:auto; font-size:11px; }
-.live-art-bottom svg { width:30px; height:30px; }
 .badge { display:inline-block; font-size:11px; padding:4px 9px; }
-.live-information h2 { font-size:28px; line-height:1.6; margin:16px 0; }
-.live-information>p { max-width:370px; font-size:13px; line-height:1.9; margin-bottom:23px; }
-.live-detail { display:flex; align-items:center; gap:10px; font-size:12px; margin:13px 0; }
-.live-detail svg { width:15px; height:15px; }
-.live-information>.button { margin-top:25px; width:fit-content; }
-.replay-section { margin-top:50px; }
-.replay-empty { display:flex; align-items:center; justify-content:center; gap:13px; padding:48px 20px; margin-top:20px; font-size:13px; }
+.live-hero { display:grid; grid-template-columns:minmax(0,1fr) 210px; align-items:center; min-height:162px; gap:24px; padding:20px 36px; overflow:hidden; }
+.live-hero-copy h1 { font-size:42px; line-height:1.25; }
+.live-hero-copy p { margin-top:10px; font-size:20px; line-height:1.5; }
+.live-hero-art { justify-self:end; width:185px; }
+.live-hero-art .ufo-widget { width:100%; }
+.live-schedule { margin-top:28px; }
+.live-schedule-heading { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.live-schedule-heading h2 { font-size:30px; line-height:1.25; }
+.live-preview-label { padding:5px 10px; font-size:13px; }
+.live-month-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.live-month-label { display:flex; align-items:baseline; gap:14px; margin:9px 0 12px; }
+.live-month-label strong { font-size:20px; }
+.live-month-label span { font-size:14px; }
+.live-month-nav { display:flex; gap:6px; }
+.live-month-nav a { display:grid; place-items:center; width:38px; height:38px; text-decoration:none; }
+.live-month-nav a svg { width:18px; height:18px; }
+.live-calendar { overflow:hidden; }
+.live-calendar-weekdays,.live-calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); }
+.live-calendar-weekdays>span { display:grid; place-items:center; min-height:38px; font-weight:700; }
+.live-calendar-day { min-width:0; min-height:85px; padding:7px; }
+.live-day-heading { display:flex; justify-content:space-between; align-items:center; min-height:22px; font-size:16px; font-weight:700; }
+.live-today { padding:2px 8px; font-size:11px; }
+.live-calendar-event { display:block; width:100%; min-height:50px; margin-top:3px; padding:5px 7px; text-align:left; cursor:pointer; }
+.live-event-meta { display:flex; align-items:center; justify-content:space-between; gap:3px; font-size:10px; font-weight:700; white-space:nowrap; }
+.live-event-meta>span { padding:0 3px; font-size:10px; }
+.live-calendar-event strong { display:block; margin-top:3px; font-size:12px; line-height:1.25; overflow-wrap:anywhere; }
+.live-selected-row { display:grid; grid-template-columns:minmax(0,1fr) 92px; gap:12px; align-items:end; margin-top:14px; }
+.live-selected-detail { display:flex; align-items:center; justify-content:space-between; min-height:90px; gap:20px; padding:14px 20px; }
+.live-selected-detail p { font-size:14px; }
+.live-selected-detail h3 { display:inline; font-size:22px; line-height:1.45; }
+.live-detail-label { display:inline-block; margin-left:10px; padding:2px 7px; font-size:12px; vertical-align:2px; }
+.live-entry-button { display:inline-flex; align-items:center; justify-content:center; min-width:130px; min-height:42px; padding:8px 12px; font-size:13px; font-weight:700; text-align:center; text-decoration:none; }
+.live-entry-button[hidden] { display:none; }
+.live-guide-art { position:relative; display:flex; align-items:end; justify-content:center; height:90px; }
+.live-guide-art .paul-avatar { width:78px; }
+.live-guide-art>span { position:absolute; left:0; bottom:8px; padding:1px 6px; font-size:13px; font-weight:800; transform:rotate(-12deg); }
+.live-mobile-list { display:none; }
+.live-empty-state,.live-mobile-empty { padding:25px 0; font-size:16px; }
+.live-replays { display:flex; align-items:baseline; gap:18px; margin-top:32px; padding-top:20px; }
+.live-replays h2 { font-size:19px; }
+.live-replays p { font-size:14px; }
+.live-replay-list { display:grid; gap:8px; padding:0; list-style:none; }
+.live-replay-list li { display:flex; gap:12px; flex-wrap:wrap; }
+.live-replay-list span { font-size:13px; }
+@media(max-width:760px) {
+    .live-hero { grid-template-columns:minmax(0,1fr) 78px; min-height:130px; gap:4px; padding:18px 16px; }
+    .live-hero-copy h1 { font-size:21px; }
+    .live-hero-copy p { margin-top:8px; font-size:14px; }
+    .live-hero-art { width:82px; }
+    .live-schedule { margin-top:25px; }
+    .live-schedule-heading { gap:8px; justify-content:space-between; }
+    .live-schedule-heading h2 { font-size:24px; }
+    .live-preview-label { font-size:11px; }
+    .live-month-label { margin:8px 0 14px; }
+    .live-month-label strong { font-size:17px; }
+    .live-calendar,.live-selected-row { display:none; }
+    .live-empty-state { display:none; }
+    .live-mobile-list { display:grid; gap:12px; }
+    .live-session-card { padding:13px; }
+    .live-session-card h3 { display:flex; align-items:baseline; gap:9px; margin-bottom:10px; font-size:18px; }
+    .live-session-card h3 span { font-size:13px; }
+    .live-session-content { padding:10px 12px; }
+    .live-session-meta { display:flex; align-items:center; justify-content:space-between; gap:6px; font-size:13px; }
+    .live-session-content strong { display:block; margin-top:3px; font-size:16px; line-height:1.4; }
+    .live-session-status { padding:1px 6px; font-size:11px; }
+    .live-session-card .live-entry-button { display:block; width:100%; margin-top:8px; }
+    .live-replays { display:block; margin-top:26px; }
+    .live-replays p { margin-top:5px; }
+}
 .me-summary { display:flex; align-items:center; gap:65px; padding:24px 0 28px; }
 .me-summary>div>span { display:block; font-size:12px; }
 .me-summary strong { font-size:34px; display:block; line-height:1.7; }
