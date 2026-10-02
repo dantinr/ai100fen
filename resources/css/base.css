@@ -56,7 +56,7 @@
 @media(prefers-reduced-motion:reduce) { .black-hole-nav-scene,.black-hole-nav-label { transition:none !important; } .black-hole-disk { animation:none !important; } .question-card-copy { display:none; animation:none; } }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:100px; }
-body { margin:0; font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+body { margin:0; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
 button,input { font:inherit; }
 button { cursor:pointer; }
 button:disabled { cursor:default; }
