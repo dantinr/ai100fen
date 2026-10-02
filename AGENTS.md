@@ -982,7 +982,7 @@ AI100分不是为了让用户“学会更多知识”。
 - 通用组件使用语义名称与 Token。不要新增 Pop 命名组件，不在业务模板写固定配色、边框、阴影或大量主题判断，也不要为每个主题复制页面。
 - 新主题登记到 `config/themes.php` 和 Vite 入口，实现现有 Token 契约；主题资源放在 `resources/themes/{theme}`。页面仅加载当前主题样式。
 - UFO 保持角色、状态与进度语义一致；外观和动画参数由主题控制。主题不得改变课程权限、价格、验收或进度计算。
-- 第一阶段不增加用户主题偏好、数据库字段或后台主题管理。Future 当前为机制验证骨架，完整设计后置。
+- D-034按用户明确要求增加Filament后台全站主题配置，`theme_settings`单例覆盖APP_THEME；“跟随APP_THEME”恢复环境配置，非法值回退注册表默认主题。仅管理员可写，选项来自注册表，不接受任意CSS、文件路径或代码。仍不增加用户主题偏好；Future 当前为机制验证骨架，完整设计后置。
 - 切换主题时检查首页、Series、Lesson、问题池、账号、搜索/弹窗、键盘聚焦、手机布局和减少动态效果；阅读页控制装饰浓度。
 
 ---
@@ -1003,3 +1003,11 @@ AI100分不是为了让用户“学会更多知识”。
 - D-030仅作用于`ai100.aicsi.cn`测试域名：Nginx精确location提供`deploy/robots-testing.txt`的Allow规则，HTTP/HTTPS统一`X-Robots-Tag: noindex, nofollow`，优先复用已有响应头，避免重复。
 - 该预览站`APP_ENV=production`是运行安全设置，不代表这套robots策略适用于所有生产域名。不要为测试站改写共享`public/robots.txt`、应用SEO、业务权限、后台认证或必要安全防护。
 - Nginx系统配置变更须单独备份、限定测试站点、通过`nginx -t`后reload；常规git pull Hook继续不修改`/etc/nginx`。验证及Cloudflare人工清单见`deploy/CRAWLER_POLICY.md`。
+
+## 26. Filament后台（D-034）
+
+- 后台路径`/galaxy`，User实现FilamentUser，仅`is_admin=true`可进入，开发环境也不能放开普通账号。注册、个人资料及其他公开接口不得设置is_admin；使用`admin:set`对明确指定的已有账号确认授权或撤销，禁止公开注册管理员或提供默认密码。
+- CourseSeries/Lesson Policy在服务端检查管理员权限；自定义排序和Theme保存也必须授权。首版通过状态归档保留内容与学习记录，不提供硬删除或批量删除。
+- 课程大纲来自关联Lesson的position/title/goal，不另存重复JSON。课程六项定义及课时目标/步骤/Prompt/验收在发布前校验，不能绕过模型校验；课时结构、状态或分值调整使课程回到草稿，需重新审核发布。
+- 已有进度的Lesson不能直接改验收项、分值或所属课程；不要清空真实学习记录来绕过限制。版本化内容迁移另行设计。
+- 本地新增非破坏性迁移可按需求执行；线上迁移与管理员授权必须由运维独立审阅和执行，常规git pull Hook继续不执行迁移或权限授权。

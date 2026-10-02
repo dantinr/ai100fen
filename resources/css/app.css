@@ -1,10 +1,13 @@
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
 @import './base.css';
 @import './components.css';
 @import './variants.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+@source '../views/layouts/frontend.blade.php';
+@source '../views/frontend';
+@source '../views/components';
+@source '../js';
 @source not '../../public/build';
 
 @theme {

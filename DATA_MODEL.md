@@ -32,6 +32,8 @@ LiveSession
 
 ## 2. users
 
+D-034新增`is_admin boolean default false`，不在User公开fillable字段中。普通注册及资料修改不能设置此标志；FilamentUser只允许明确授权的管理员进入galaxy，模型Policy另行校验课程与课时操作。CLI `admin:set`仅操作已有邮箱账号且要求确认，支持撤销；不新增默认管理员、默认密码或公开权限接口。
+
 ```text
 id
 name
@@ -145,7 +147,7 @@ D-023当时只同步字段设计；D-031已新增免费任务业务表，未改�
 
 迁移`2026_10_01_180000_create_course_learning_tables`仅新增三张表，不回填或删除既有用户；生产须审阅后手动迁移，日常pull Hook不执行迁移。
 
-- `course_series`：id、唯一slug、title、category（varchar，模型白名单）、user_intent、final_outcome、三个宪章JSON字符串数组、recommendation_keywords（JSON）、minutes、price（decimal10,2）、is_free（默认false）、status（默认draft）、时间戳。没有新增FreeCourse模型。内容必须完整提交，当前没有草稿编辑器；正式发布校验六项定义和至少一个完整Lesson。完整免费发布要求全部Lesson published且points合计100。
+- `course_series`：id、唯一slug、title、category（varchar，模型白名单）、user_intent、final_outcome、三个宪章JSON字符串数组、recommendation_keywords（JSON）、minutes、price（decimal10,2）、is_free（默认false）、status（默认draft）、时间戳。没有新增FreeCourse模型。D-031初版要求完整提交；D-034已支持逐步保存草稿，新增字段见第4节。正式发布校验六项定义和至少一个完整Lesson。完整免费发布要求全部Lesson published且points合计100。
 - `lessons`：id、course_series_id、slug、title、position、score（累计展示分值）、points（本步验收权重）、minutes、is_free（默认false，仅代表该Lesson试看）、status、intro、goal、steps（JSON标题/正文）、prompt、可空code/code_filename、resources（JSON文件名/说明/文本）、checks（JSON验收清单）、时间戳。唯一(course_series_id,slug)，无课数硬限制。当前图文内容未建视频或独立附件表。
 - `lesson_progress`：id、user_id、lesson_id、checks（JSON布尔数组）、progress_percent（0–100整数）、last_position_seconds（预留0）、completed_at、时间戳。唯一(user_id,lesson_id)，外键限制删除。ProgressService在事务中锁当前用户，幂等保存本人记录；不接受客户端user_id、分数、完成时间或会员状态。
 
@@ -158,6 +160,19 @@ Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一�
 ---
 
 ## 4. lessons
+
+### D-034内容管理扩展（当前实现）
+
+迁移`2026_10_02_120000_add_course_admin_and_theme_settings`只增加列与表，不改写课程、用户或进度记录：
+
+- `course_series.description`：nullable text，Markdown课程介绍；`objectives`：nullable JSON字符串数组，课程目标清单。沿用六项宪章字段，不以目标清单代替最终验收。
+- `lessons.objectives`：nullable JSON字符串数组；`content`：nullable longtext，Markdown正文；`video_url`：nullable text，校验HTTPS链接，前台提供跳转入口。`goal`仍是课时最终目标，`steps`仍是有序标题/正文数组，作为可编辑课时大纲；不新增重复outline表或字段。
+- 课程大纲直接按Lesson.position/id读取标题、目标、状态与分值。后台排序服务授权、锁课程与课时、校验完整ID集合及所属关系，不允许跨课程排序。
+- 草稿的旧非空文本列保存空字符串，JSON清单保存空数组，新增扩展字段可以为空；数据库不必放宽旧约束。发布需完整定义与已发布课时，最后课时score=100；完整免费还需全部课时发布且points合计100。课时结构/状态/分值变更后课程退回草稿，需重新发布。
+- 课时已有LessonProgress时禁止直接修改checks/points/score，所有已有课时禁止移到另一课程；不删除或重置学习记录。后台归档通过status实现，Policy禁用硬删除。
+- `theme_settings`：id、nullable theme、timestamps。只管理id=1的全站配置；null表示跟随APP_THEME，白名单来自config/themes.php，后台显式选择优先，非法值回退注册表默认。尚未迁移时前台继续用环境配置。不是用户偏好表；新增主题及Token仍通过代码登记。
+
+下列Lesson字段列表仍包含尚未实现的长期设计，以D-031及此节当前字段为准。
 
 ```text
 id

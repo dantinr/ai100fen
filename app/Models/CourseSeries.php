@@ -13,14 +13,29 @@ class CourseSeries extends Model
 
     protected $guarded = ['id'];
 
+    protected $attributes = [
+        'user_intent' => '', 'final_outcome' => '', 'completion_criteria' => '[]',
+        'agent_role' => '[]', 'human_judgment_required' => '[]', 'recommendation_keywords' => '[]',
+        'minutes' => 100, 'price' => 100, 'is_free' => false, 'status' => 'draft',
+    ];
+
     protected function casts(): array
     {
-        return ['is_free' => 'boolean', 'price' => 'decimal:2', 'completion_criteria' => 'array', 'agent_role' => 'array', 'human_judgment_required' => 'array', 'recommendation_keywords' => 'array'];
+        return ['is_free' => 'boolean', 'price' => 'decimal:2', 'objectives' => 'array', 'completion_criteria' => 'array', 'agent_role' => 'array', 'human_judgment_required' => 'array', 'recommendation_keywords' => 'array'];
     }
 
     protected static function booted(): void
     {
         static::saving(function (self $series) {
+            if (! in_array($series->status, ['draft', 'published', 'archived'], true)) {
+                throw ValidationException::withMessages(['status' => '请选择有效的课程状态。']);
+            }
+            foreach (['completion_criteria', 'agent_role', 'human_judgment_required', 'recommendation_keywords', 'objectives'] as $field) {
+                $items = $series->$field;
+                if ($items !== null && (! is_array($items) || ! array_is_list($items) || collect($items)->contains(fn ($item) => ! is_string($item) || trim($item) === ''))) {
+                    throw ValidationException::withMessages([$field => '请填写有效的具体事项清单。']);
+                }
+            }
             if (! in_array($series->category, ['solve', 'create', 'explore'], true)) {
                 throw ValidationException::withMessages(['category' => '请选择唯一的 Solve / Create / Explore 类别。']);
             }
@@ -40,6 +55,9 @@ class CourseSeries extends Model
             }
             if (! $series->exists || ! $series->lessons()->where('status', 'published')->exists()) {
                 throw ValidationException::withMessages(['lessons' => '发布前至少需要一个完整的 Lesson。']);
+            }
+            if ((int) $series->lessons()->where('status', 'published')->reorder()->orderByDesc('position')->orderByDesc('id')->first()->score !== 100) {
+                throw ValidationException::withMessages(['status' => '最后一个已发布课时须为100分，并按课程完成标准验收整个任务。']);
             }
             if ($series->is_free && ($series->lessons()->where('status', '!=', 'published')->exists() || (int) $series->lessons()->sum('points') !== 100)) {
                 throw ValidationException::withMessages(['lessons' => '完整免费任务的全部步骤须已发布，验收权重合计100分。']);

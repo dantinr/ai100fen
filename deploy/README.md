@@ -100,6 +100,12 @@ git pull
 - 首页、三个免费任务、课程页、问题池、账号入口、提交墙、robots与全部构建资源正常；个人中心继续要求登录，私有路径403、后台404，测试站Allow规则与noindex响应头保持。
 
 
+## Filament课程管理首次初始化（D-034）
+
+`git pull`只发布代码与资源，不自动增加数据库字段或授予管理员权限。新增迁移与后台使用说明见[docs/ADMIN.md](../docs/ADMIN.md)。首次启用须先备份并审阅目标数据库，再用dante独立执行`php artisan migrate --force --no-interaction`，核对迁移状态；随后对人类明确指定的已有账号运行`php artisan admin:set 已注册邮箱`并确认。保留已有密码与.env，不创建默认管理员。后台路径为`/galaxy`。
+
+Filament的Composer post-autoload-dump会执行`filament:upgrade`，发布被Git忽略的官方CSS/JS/字体；这些由dante写入并继承源码组只读ACL，不手工上传、不改为777。后台主题选择存数据库，前台新请求生效；选择“跟随APP_THEME”可恢复环境配置。后续无数据库变化时仍只需git pull。
+
 ## Free Lab首次初始化（D-031）
 
 本地push、服务器pull后，新增路由需要三张课程学习表。审阅`2026_10_01_180000_create_course_learning_tables`，确认目标项目数据库和迁移状态，再独立执行一次：

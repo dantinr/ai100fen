@@ -734,3 +734,10 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
     .free-downloads .text-link { flex-wrap:wrap; }
 }
 @media(max-width:760px) { .my-course-image .art-time { display:none; } .my-course-image .app-course-art { justify-content:center; padding:4px; } .my-course-image .art-icon { width:34px; height:34px; } }
+.free-markdown > * + * { margin-top: 1rem; }
+.free-markdown h1, .free-markdown h2, .free-markdown h3 { line-height: 1.4; }
+.free-markdown ul, .free-markdown ol { padding-inline-start: 1.5rem; }
+.free-markdown ul { list-style: disc; }
+.free-markdown ol { list-style: decimal; }
+.free-markdown pre { overflow: auto; padding: 1rem; }
+.free-markdown img { max-width: 100%; height: auto; }

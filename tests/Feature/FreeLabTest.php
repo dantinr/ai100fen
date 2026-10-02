@@ -142,6 +142,7 @@ class FreeLabTest extends TestCase
         $first->update(['points' => 30, 'score' => 30]);
         $last = $first->replicate();
         $last->fill(['slug' => 'final-check', 'position' => 2, 'points' => 70, 'score' => 100])->save();
+        $series->refresh()->update(['status' => 'published']); // Review the edited outline before allowing learning.
         $service = app(ProgressService::class);
         $service->save($user, $first, [true, true, true]);
         $this->assertSame(30, $service->seriesScore($user, $series));
