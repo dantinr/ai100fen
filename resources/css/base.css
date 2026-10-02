@@ -110,7 +110,7 @@ svg.lucide { width:18px; height:18px; flex-shrink:0; }
 .course-kicker>span { gap:5px; }
 .course-kicker svg { width:13px; height:13px; }
 .course-card h3 { margin-top:11px; font-size:18px; line-height:1.6; }
-.course-card-content>p { font-size:12px; margin-top:9px; min-height:40px; }
+.course-card-content>p { font-size:16px; margin-top:9px; min-height:40px; }
 .course-card-bottom { margin-top:22px; padding:15px 0; display:flex; align-items:center; justify-content:space-between; font-size:11px; }
 .course-arrow { display:grid; place-items:center; height:30px; width:30px; }
 .first-step-band { display:flex; align-items:center; gap:22px; padding:30px 0; margin-top:34px; }
@@ -133,7 +133,7 @@ svg.lucide { width:18px; height:18px; flex-shrink:0; }
 .live-status { display:flex; align-items:center; gap:7px; font-size:11px; margin-top:24px; }
 .home-live h3 { font-size:16px; margin-top:9px; }
 .home-live p { font-size:12px; margin:6px 0 16px; }
-.site-footer { padding:27px 0; font-size:11px; }
+.site-footer { padding:27px 0; font-size:16px; }
 .footer-inner { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
 .footer-brand { font-size:18px; }
 .footer-inner>span { white-space:nowrap; }
@@ -567,7 +567,7 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .app-ui .visual-label { top:10px; left:12px; padding:2px 7px; font-size:10px; }
 .app-ui .course-card-content { padding:20px 19px 0; flex:1; display:flex; flex-direction:column; }
 .app-ui .course-card h3 { font-size:20px; line-height:1.5; margin-top:10px; }
-.app-ui .course-card-content>p { line-height:1.85; margin-bottom:20px; }
+.app-ui .course-card-content>p { font-size:16px; line-height:1.85; margin-bottom:20px; }
 .app-ui .course-card-bottom { margin-top:auto; gap:12px; }
 .app-ui .course-card-bottom>span { flex:1; }
 .app-ui .course-arrow { width:36px; height:36px; flex-shrink:0; }
