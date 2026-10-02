@@ -120,7 +120,8 @@ class LegacyCourseDefinitions
                     'slug' => $outline['slug'], 'title' => $outline['title'], 'position' => $index + 1,
                     'score' => $outline['score'], 'points' => 10, 'minutes' => $outline['minutes'], 'is_free' => $outline['is_free'],
                     'intro' => $content['intro'] ?? $outline['summary'], 'goal' => $content['goal'] ?? $outline['goal'],
-                    'objectives' => [$content['goal'] ?? $outline['goal']], 'steps' => $content['steps'] ?? [], 'prompt' => $content['prompt'] ?? '',
+                    'objectives' => [$content['goal'] ?? $outline['goal']], 'content' => $content['content'] ?? null,
+                    'steps' => $content['steps'] ?? [], 'prompt' => $content['prompt'] ?? '',
                     'code' => $content['code'] ?? null, 'code_filename' => isset($content['code']) ? 'hello.html' : null,
                     'checks' => $content['checks'] ?? [],
                     'resources' => $content ? [[

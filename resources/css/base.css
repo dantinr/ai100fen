@@ -364,12 +364,15 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .lesson-tabs { display:flex; gap:26px; margin-top:15px; }
 .lesson-tabs button { padding:15px 0; font-size:13px; white-space:nowrap; }
 [role=tabpanel] { padding:24px 0; min-height:300px; }
-.lesson-intro { font-size:13px; line-height:1.9; }
+.lesson-intro { font-size:16px; line-height:1.8; }
+.lesson-article { max-width:70ch; margin-top:24px; font-size:16px; line-height:1.75; }
+.lesson-article h2 { font-size:20px; font-weight:var(--weight-strong); }
+.lesson-article code { overflow-wrap:anywhere; }
 .instruction-steps { padding:0; margin:28px 0 0; list-style:none; }
 .instruction-steps li { display:flex; align-items:flex-start; gap:18px; margin:25px 0; }
 .instruction-steps li>span { width:30px; height:30px; display:grid; place-items:center; flex-shrink:0; font-size:11px; }
-.instruction-steps h3 { font-size:15px; margin-bottom:8px; }
-.instruction-steps p { font-size:13px; line-height:1.95; }
+.instruction-steps h3 { font-size:17px; margin-bottom:8px; }
+.instruction-steps p { font-size:16px; line-height:1.8; }
 .instruction-steps .text-link { margin-top:10px; }
 .panel-title { font-size:19px; margin-bottom:22px; }
 .code-block { overflow:hidden; }

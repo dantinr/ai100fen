@@ -10,6 +10,7 @@ use App\Services\CourseAccessService;
 use App\Services\FreeLabInstaller;
 use App\Services\LegacyCourseImporter;
 use App\Support\FrontendCatalog;
+use App\Support\WebsiteFirstLessonContent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -62,6 +63,7 @@ class LegacyCourseImportTest extends TestCase
         $this->assertSame('published', $lessons->first()->status);
         $content = app(FrontendCatalog::class)->previewContent($sources[0], $sources[0]['lessons'][0]);
         $this->assertSame($content['prompt'], $lessons->first()->prompt);
+        $this->assertSame($content['content'], $lessons->first()->content);
         $this->assertSame($content['code'], $lessons->first()->code);
         $this->assertSame($content['checks'], $lessons->first()->checks);
         $this->assertStringContainsString($content['checks'][0], $lessons->first()->resources[0]['content']);
@@ -84,5 +86,38 @@ class LegacyCourseImportTest extends TestCase
         $this->assertSame(0, $report['lessons']);
         $this->assertSame(16, $report['skipped']);
         $this->assertSame($before, [CourseSeries::all()->toArray(), Lesson::all()->toArray(), $progress->fresh()->toArray()]);
+    }
+
+    public function test_first_lesson_content_sync_requires_original_version_and_preserves_progress(): void
+    {
+        app(LegacyCourseImporter::class)->run();
+        $lesson = CourseSeries::where('slug', 'build-a-website')->firstOrFail()->lessons()->firstOrFail();
+        $original = WebsiteFirstLessonContent::original();
+        $lesson->update([
+            'goal' => $original['goal'], 'intro' => $original['intro'],
+            'objectives' => [$original['goal']], 'content' => null,
+            'steps' => array_map(fn (array $step) => ['body' => $step['body'], 'title' => $step['title']], $original['steps']),
+            'prompt' => $original['prompt'],
+        ]);
+        $progress = LessonProgress::create([
+            'user_id' => User::factory()->create()->id, 'lesson_id' => $lesson->id,
+            'checks' => [true, false, false], 'progress_percent' => 33,
+        ]);
+
+        $this->artisan('courses:sync-website-first-lesson')->assertSuccessful();
+        $this->assertNull($lesson->fresh()->content);
+        $this->artisan('courses:sync-website-first-lesson --apply')->assertSuccessful();
+        $fresh = $lesson->fresh();
+        $this->assertSame('published', $fresh->status);
+        $this->assertSame($original['checks'], $fresh->checks);
+        $this->assertSame(10, $fresh->points);
+        $this->assertSame($original['code'], $fresh->code);
+        $this->assertSame(33, $progress->fresh()->progress_percent);
+        $this->assertStringContainsString('连接超时', $fresh->content);
+        $this->artisan('courses:sync-website-first-lesson --apply')->assertSuccessful();
+
+        $fresh->update(['intro' => '管理员后续修改']);
+        $this->artisan('courses:sync-website-first-lesson --apply')->assertFailed();
+        $this->assertSame('管理员后续修改', $lesson->fresh()->intro);
     }
 }

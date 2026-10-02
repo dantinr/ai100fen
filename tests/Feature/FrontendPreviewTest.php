@@ -16,7 +16,9 @@ class FrontendPreviewTest extends TestCase
     public function test_free_lesson_includes_steps_and_a_downloadable_checklist(): void
     {
         $this->get('/series/build-a-website/lessons/server-and-ip')
-            ->assertOk()->assertSee('lesson-prompt')->assertSee('data-acceptance', false);
+            ->assertOk()->assertSee('lesson-prompt')->assertSee('data-acceptance', false)
+            ->assertSee('从浏览器验证公网访问')->assertSee('先只读检查当前 Web 服务')
+            ->assertSee('开始前，先准备好')->assertSee('http://你的公网 IP/hello.html');
 
         $this->get('/series/build-a-website/lessons/server-and-ip/checklist')
             ->assertOk()->assertHeader('Content-Type', 'text/markdown; charset=UTF-8')

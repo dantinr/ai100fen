@@ -8,6 +8,8 @@
 
 执行：`php artisan courses:import-legacy --dry-run`先检查，`php artisan courses:import-legacy`独立执行。事务中只新增不存在的slug；遇到同slug整门跳过，不给现有课程补课时、不覆盖字段或重置进度。生产执行前保留私有内容快照，git pull Hook不自动导入。
 
+首课文字内容在现有导入之后补全：公开试看与新导入课时共用`WebsiteFirstLessonContent`。已有数据库课时不会因Git pull或再次导入而自动覆盖。先运行`php artisan courses:sync-website-first-lesson`预检；仅在显示原始导入版本且审阅内容后，独立运行`php artisan courses:sync-website-first-lesson --apply`。命令只更新目标、简介、正文、步骤和Prompt，保留三项验收、分值、示例代码、发布状态及学习记录；发现人工编辑时拒绝覆盖，应在后台手动合并。首课视频尚未录制。
+
 ## 100分钟搭建网站
 
 - Slug：`build-a-website`

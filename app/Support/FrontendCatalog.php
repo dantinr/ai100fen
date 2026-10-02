@@ -304,19 +304,7 @@ class FrontendCatalog
     {
         abort_unless($this->canPreview($series, $lesson), 403);
 
-        return [
-            'goal' => '让一个 hello.html 页面，通过服务器的公网 IP 被浏览器访问。',
-            'intro' => '网站的第一步，是把一个简单页面放到互联网上。这一课先完成最小结果：输入公网 IP，就能看到自己的页面。',
-            'steps' => [
-                ['title' => '确认你的测试环境', 'body' => '准备自己的测试服务器，记录公网 IP，并确认可以安全登录。首次配置请使用测试环境，妥善保管登录凭据，不要把密码或私钥粘贴到公开对话。'],
-                ['title' => '先把目标告诉 Agent', 'body' => '复制本节 Prompt。请 Agent 先说明计划、需要修改的文件与服务，再确认执行。目标只有一个：部署 hello.html，并通过公网 IP 访问。'],
-                ['title' => '创建并部署第一个页面', 'body' => '让 Agent 检查现有服务，把示例 HTML 放到正确的网站目录。端口或服务需要变更时，先看清影响再确认，不要覆盖现有网站。'],
-                ['title' => '打开浏览器，验收结果', 'body' => '在地址栏输入 http://你的公网IP，确认页面能打开。如果失败，让 Agent 先检查服务、端口和日志，给出原因后再修改。'],
-            ],
-            'prompt' => "我想把一个 hello.html 页面部署到我自己的测试服务器，并通过公网 IP 访问。\n\n请先检查环境，说明你的计划，以及需要修改的文件和服务。不要覆盖已有网站，不要输出密码或私钥。涉及安装软件、变更端口或服务时，先等我确认。\n\n页面内容是：Hello，世界。这是我的第一个网站。\n\n完成后请告诉我访问地址，并给出浏览器验收步骤。如果访问失败，先诊断，再提出修改建议。",
-            'code' => "<!doctype html>\n<html lang=\"zh-CN\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>我的第一个网站</title>\n</head>\n<body>\n  <h1>Hello，世界。</h1>\n  <p>这是我的第一个网站。</p>\n</body>\n</html>",
-            'checks' => ['通过公网 IP 能打开页面', '页面显示了我自己的内容', '我能找到网站文件所在的位置'],
-        ];
+        return WebsiteFirstLessonContent::current();
     }
 
     private function websiteLessons(): array
