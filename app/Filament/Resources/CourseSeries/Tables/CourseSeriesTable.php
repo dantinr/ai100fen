@@ -33,6 +33,8 @@ class CourseSeriesTable
                 EditAction::make()->label('编辑与大纲'),
                 Action::make('manageLessons')->label('课时管理')
                     ->url(fn ($record) => LessonResource::getUrl('index', ['filters' => ['course_series_id' => ['value' => $record->id]]])),
+                Action::make('frontendPreview')->label('前台预览')->icon('heroicon-o-arrow-top-right-on-square')
+                    ->url(fn ($record) => route('courses.preview', $record))->openUrlInNewTab(),
             ])
             ->defaultSort('updated_at', 'desc');
     }

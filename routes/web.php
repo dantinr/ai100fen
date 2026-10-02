@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommitHistoryController;
+use App\Http\Controllers\CoursePreviewController;
 use App\Http\Controllers\FreeLabController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
@@ -27,6 +28,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
+    Route::get('/preview/courses/{series}/{lessonSlug?}', CoursePreviewController::class)->name('courses.preview');
     Route::post('/free/{series}/{lessonSlug}/progress', [FreeLabController::class, 'save'])->middleware('throttle:60,1,free-progress:')->name('free.progress');
     Route::get('/me', [ProfileController::class, 'show'])->name('me');
     Route::patch('/me/profile', [ProfileController::class, 'update'])->name('profile.update');

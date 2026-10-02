@@ -112,6 +112,7 @@ class AdministrationTest extends TestCase
         $lesson = $series->lessons->first();
         $lessonListUrl = LessonResource::getUrl('index', ['filters' => ['course_series_id' => ['value' => $series->id]]]);
         Livewire::test(ListCourseSeries::class)->assertTableColumnExists('id')->assertTableActionHasUrl('manageLessons', $lessonListUrl, $series);
+        Livewire::test(ListCourseSeries::class)->assertTableActionHasUrl('frontendPreview', route('courses.preview', $series), $series);
         Livewire::withQueryParams(['filters' => ['course_series_id' => ['value' => $series->id]]])->test(ListLessons::class)
             ->assertCanSeeTableRecords([$lesson])
             ->assertCanNotSeeTableRecords(Lesson::where('course_series_id', '!=', $series->id)->get());
@@ -121,6 +122,32 @@ class AdministrationTest extends TestCase
             'objectives' => ['完成真实网页'], 'content' => "## 正文目标\n\n<script>evil()</script>\n\n[危险](javascript:alert(1))", 'video_url' => 'https://example.test/video',
         ])->call('save')->assertHasNoFormErrors();
         $this->get('/free/'.$series->slug.'/'.$lesson->slug)->assertOk()->assertSee('正文目标')->assertSee('完成真实网页')->assertDontSee('<script>evil()</script>', false)->assertDontSee('href="javascript:', false);
+    }
+
+    public function test_frontend_preview_is_admin_only_read_only_and_supports_unpublished_paid_courses(): void
+    {
+        app(FreeLabInstaller::class)->install();
+        $series = CourseSeries::first();
+        $series->update(['status' => 'draft', 'is_free' => false, 'price' => '100.00']);
+        $first = $series->lessons()->first();
+        $draft = $first->replicate();
+        $draft->fill(['slug' => 'draft-step', 'title' => '未发布的课时', 'status' => 'draft', 'position' => 2])->save();
+        $url = route('courses.preview', $series);
+
+        $this->get($url)->assertRedirect('/login');
+        $this->actingAs(User::factory()->create())->get($url)->assertForbidden();
+        $this->administrator();
+        $this->get($url)->assertOk()->assertSee('管理员前台预览')->assertSee('付费课程')->assertSee('未发布的课时')
+            ->assertSee('data-page="lesson"', false)
+            ->assertDontSee('data-free-progress', false)->assertDontSee('保存验收进度')->assertDontSee(route('free.resource', [$series, $first->slug, $first->resources[0]['name']]))
+            ->assertHeader('Cache-Control', 'no-store, private');
+        $this->get(route('courses.preview', [$series, $draft->slug]))->assertOk()->assertSee($draft->title);
+        $this->get(route('courses.preview', [$series, 'not-in-this-course']))->assertNotFound();
+        $this->get(route('free.lesson', [$series, $first->slug]))->assertNotFound();
+        $this->assertDatabaseCount('lesson_progress', 0);
+        $this->assertSame('draft', $series->fresh()->status);
+        $empty = CourseSeries::create(['slug' => 'empty-preview', 'title' => '没有课时的课程', 'category' => 'solve']);
+        $this->get(route('courses.preview', $empty))->assertOk()->assertSee('还没有课时')->assertSee('添加课时');
     }
 
     public function test_outline_reordering_is_scoped_authorized_and_requires_republication(): void

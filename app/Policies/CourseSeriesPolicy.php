@@ -9,22 +9,22 @@ class CourseSeriesPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->is_admin;
+        return $user->is_admin === true;
     }
 
     public function view(User $user, CourseSeries $series): bool
     {
-        return $user->is_admin;
+        return $user->is_admin === true;
     }
 
     public function create(User $user): bool
     {
-        return $user->is_admin;
+        return $user->is_admin === true;
     }
 
     public function update(User $user, CourseSeries $series): bool
     {
-        return $user->is_admin;
+        return $user->is_admin === true;
     }
 
     public function delete(User $user, CourseSeries $series): bool
