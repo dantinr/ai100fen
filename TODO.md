@@ -32,7 +32,7 @@
 - [x] 精简README为当前项目介绍与按日期整理的更新日志，移除Laravel模板介绍及详细运行、部署说明
 - [x] 配置服务器git pull更新上线：版本化public/build，自动安装锁定PHP依赖及刷新缓存，验证实际拉取与线上资源（D-025）
 - [x] 统一为本地push、服务器pull：本地同步GitHub main与Gitee master，服务器main跟踪gitee/master，安装脚本设置上游，实际pull验证Hook发布（D-029）
-- [ ] D-033将服务器项目改为dante:dante，www-data加入dante组；隔离源码只读与运行目录写入，限制FPM重载sudo，并验证普通用户git pull发布
+- [x] D-033将服务器项目改为dante:dante，www-data加入dante组；隔离源码只读与运行目录写入，限制FPM重载免密sudo，验证普通用户git pull、权限继承与线上页面
 - [x] 邮箱注册、登录、记住登录与退出，Laravel原生会话认证、密码Hash、表单校验、CSRF及登录限流（D-026）
 - [x] 受保护的个人中心，展示账号信息、修改昵称和密码；改密保留当前登录并使其他设备会话失效
 - [x] 本地与生产首次执行已审阅的框架初始迁移；生产建立独立项目MySQL数据库与受限账号，保留APP_KEY，不写入示例用户

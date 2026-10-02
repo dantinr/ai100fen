@@ -28,7 +28,7 @@ sh deploy/enable-deploy-user.sh /var/www/ai100fen
 
 源码目录750、文件640（保留必要的可执行位），默认ACL确保新文件对组只读；`.git`仅部署用户可访问，`.env`保持640且内容不变。`storage`和`bootstrap/cache`采用2770目录及共享写入默认ACL，使部署用户和Web进程都能写入；Web进程不能修改源码、依赖、构建资源或Git。运行文件由实际创建者拥有，不要求所有运行文件都属于dante。不得对整个`/var/www`递归改归属或设置777。
 
-`/etc/sudoers.d/ai100fen-deploy`只授予`dante`免密执行`/usr/bin/systemctl reload php8.5-fpm`，不加入sudo组、不授予任意命令权限。
+`/etc/sudoers.d/ai100fen-deploy`只新增`dante`免密执行`/usr/bin/systemctl reload php8.5-fpm`，不加入sudo组、不新增任意命令权限；现有dante账号原本的需密码sudo规则保留。
 
 随后以`dante`登录并配置Git更新：
 
@@ -90,6 +90,14 @@ git pull
 - 首页、问题池、价格页、免费第一课和清单下载正常；未开放清单与`.env`、`.git`继续拒绝访问。D-030将测试域名robots改为允许抓取，HTTP/HTTPS均使用noindex响应头；环境隔离、Nginx安装及Cloudflare人工清单见[CRAWLER_POLICY.md](CRAWLER_POLICY.md)。
 - 已核对全部6份构建资源的SHA256与本地一致，确认`.env`字节未变。
 - 切换前的构建产物、bootstrap缓存与`.env`保存在仅root可访问的`/var/backups/ai100fen/git-pull-20261001-154705`，旧构建遗留文件另行归档，不覆盖业务数据。
+
+## 普通用户发布验证（2026-10-02）
+
+- 项目与Git由`dante:dante`管理，`www-data`加入dante组；已确认Nginx和PHP-FPM新工作进程加载该组，`/var/www`保持root:root 755。
+- 原权限及ACL、Git配置与.env校验值备份至`/var/backups/ai100fen/deploy-user-Ykiqv3dC`；.env内容校验一致，没有执行迁移或改动业务数据。
+- 用dante实际git pull，自动完成Composer、配置/路由/视图缓存、提交快照与受限sudo重载；服务器检出保持干净。普通命令的免密sudo被拒绝，原有需密码管理规则未改动。
+- 实测Web可读源码、不可写源码/.env/.git/依赖/构建；运行目录双方新建文件并交叉写入成功，默认ACL保证新源码文件640、运行文件660，测试文件已清理。
+- 首页、三个免费任务、课程页、问题池、账号入口、提交墙、robots与全部构建资源正常；个人中心继续要求登录，私有路径403、后台404，测试站Allow规则与noindex响应头保持。
 
 
 ## Free Lab首次初始化（D-031）
