@@ -1,12 +1,15 @@
-@props(['state' => 'idle', 'size' => 'medium'])
+@props(['state' => 'idle', 'size' => 'medium', 'portrait' => false])
 @php
     $state = in_array($state, ['idle', 'idea', 'got_it', 'so_so', 'awkward'], true) ? $state : 'idle';
     $size = in_array($size, ['small', 'medium', 'large'], true) ? $size : 'medium';
 @endphp
-<span {{ $attributes->class(['paul-avatar', 'paul-size-'.$size]) }} data-paul-avatar data-state="{{ $state }}" aria-hidden="true">
-    <svg viewBox="0 0 180 200" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+<span {{ $attributes->class(['paul-avatar', 'paul-size-'.$size, 'paul-avatar-portrait' => $portrait]) }} data-paul-avatar data-state="{{ $state }}" aria-hidden="true">
+    <svg viewBox="{{ $portrait ? '22 8 136 136' : '0 0 180 200' }}" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+        @unless($portrait)
         <ellipse cx="90" cy="189" rx="43" ry="6" fill="var(--paul-stroke)" opacity=".12"/>
+        @endunless
         <g class="paul-character" stroke="var(--paul-stroke)" stroke-width="var(--paul-stroke-width)" stroke-linecap="round" stroke-linejoin="round">
+            @unless($portrait)
             <g class="paul-body">
                 <path d="M63 132q-16 13-14 44l8 8h67l8-8q2-31-17-44z" fill="var(--paul-suit)"/>
                 <path d="m70 130 20 17 20-17v-12H70z" fill="var(--paul-skin)"/>
@@ -23,6 +26,7 @@
                 <path d="M126 144q10 11 22 15l4 10q-20-1-31-14" fill="var(--paul-suit)"/>
                 <path d="M146 159q1-10 6-7l1 7 8-2q5-1 4 4l-8 3 7 2q4 2 1 5l-10-2q-10 4-12-2z" fill="var(--paul-skin)"/>
             </g>
+            @endunless
             <g class="paul-head">
                 <path d="M66 52q-13-13-7-27m53 27q15-10 13-22" stroke="var(--paul-skin-shadow)"/>
                 <circle cx="60" cy="21" r="6" fill="var(--paul-suit-accent)"/>

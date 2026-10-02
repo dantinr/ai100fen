@@ -529,3 +529,5 @@ h1,h2,h3 { font-family:var(--font-heading); }
     .black-hole-nav-link:hover .black-hole-nav-scene { opacity:1; transform:translate(-50%,0); }
     .black-hole-nav-link:hover .black-hole-disk { animation:black-hole-orbit var(--black-hole-orbit-duration) linear infinite; }
 }
+
+.footer-repo-icon { background:currentColor; border-radius:50%; --paul-skin:var(--color-surface); --paul-skin-shadow:var(--color-surface); --paul-stroke:currentColor; --paul-eye:currentColor; --paul-light:var(--color-surface); --paul-suit-accent:var(--color-surface); }
