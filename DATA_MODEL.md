@@ -659,3 +659,17 @@ entitlements
 公开介绍`/courses/{series}`及公开关联目标要求课程published且有published课时；完整免费须满足Free Lab过滤规则。课程元信息与已发布大纲可公开，课时正文/Prompt/代码/附件不随路径输出，付费学习仍未开放。草稿/归档源或目标不出现在关系模块；管理员只读预览可查看这些连接，并只跳转到受保护预览。
 
 本阶段不新增level、outcome或course_type：已有category/final_outcome及is_free继续使用；会员访问权益不能由课程类型替代。
+
+
+
+## questions（D-041，私人问题收集，当前实现）
+
+审计前没有问题池提交模型。本次仅建立一张questions表；未来公开问题池须评估扩展此表，不平行新建重复任务卡系统。
+
+- id、user_id（users外键，限制硬删除）、submission_key（UUID）、content_hash（SHA-256）；唯一(user_id,submission_key)，索引(user_id,created_at)。
+- title varchar(160)、category varchar(16)白名单solve/create/explore、goal text、scope nullable text、outcome text、completion_criteria JSON字符串清单、时间戳。
+- 请求限制：goal/scope/outcome各1500字，验收1–8条且每条最多300字；confirmed必须accepted。归属来自认证用户，输入user_id/visibility/status/messages不写入。
+- 没有公开状态、聊天消息、会员字段或课程完成分值：所有记录均为本人私人收集。创建不发布、不授权课程、不标记100分；管理员不能查看他人的私人记录。
+- QuestionSubmissionService事务先锁用户；同一UUID及内容返回原记录，编号冲突409、不覆盖。仅保存白名单任务卡，聊天与未确认草稿只在页面内存。
+- POST /questions保存；GET /questions/mine分页本人记录，GET /questions/{id}归属不符404；全部依赖现有Session认证，写入有CSRF/限流，查看与成功JSON设置private/no-store。POST /questions/recommendations不持久化，复用完整免费课程过滤和推荐服务。
+- 迁移2026_10_02_170000_create_questions_table只新增表，不触及已有课程/课时/关系/用户/进度。公开发布、保留期限和用户删除流程仍待另行设计。

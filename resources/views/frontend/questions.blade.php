@@ -5,14 +5,16 @@
     <header class="question-hero">
         <div class="page-heading">
             <span class="eyebrow">问题池 / AI + AGENT</span>
-            <h1>你也在好奇<br>这些问题吗<span class="heading-question">？</span></h1>
-            <p>从大家关注的话题里，找到一件值得亲自试试的事。</p>
+            <h1>把问题扔进黑洞<span class="heading-question">.</span></h1>
+            <p>告诉 Z，你遇到了什么问题。你来确认，黑洞负责收集。</p>
+            <a class="button button-primary question-chat-entry" href="#question-lab">开始与 Z 对话<i data-lucide="arrow-right"></i></a>
         </div>
         <div class="question-hero-art" aria-hidden="true">
-            <x-ufo-widget />
-            <span>先问一个好问题。</span>
+            <x-black-hole variant="hero" />
+            <span>收集未知，先想清楚。</span>
         </div>
     </header>
+    <x-question-workspace />
     <div class="question-explorer">
         <section class="question-topic-board" aria-labelledby="question-topics-title">
             <div class="question-section-heading">
@@ -53,7 +55,7 @@
     </div>
     <aside class="question-submit-note">
         <i data-lucide="info" aria-hidden="true"></i>
-        <p>有自己的问题？提交功能正在准备中。现在可以先挑一个话题，或从免费任务开始。</p>
+        <p>也可以先从话题找灵感。私人问题仅本人可见，公开提交与投票暂未开放。</p>
         <a class="text-link" href="{{ route('series.index') }}">看看全部课程<i data-lucide="arrow-right" aria-hidden="true"></i></a>
     </aside>
     <details class="question-research-notes">

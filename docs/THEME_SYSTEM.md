@@ -1168,3 +1168,11 @@ Future用于验证机制，主题专属插图和完整页面细节尚未定稿�
 主题注册表、Token、Vite按需加载与前台语义组件保持原架构，Future仍为骨架。Filament后台使用自身官方样式；前台Tailwind显式扫描前台视图/组件/JS，不扫描编译缓存中的后台模板。新课程Markdown沿用共享布局和主题外观。
 
 此决策推进原第一阶段“后台主题管理后置”的范围，仅由已授权管理员操作，保存及每次Livewire动作检查权限。数据库字段、安装和验证见DATA_MODEL、docs/ADMIN.md，线上迁移仍不进入git pull Hook。
+
+
+
+## 黑洞组件（D-041）
+
+black-hole SVG及black-hole-nav-link独立于UFO；组件复用nav/hero/submission外观，颜色/描边/进入/旋转/吸入时间均由Pop/Future的`--black-hole-*` Token控制。新主题须补齐core、outline、disk、accent、detail、glow、glow-opacity、line-width、enter、orbit-duration、receive-duration；业务模板不写固定颜色。结构/响应式/几何动画在base，通用外观在components，具体值在主题；原UFO与paul-* Token契约保持。
+
+导航只有Hover或focus-visible激活旋转，触控/窄屏不展示导航图形，hero/提交图形默认静态；减少动态效果同时在CSS和JS取消吸入。问题页内联Z避免与悬浮向导重复；其他页面保持原Z/UFO。私有问题列表与详情采用question-pool页面类型，复用主题。

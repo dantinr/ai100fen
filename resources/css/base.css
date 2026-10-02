@@ -1,4 +1,59 @@
 /* Structure, spacing, responsive layout and interaction contracts. */
+.black-hole { display:block; width:100%; pointer-events:none; }
+.black-hole>svg { display:block; width:100%; height:auto; overflow:visible; }
+.black-hole-nav-label { padding:4px 8px; margin:0 -8px; }
+.black-hole-nav-scene { position:absolute; width:44px; top:3px; left:50%; pointer-events:none; }
+.black-hole-disk { transform-origin:48px 36px; }
+.question-chat-entry { width:fit-content; margin-top:20px; }
+.question-lab { display:grid; grid-template-columns:1.05fr 1fr; align-items:start; gap:28px; margin:0 0 52px; scroll-margin-top:100px; }
+.question-chat,.question-draft-panel { min-width:0; padding:24px; }
+.question-draft-panel { position:relative; }
+.question-lab-heading,.question-draft-header { display:flex; align-items:center; gap:12px; }
+.question-lab-heading h2,.question-draft-header h2 { font-size:21px; }
+.question-lab-heading p,.question-privacy { font-size:12px; line-height:1.8; }
+.question-privacy { margin:14px 0; }
+.question-draft-header>div { flex:1; min-width:0; }
+.question-receipt-stage { position:relative; display:flex; gap:12px; align-items:center; min-height:60px; margin-top:18px; }
+.question-receipt-stage>.black-hole { width:76px; flex:none; margin-left:auto; }
+.question-receipt-stage>.question-save-status { flex:1; margin:0; }
+.question-chat-log { max-height:310px; overflow:auto; padding-right:4px; margin:20px 0; }
+.question-message { display:grid; gap:5px; padding:14px; margin:12px 0; font-size:13px; overflow-wrap:anywhere; white-space:pre-wrap; }
+.question-message strong { font-size:11px; }
+.question-message-user { margin-left:24px; }
+.question-chat-form,.question-draft-fields { display:grid; gap:12px; }
+.question-draft-fields { border:0; padding:0; margin:0 0 18px; min-width:0; }
+.question-draft-fields label { display:grid; gap:5px; font-size:12px; }
+.question-lab input:not([type=checkbox],[type=hidden]),.question-lab textarea,.question-lab select { display:block; width:100%; min-width:0; min-height:44px; padding:9px 12px; font:inherit; resize:vertical; }
+.question-lab input[type=checkbox] { width:18px; height:18px; flex:none; }
+.question-chat-tools { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.question-chat-tools>span { font-size:11px; }
+.question-recommendations { margin-top:22px; font-size:12px; }
+.question-recommendations button { min-height:44px; }
+.question-recommendations a { margin-top:12px; }
+.question-login-note,.question-confirmation,.question-save-status { font-size:12px; line-height:1.9; }
+.question-login-note { margin-bottom:18px; }
+.question-confirmation { padding:16px; }
+.question-confirmation h3 { font-size:15px; margin-bottom:8px; }
+.question-confirmation label { display:flex; align-items:flex-start; gap:9px; margin:14px 0; }
+.question-confirm-actions,.question-saved-actions { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+.question-save-status { margin-top:18px; overflow-wrap:anywhere; }
+.question-mine-link { margin-top:18px; font-size:12px; }
+.question-card-copy { position:absolute; top:28px; right:24px; width:min(260px,calc(100% - 48px)); padding:18px; pointer-events:none; transform-origin:top right; animation:black-hole-receive var(--black-hole-receive-duration) var(--ease-emphasis) both; }
+.question-card-copy strong,.question-card-copy p { display:block; max-height:65px; overflow:hidden; overflow-wrap:anywhere; font-size:12px; }
+.question-private-main { max-width:900px; }
+.question-private-list { display:grid; gap:18px; margin:30px 0; }
+.question-private-card { padding:24px; overflow-wrap:anywhere; }
+.question-private-card h2 { font-size:21px; margin:10px 0; }
+.question-private-card h3 { font-size:14px; margin:20px 0 6px; }
+.question-private-card p,.question-private-card li { white-space:pre-wrap; font-size:14px; }
+.question-private-card ul { padding-left:22px; list-style:disc; }
+.question-private-card small { display:block; margin-top:18px; font-size:11px; }
+.question-account-link { margin:26px 0; }
+@keyframes black-hole-receive { 0% { opacity:1; transform:translate(-65px,20px) rotate(-4deg) scale(1); } 45% { opacity:.8; transform:translate(-35px,-25px) rotate(10deg) scale(.7); } 100% { opacity:0; transform:translate(-14px,0) rotate(30deg) scale(.03); } }
+@media(max-width:760px) { .question-lab { grid-template-columns:1fr; gap:20px; } .question-chat,.question-draft-panel { padding:18px; } .question-lab-heading h2,.question-draft-header h2 { font-size:18px; } .question-chat-tools>span { font-size:10px; } .question-hero-art>.black-hole { width:90px; } }
+@keyframes black-hole-orbit { to { transform:rotate(360deg); } }
+@media(max-width:760px),(hover:none),(pointer:coarse) { .black-hole-nav-scene { display:none; } }
+@media(prefers-reduced-motion:reduce) { .black-hole-nav-scene,.black-hole-nav-label { transition:none !important; } .black-hole-disk { animation:none !important; } .question-card-copy { display:none; animation:none; } }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:100px; }
 body { margin:0; font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased; }
@@ -753,7 +808,7 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .question-hero .page-heading p { max-width:550px; }
 .question-hero-art { display:flex; flex-direction:column; align-items:center; }
 .question-hero-art .ufo-widget { width:190px; }
-.question-hero-art>span { padding:6px 12px; font-size:12px; }
+.question-hero-art>span:not(.black-hole) { padding:6px 12px; font-size:12px; }
 .question-explorer { display:grid; grid-template-columns:1.15fr 1fr; gap:40px; align-items:start; }
 .question-topic-board,.question-topic-detail { min-width:0; }
 .question-section-heading { display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; justify-content:space-between; margin-bottom:24px; }
@@ -791,7 +846,7 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
     .question-hero h1 { font-size:34px; }
     .question-hero .page-heading p { font-size:13px; }
     .question-hero-art .ufo-widget { width:90px; }
-    .question-hero-art>span { display:none; }
+    .question-hero-art>span:not(.black-hole) { display:none; }
     .question-explorer { grid-template-columns:1fr; gap:28px; }
     .question-topic-cloud { gap:12px 10px; }
     .question-topic-detail { padding:22px; scroll-margin-top:90px; }

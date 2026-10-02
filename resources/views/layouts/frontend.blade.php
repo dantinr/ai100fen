@@ -17,7 +17,7 @@
                 <a href="{{ route('home') }}" @class(['active' => request()->routeIs('home')]) @if(request()->routeIs('home')) aria-current="page" @endif>首页</a>
                 <a href="{{ route('series.index') }}" @class(['active' => request()->routeIs('series.*', 'lessons.*')]) @if(request()->routeIs('series.*', 'lessons.*')) aria-current="page" @endif>100分钟</a>
                 <a href="{{ route('free.index') }}" @class(['active' => request()->routeIs('free.*')]) @if(request()->routeIs('free.*')) aria-current="page" @endif>免费实验室</a>
-                <x-ufo-nav-link :href="route('questions')" :active="request()->routeIs('questions')">问题池</x-ufo-nav-link>
+                <x-black-hole-nav-link :href="route('questions')" :active="request()->routeIs('questions', 'questions.*')">问题池</x-black-hole-nav-link>
                 <a href="{{ route('live') }}" @class(['active' => request()->routeIs('live')]) @if(request()->routeIs('live')) aria-current="page" @endif>直播</a>
                 <a href="{{ route('me') }}" @class(['active' => request()->routeIs('me')]) @if(request()->routeIs('me')) aria-current="page" @endif>我的100分</a>
             </nav>
@@ -34,7 +34,7 @@
                 <a href="{{ route('free.index') }}">免费实验室</a>
                 <a href="{{ route('pricing') }}">购买与订阅</a>
                 <a href="{{ route('commits') }}">提交记录</a>
-                <button class="footer-paul-link" type="button" data-paul-open hidden>Z向导</button>
+                @if(request()->routeIs('questions', 'questions.*'))<a href="{{ route('questions') }}#question-lab">Z向导</a>@else<button class="footer-paul-link" type="button" data-paul-open hidden>Z向导</button>@endif
                 <a class="footer-repo-link" href="https://github.com/dantinr/ai100fen" target="_blank" rel="noopener noreferrer" aria-label="AI100分 GitHub 仓库（新标签页打开）">
                     <svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16 0C7.16 0 0 7.16 0 16C0 23.08 4.58 29.06 10.94 31.18C11.74 31.32 12.04 30.84 12.04 30.42C12.04 30.04 12.02 28.78 12.02 27.44C8 28.18 6.96 26.46 6.64 25.56C6.46 25.1 5.68 23.68 5 23.3C4.44 23 3.64 22.26 4.98 22.24C6.24 22.22 7.14 23.4 7.44 23.88C8.88 26.3 11.18 25.62 12.1 25.2C12.24 24.16 12.66 23.46 13.12 23.06C9.56 22.66 5.84 21.28 5.84 15.16C5.84 13.42 6.46 11.98 7.48 10.86C7.32 10.46 6.76 8.82 7.64 6.62C7.64 6.62 8.98 6.2 12.04 8.26C13.32 7.9 14.68 7.72 16.04 7.72C17.4 7.72 18.76 7.9 20.04 8.26C23.1 6.18 24.44 6.62 24.44 6.62C25.32 8.82 24.76 10.46 24.6 10.86C25.62 11.98 26.24 13.4 26.24 15.16C26.24 21.3 22.5 22.66 18.94 23.06C19.52 23.56 20.02 24.52 20.02 26.02C20.02 28.16 20 29.88 20 30.42C20 30.84 20.3 31.34 21.1 31.18C27.42 29.06 32 23.06 32 16C32 7.16 24.84 0 16 0V0Z"/>
@@ -47,6 +47,6 @@
     </footer>
     <dialog id="availability-dialog" class="availability-dialog" aria-labelledby="dialog-title"><button class="icon-button dialog-close" data-close-dialog aria-label="关闭"><i data-lucide="x"></i></button><span class="dialog-symbol"><i data-lucide="clock-3"></i></span><h2 id="dialog-title">购买暂未开放</h2><p id="dialog-message">课程与支付服务正在准备中。你可以先体验免费的第一课。</p><a class="button button-primary" href="{{ route('lessons.show', ['slug' => 'build-a-website', 'lessonSlug' => 'server-and-ip']) }}">先完成第一个10分<i data-lucide="arrow-right"></i></a><button class="text-button" data-close-dialog>继续浏览</button></dialog>
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-    <x-paul-widget />
+    @unless(request()->routeIs('questions', 'questions.*'))<x-paul-widget />@endunless
 </body>
 </html>

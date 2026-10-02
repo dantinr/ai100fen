@@ -126,4 +126,15 @@ html[data-theme="future"] {
     --paul-fx: #a7ff6a;
     --paul-sweat: #65f4ff;
     --paul-breathe-duration: 4200ms;
+    --black-hole-core: #070918;
+    --black-hole-outline: #8c7cff;
+    --black-hole-disk: #ba9cff;
+    --black-hole-accent: #ffce7c;
+    --black-hole-detail: #65f4ff;
+    --black-hole-glow: #8c7cff;
+    --black-hole-glow-opacity: .2;
+    --black-hole-line-width: 1.6;
+    --black-hole-enter: 240ms;
+    --black-hole-orbit-duration: 10000ms;
+    --black-hole-receive-duration: 760ms;
 }

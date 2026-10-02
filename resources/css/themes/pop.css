@@ -126,4 +126,15 @@ html[data-theme="pop"] {
     --paul-fx: #ffd84d;
     --paul-sweat: #a7d9cb;
     --paul-breathe-duration: 4000ms;
+    --black-hole-core: #151218;
+    --black-hole-outline: #151218;
+    --black-hole-disk: #ff8a3d;
+    --black-hole-accent: #ffd84d;
+    --black-hole-detail: #8c61b6;
+    --black-hole-glow: #ffd84d;
+    --black-hole-glow-opacity: .14;
+    --black-hole-line-width: 3;
+    --black-hole-enter: 240ms;
+    --black-hole-orbit-duration: 8000ms;
+    --black-hole-receive-duration: 760ms;
 }

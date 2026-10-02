@@ -475,7 +475,7 @@ h1,h2,h3 { font-family:var(--font-heading); }
 @media(hover:hover) and (prefers-reduced-motion:no-preference) { .home-intent-card:hover { transform:var(--transform-hover); box-shadow:var(--shadow-card-hover); } }
 
 /* Topic cards inherit the active theme; motion is brief and never loops. */
-.question-hero-art>span { color:var(--color-text); background:var(--color-highlight); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-badge); font-weight:var(--weight-strong); box-shadow:var(--shadow-sm); }
+.question-hero-art>span:not(.black-hole) { color:var(--color-text); background:var(--color-highlight); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-badge); font-weight:var(--weight-strong); box-shadow:var(--shadow-sm); }
 .question-hero-art .ufo-widget[data-state] .ufo-ship,.question-hero-art .ufo-widget[data-state] .ufo-lights { animation-iteration-count:1; }
 .heading-question { color:var(--color-text); }
 .question-section-heading>span,.question-topic-note,.question-topic-context,.question-source-link,.question-research-notes { color:var(--color-text-muted); }
@@ -506,3 +506,26 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .course-relation-card h4 a:focus-visible { outline:3px solid var(--color-secondary); outline-offset:4px; }
 .course-relation-card h4 a:hover { text-decoration:underline; text-underline-offset:4px; }
 .course-relation-reason { border-top:var(--border-width-default) solid var(--color-border); }
+.black-hole-nav-scene { opacity:0; transform:translate(-50%,-3px); transition:opacity var(--black-hole-enter) var(--ease-default),transform var(--black-hole-enter) var(--ease-default); }
+.black-hole-nav-label { border-radius:var(--radius-round); transition:background-color var(--black-hole-enter) var(--ease-default),color var(--black-hole-enter) var(--ease-default); }
+.question-chat,.question-draft-panel,.question-private-card { border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); background:var(--color-surface); box-shadow:var(--shadow-sm); }
+.question-lab-heading p,.question-privacy,.question-login-note,.question-chat-tools>span,.question-private-card small { color:var(--color-text-muted); }
+.question-message { background:var(--color-surface-alt); border-radius:var(--radius-md); border:var(--border-width-thin) solid var(--color-border-muted); }
+.question-message-user { background:var(--color-highlight); }
+.question-lab input:not([type=checkbox],[type=hidden]),.question-lab textarea,.question-lab select { border:var(--border-width-thin) solid var(--color-border); border-radius:var(--radius-input); background:var(--color-bg); color:var(--color-text); }
+.question-lab :is(input,textarea,select):focus-visible { outline:var(--focus-width) solid var(--color-secondary); outline-offset:3px; }
+.question-lab :is(input,textarea,select):disabled { opacity:.8; }
+.question-lab button:disabled { opacity:.6; }
+.question-confirmation { background:var(--color-surface-alt); border:var(--border-width-thin) solid var(--color-border); border-radius:var(--radius-md); }
+.question-lab[data-state="error"] .question-save-status { color:var(--color-text); background:var(--color-surface-alt); border-left:var(--border-width-default) solid var(--color-secondary); padding:10px; }
+.question-lab[data-state="success"] .question-save-status { font-weight:var(--weight-strong); }
+.question-lab[data-state="submitting"] .black-hole-disk { animation:black-hole-orbit var(--black-hole-orbit-duration) linear infinite; }
+.question-card-copy { background:var(--color-highlight); color:var(--color-text); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-card); box-shadow:var(--shadow-sm); }
+.black-hole-nav-link:focus-visible .black-hole-nav-label { color:var(--color-text); background:var(--color-highlight); }
+.black-hole-nav-link:focus-visible .black-hole-nav-scene { opacity:1; transform:translate(-50%,0); }
+.black-hole-nav-link:focus-visible .black-hole-disk { animation:black-hole-orbit var(--black-hole-orbit-duration) linear infinite; }
+@media(hover:hover) and (pointer:fine) {
+    .black-hole-nav-link:hover .black-hole-nav-label { color:var(--color-text); background:var(--color-highlight); }
+    .black-hole-nav-link:hover .black-hole-nav-scene { opacity:1; transform:translate(-50%,0); }
+    .black-hole-nav-link:hover .black-hole-disk { animation:black-hole-orbit var(--black-hole-orbit-duration) linear infinite; }
+}

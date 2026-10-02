@@ -7,6 +7,7 @@ use App\Http\Controllers\FreeLabController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicCourseController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionTopicsController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FrontendController:
 Route::get('/pricing', [FrontendController::class, 'pricing'])->name('pricing');
 Route::get('/live', [FrontendController::class, 'live'])->name('live');
 Route::get('/questions', QuestionTopicsController::class)->name('questions');
+Route::post('/questions/recommendations', [QuestionController::class, 'recommend'])->middleware('throttle:20,1,question-recommend:')->name('questions.recommend');
 Route::get('/commits', CommitHistoryController::class)->name('commits');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -31,6 +33,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
+    Route::post('/questions', [QuestionController::class, 'store'])->middleware('throttle:10,1,question-submit:')->name('questions.store');
+    Route::get('/questions/mine', [QuestionController::class, 'index'])->name('questions.mine');
+    Route::get('/questions/{question}', [QuestionController::class, 'show'])->whereNumber('question')->name('questions.show');
     Route::get('/preview/courses/{series}/{lessonSlug?}', CoursePreviewController::class)->name('courses.preview');
     Route::post('/free/{series}/{lessonSlug}/progress', [FreeLabController::class, 'save'])->middleware('throttle:60,1,free-progress:')->name('free.progress');
     Route::get('/me', [ProfileController::class, 'show'])->name('me');
