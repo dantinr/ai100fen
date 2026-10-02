@@ -4,6 +4,7 @@ namespace App\Filament\Resources\CourseSeries\Tables;
 
 use App\Filament\Resources\Lessons\LessonResource;
 use App\Models\CourseSeries;
+use Filament\Facades\Filament;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
@@ -19,6 +20,9 @@ class CourseSeriesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->reorderable('sort_order')
+            ->authorizeReorder(fn () => Filament::auth()->user()?->is_admin === true)
+            ->reorderRecordsTriggerAction(fn (Action $action, bool $isReordering) => $action->tooltip($isReordering ? '完成排序' : '拖动调整课程展示顺序'))
             ->columns([
                 TextColumn::make('id')->label('ID')->sortable(),
                 TextColumn::make('sort_order')->label('展示排序')->sortable(),

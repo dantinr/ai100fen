@@ -149,6 +149,8 @@ D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提�
 
 D-038新增`course_series.sort_order`（unsigned integer、默认1000、有索引），模型及后台服务端校验为0–999999的整数。越小越靠前；数据库列表同值按id升序，原16门首页/目录同值保留原策划顺序，未入库的旧目录项按1000处理。首页/目录仅按slug读取此字段，不读取数据库草稿正文，也不自动加入新课程；免费实验室仍先筛选已发布完整免费课程。仅改展示排序不改变发布状态、Lesson.position、价格、权限或验收。新增迁移`2026_10_02_140000_add_course_series_sort_order`只加列及索引，保留已有行，日常Hook仍不迁移。
 
+D-045拖动排序复用同一`sort_order`列，无新表或字段。管理员提交完整课程ID顺序，服务端在事务中锁定课程、校验ID集合及逐门更新权限，再将位置重排为1至N；筛选或搜索后的部分列表不能保存为全局顺序。原数值设置仍可用于精确调整。
+
 - `course_series`：id、唯一slug、title、category（varchar，模型白名单）、user_intent、final_outcome、三个宪章JSON字符串数组、recommendation_keywords（JSON）、minutes、price（decimal10,2）、is_free（默认false）、status（默认draft）、时间戳。没有新增FreeCourse模型。D-031初版要求完整提交；D-034已支持逐步保存草稿，新增字段见第4节。正式发布校验六项定义和至少一个完整Lesson。完整免费发布要求全部Lesson published且points合计100。
 - `lessons`：id、course_series_id、slug、title、position、score（累计展示分值）、points（本步验收权重）、minutes、is_free（默认false，仅代表该Lesson试看）、status、intro、goal、steps（JSON标题/正文）、prompt、可空code/code_filename、resources（JSON文件名/说明/文本）、checks（JSON验收清单）、时间戳。唯一(course_series_id,slug)，无课数硬限制。当前图文内容未建视频或独立附件表。
 - `lesson_progress`：id、user_id、lesson_id、checks（JSON布尔数组）、progress_percent（0–100整数）、last_position_seconds（预留0）、completed_at、时间戳。唯一(user_id,lesson_id)，外键限制删除。ProgressService在事务中锁当前用户，幂等保存本人记录；不接受客户端user_id、分数、完成时间或会员状态。

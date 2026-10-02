@@ -17,6 +17,7 @@ use App\Models\LessonProgress;
 use App\Models\ThemeSetting;
 use App\Models\User;
 use App\Services\CourseOutlineService;
+use App\Services\CourseDisplayReorderService;
 use App\Services\FreeLabInstaller;
 use App\Services\ThemeConfiguration;
 use Filament\Facades\Filament;
@@ -55,6 +56,14 @@ class AdministrationTest extends TestCase
         foreach ($paths as $path) {
             $this->get($path)->assertOk();
         }
+    }
+
+    public function test_top_horizontal_scrollbar_is_scoped_to_course_list(): void
+    {
+        $this->administrator();
+
+        $this->get('/galaxy/course-series')->assertOk()->assertSee('课程列表横向滚动');
+        $this->get('/galaxy/lessons')->assertOk()->assertDontSee('课程列表横向滚动');
     }
 
     public function test_registration_cannot_grant_admin_access_and_cli_requires_confirmation(): void
@@ -131,6 +140,42 @@ class AdministrationTest extends TestCase
         $this->get('/galaxy/course-series')->assertForbidden();
         $table->call('callMountedAction')->assertForbidden();
         $this->assertSame(25, $last->fresh()->sort_order);
+    }
+
+    public function test_admin_can_drag_all_courses_to_reorder_frontend_without_changing_content(): void
+    {
+        $admin = $this->administrator();
+        app(FreeLabInstaller::class)->install();
+        $courses = CourseSeries::orderBy('id')->get();
+        $before = $courses->mapWithKeys(fn (CourseSeries $course) => [$course->id => [
+            'status' => $course->status, 'title' => $course->title,
+            'lesson_count' => $course->lessons()->count(),
+        ]])->all();
+        $order = [$courses[2]->id, $courses[0]->id, $courses[1]->id];
+
+        $table = Livewire::test(ListCourseSeries::class);
+        $this->assertTrue($table->instance()->getTable()->isReorderable());
+        $table->call('reorderTable', $order)->assertHasNoErrors();
+        $this->assertSame($order, CourseSeries::displayOrder()->pluck('id')->all());
+        $this->assertSame([1, 2, 3], CourseSeries::displayOrder()->pluck('sort_order')->all());
+        $this->get('/free')->assertViewHas('courses', fn ($visible) => $visible->pluck('id')->all() === $order);
+        foreach ($courses as $course) {
+            $fresh = $course->fresh();
+            $this->assertSame($before[$course->id]['status'], $fresh->status);
+            $this->assertSame($before[$course->id]['title'], $fresh->title);
+            $this->assertSame($before[$course->id]['lesson_count'], $fresh->lessons()->count());
+        }
+
+        try {
+            app(CourseDisplayReorderService::class)->reorder($admin, [$order[1], $order[0]]);
+            $this->fail('Partial course order must be rejected.');
+        } catch (ValidationException) {
+            $this->assertSame($order, CourseSeries::displayOrder()->pluck('id')->all());
+        }
+
+        $this->actingAs(User::factory()->create());
+        $table->call('reorderTable', array_reverse($order))->assertForbidden();
+        $this->assertSame($order, CourseSeries::displayOrder()->pluck('id')->all());
     }
 
     public function test_course_and_lesson_editors_render_existing_arrays_and_save_markdown_safely(): void
