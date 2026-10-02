@@ -35,6 +35,8 @@ class CourseSeriesForm
                         ->helperText('先保存草稿，再添加并发布课时，最后发布课程。归档保留内容和学习记录。'),
                     Toggle::make('is_free')->label('整门课程完整免费')->default(false)->live()->afterStateUpdated(fn (bool $state, Set $set) => $set('price', $state ? '0.00' : '100.00'))->helperText('完整免费须全部课时已发布，验收权重合计100。付费课程试看在课时中单独配置。'),
                     TextInput::make('minutes')->label('预计总时长（分钟）')->numeric()->integer()->minValue(1)->maxValue(65535)->required()->default(100),
+                    TextInput::make('sort_order')->label('展示排序')->numeric()->integer()->minValue(0)->maxValue(999999)->required()->default(1000)
+                        ->helperText('数字越小越靠前，默认1000。控制首页、课程目录与免费实验室展示顺序，不改变课时顺序。'),
                     TextInput::make('price')->label('单课程价格（元）')->readOnly()->default('100.00')->dehydrateStateUsing(fn (Get $get) => $get('is_free') ? '0.00' : '100.00')->helperText('当前固定定价：付费100元，完整免费0元。'),
                     TagsInput::make('recommendation_keywords')->label('推荐关键词')->default([])->helperText('填写用户可能提出的任务意图；按回车添加。'),
                     MarkdownEditor::make('description')->label('课程介绍')->disableToolbarButtons(['attachFiles'])->columnSpanFull(),

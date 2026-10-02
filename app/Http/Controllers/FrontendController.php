@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CourseDisplayOrder;
 use App\Support\FrontendCatalog;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class FrontendController extends Controller
 {
-    public function __construct(private readonly FrontendCatalog $catalog) {}
+    public function __construct(private readonly FrontendCatalog $catalog, private readonly CourseDisplayOrder $displayOrder) {}
 
     public function home(): View
     {
-        return view('frontend.home', ['series' => $this->catalog->all()]);
+        return view('frontend.home', ['series' => $this->displayOrder->previewCourses($this->catalog->all())]);
     }
 
     public function index(): View
     {
-        return view('frontend.catalog', ['series' => $this->catalog->all()]);
+        return view('frontend.catalog', ['series' => $this->displayOrder->previewCourses($this->catalog->all())]);
     }
 
     public function series(string $slug): View

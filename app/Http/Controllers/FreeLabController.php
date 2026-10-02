@@ -19,7 +19,7 @@ class FreeLabController extends Controller
         $validated = $request->validate(['q' => ['nullable', 'string', 'max:300'], 'category' => ['nullable', 'string', Rule::in(['solve', 'create', 'explore'])]]);
         $category = $validated['category'] ?? null;
         $courses = CourseSeries::freeLab()->when($category, fn ($query) => $query->where('category', $category))
-            ->with(['lessons' => fn ($query) => $query->where('status', 'published')])->orderBy('id')->get();
+            ->with(['lessons' => fn ($query) => $query->where('status', 'published')])->displayOrder()->get();
         $question = $validated['q'] ?? '';
 
         return view('frontend.free.index', compact('courses', 'question', 'category') + [

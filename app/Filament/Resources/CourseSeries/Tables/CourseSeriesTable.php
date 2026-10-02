@@ -3,12 +3,16 @@
 namespace App\Filament\Resources\CourseSeries\Tables;
 
 use App\Filament\Resources\Lessons\LessonResource;
+use App\Models\CourseSeries;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Gate;
 
 class CourseSeriesTable
 {
@@ -17,6 +21,7 @@ class CourseSeriesTable
         return $table
             ->columns([
                 TextColumn::make('id')->label('ID')->sortable(),
+                TextColumn::make('sort_order')->label('展示排序')->sortable(),
                 TextColumn::make('title')->label('课程')->searchable()->sortable()->description(fn ($record) => $record->slug),
                 TextColumn::make('category')->label('价值路径')->badge()->formatStateUsing(fn (string $state) => ['solve' => 'Solve · 解决', 'create' => 'Create · 创作', 'explore' => 'Explore · 探索'][$state] ?? $state),
                 TextColumn::make('status')->label('状态')->badge()->formatStateUsing(fn (string $state) => ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$state] ?? $state),
@@ -30,12 +35,25 @@ class CourseSeriesTable
                 SelectFilter::make('status')->label('状态')->options(['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档']),
             ])
             ->recordActions([
+                Action::make('displayOrder')->label('设置排序')->icon('heroicon-o-bars-arrow-up')
+                    ->authorize('update')->modalHeading('设置课程展示排序')->modalSubmitActionLabel('保存排序')
+                    ->fillForm(fn (CourseSeries $record) => ['sort_order' => $record->sort_order])
+                    ->schema([
+                        TextInput::make('sort_order')->label('展示排序')->numeric()->integer()
+                            ->minValue(0)->maxValue(999999)->required()
+                            ->helperText('数字越小越靠前，默认1000。影响首页、课程目录和免费实验室；不改变课时顺序。'),
+                    ])
+                    ->action(function (CourseSeries $record, array $data): void {
+                        Gate::authorize('update', $record);
+                        $record->update(['sort_order' => $data['sort_order']]);
+                        Notification::make()->title('展示排序已保存')->body('刷新前台页面即可查看新顺序。')->success()->send();
+                    }),
                 EditAction::make()->label('编辑与大纲'),
                 Action::make('manageLessons')->label('课时管理')
                     ->url(fn ($record) => LessonResource::getUrl('index', ['filters' => ['course_series_id' => ['value' => $record->id]]])),
                 Action::make('frontendPreview')->label('前台预览')->icon('heroicon-o-arrow-top-right-on-square')
                     ->url(fn ($record) => route('courses.preview', $record))->openUrlInNewTab(),
             ])
-            ->defaultSort('updated_at', 'desc');
+            ->defaultSort('sort_order');
     }
 }

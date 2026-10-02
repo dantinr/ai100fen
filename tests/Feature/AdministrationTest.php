@@ -104,6 +104,35 @@ class AdministrationTest extends TestCase
         $this->assertSame('draft', $series->fresh()->status);
     }
 
+    public function test_admin_can_edit_display_order_in_actions_and_forms_with_validation_and_policy_checks(): void
+    {
+        $this->administrator();
+        app(FreeLabInstaller::class)->install();
+        $courses = CourseSeries::orderBy('id')->get();
+        $last = $courses->last();
+        $table = Livewire::test(ListCourseSeries::class)->assertTableColumnExists('sort_order');
+        $table->callTableAction('displayOrder', $last, ['sort_order' => '0'])->assertHasNoTableActionErrors();
+        $this->assertSame(0, $last->fresh()->sort_order);
+        $this->assertSame('published', $last->fresh()->status);
+        Livewire::test(ListCourseSeries::class)->assertCanSeeTableRecords([$last, $courses[0], $courses[1]], inOrder: true);
+        foreach ([-1, '0.5', 1000000, ''] as $invalid) {
+            Livewire::test(ListCourseSeries::class)->callTableAction('displayOrder', $last, ['sort_order' => $invalid])
+                ->assertHasTableActionErrors(['sort_order']);
+            $this->assertSame(0, $last->fresh()->sort_order);
+        }
+        Livewire::test(EditCourseSeries::class, ['record' => $last->slug])->fillForm(['sort_order' => 25])
+            ->call('save')->assertHasNoFormErrors();
+        $this->assertSame(25, $last->fresh()->sort_order);
+        Livewire::test(EditCourseSeries::class, ['record' => $last->slug])->fillForm(['sort_order' => -1])
+            ->call('save')->assertHasFormErrors(['sort_order']);
+
+        $table->mountTableAction('displayOrder', $last)->setTableActionData(['sort_order' => 1]);
+        $this->actingAs(User::factory()->create());
+        $this->get('/galaxy/course-series')->assertForbidden();
+        $table->call('callMountedAction')->assertForbidden();
+        $this->assertSame(25, $last->fresh()->sort_order);
+    }
+
     public function test_course_and_lesson_editors_render_existing_arrays_and_save_markdown_safely(): void
     {
         $this->administrator();

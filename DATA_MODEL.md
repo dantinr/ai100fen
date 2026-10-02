@@ -96,7 +96,7 @@ human_judgment_required json nullable
 cover                varchar nullable
 price                decimal(10,2) default 100.00
 status               varchar
-sort_order           int default 0
+sort_order           unsigned int default 1000
 published_at         timestamp nullable
 created_at
 updated_at
@@ -146,6 +146,8 @@ D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提�
 ### 3.4 D-031当前实际落地
 
 迁移`2026_10_01_180000_create_course_learning_tables`仅新增三张表，不回填或删除既有用户；生产须审阅后手动迁移，日常pull Hook不执行迁移。
+
+D-038新增`course_series.sort_order`（unsigned integer、默认1000、有索引），模型及后台服务端校验为0–999999的整数。越小越靠前；数据库列表同值按id升序，原16门首页/目录同值保留原策划顺序，未入库的旧目录项按1000处理。首页/目录仅按slug读取此字段，不读取数据库草稿正文，也不自动加入新课程；免费实验室仍先筛选已发布完整免费课程。仅改展示排序不改变发布状态、Lesson.position、价格、权限或验收。新增迁移`2026_10_02_140000_add_course_series_sort_order`只加列及索引，保留已有行，日常Hook仍不迁移。
 
 - `course_series`：id、唯一slug、title、category（varchar，模型白名单）、user_intent、final_outcome、三个宪章JSON字符串数组、recommendation_keywords（JSON）、minutes、price（decimal10,2）、is_free（默认false）、status（默认draft）、时间戳。没有新增FreeCourse模型。D-031初版要求完整提交；D-034已支持逐步保存草稿，新增字段见第4节。正式发布校验六项定义和至少一个完整Lesson。完整免费发布要求全部Lesson published且points合计100。
 - `lessons`：id、course_series_id、slug、title、position、score（累计展示分值）、points（本步验收权重）、minutes、is_free（默认false，仅代表该Lesson试看）、status、intro、goal、steps（JSON标题/正文）、prompt、可空code/code_filename、resources（JSON文件名/说明/文本）、checks（JSON验收清单）、时间戳。唯一(course_series_id,slug)，无课数硬限制。当前图文内容未建视频或独立附件表。

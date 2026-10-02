@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class CourseSeries extends Model
@@ -16,17 +17,20 @@ class CourseSeries extends Model
     protected $attributes = [
         'user_intent' => '', 'final_outcome' => '', 'completion_criteria' => '[]',
         'agent_role' => '[]', 'human_judgment_required' => '[]', 'recommendation_keywords' => '[]',
-        'minutes' => 100, 'price' => 100, 'is_free' => false, 'status' => 'draft',
+        'minutes' => 100, 'price' => 100, 'is_free' => false, 'status' => 'draft', 'sort_order' => 1000,
     ];
 
     protected function casts(): array
     {
-        return ['is_free' => 'boolean', 'price' => 'decimal:2', 'objectives' => 'array', 'completion_criteria' => 'array', 'agent_role' => 'array', 'human_judgment_required' => 'array', 'recommendation_keywords' => 'array'];
+        return ['is_free' => 'boolean', 'price' => 'decimal:2', 'sort_order' => 'integer', 'objectives' => 'array', 'completion_criteria' => 'array', 'agent_role' => 'array', 'human_judgment_required' => 'array', 'recommendation_keywords' => 'array'];
     }
 
     protected static function booted(): void
     {
         static::saving(function (self $series) {
+            Validator::make(['sort_order' => $series->getAttributes()['sort_order'] ?? null], [
+                'sort_order' => ['required', 'integer', 'min:0', 'max:999999'],
+            ])->validate();
             if (! in_array($series->status, ['draft', 'published', 'archived'], true)) {
                 throw ValidationException::withMessages(['status' => '请选择有效的课程状态。']);
             }
@@ -75,6 +79,11 @@ class CourseSeries extends Model
         $query->where('status', 'published')->where('is_free', true)
             ->whereDoesntHave('lessons', fn (Builder $lessons) => $lessons->where('status', '!=', 'published'))
             ->whereHas('lessons', fn (Builder $lessons) => $lessons->where('status', 'published'));
+    }
+
+    public function scopeDisplayOrder(Builder $query): void
+    {
+        $query->orderBy('sort_order')->orderBy('id');
     }
 
     public function getRouteKeyName(): string
