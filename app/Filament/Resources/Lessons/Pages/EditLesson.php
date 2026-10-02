@@ -22,6 +22,11 @@ class EditLesson extends EditRecord
         ];
     }
 
+    public function areFormActionsSticky(): bool
+    {
+        return true;
+    }
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         return $this->persistContent(fn () => parent::handleRecordUpdate($record, $data));
