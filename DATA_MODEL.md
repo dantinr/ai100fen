@@ -133,9 +133,9 @@ archived
 
 ### 3.3 当前示例与迁移差距
 
-当前`FrontendCatalog`的`category=build/work`属于旧前台筛选，`question/outcome/deliverables`用于展示，尚未提供完整的六项宪章字段。迁移时逐门根据真实意图核定类别，补充成果、验收条件和人/Agent职责；不盲目执行`build→create`、`work→solve`或将deliverables直接当成验收标准。
+`FrontendCatalog`的`category=build/work`仍属于旧公共页面筛选。D-036已逐门审核并将16门课程以草稿导入共用模型：question→user_intent、outcome→final_outcome、deliverables→objectives；description与prerequisites组合为Markdown介绍。completion_criteria、agent_role、human_judgment_required逐门补充，category独立判断为Create 9/Solve 7，不盲目转换旧类别。封面、图标、旧公开筛选与页面数据源暂仍保留在FrontendCatalog。
 
-D-023当时只同步字段设计；D-031已新增免费任务业务表，未改写旧示例内容。业务表实现及已有数据回填时，先审核类别和六项定义，再按草稿/发布约束导入；不能为了通过非空校验而批量填入默认类别。待办见`TODO.md`。
+D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提供`courses:import-legacy`独立事务命令及只读--dry-run，仅新增不存在的课程slug，遇到同slug整门跳过，保留全部既有字段与关联记录。网站已有10课时按position/score/points导入，首课已有Prompt、步骤、代码与验收清单，其余9课保留目标与简介并标记草稿；其他15门不生成不存在的课时。无新表或迁移，导入不触发购买权限或正式发布。审核与逐门六项报告见`docs/LEGACY_COURSE_IMPORT.md`。
 
 不要把Series永久写死为10课。
 

@@ -106,6 +106,10 @@ git pull
 
 Filament的Composer post-autoload-dump会执行`filament:upgrade`，发布被Git忽略的官方CSS/JS/字体；这些由dante写入并继承源码组只读ACL，不手工上传、不改为777。后台主题选择存数据库，前台新请求生效；选择“跟随APP_THEME”可恢复环境配置。后续无数据库变化时仍只需git pull。
 
+## 现有课程入库（D-036）
+
+与日常git pull分开，新增课程内容前保存私有课程/课时/学习记录快照，执行`php artisan courses:import-legacy --dry-run`核对新增与跳过清单，再独立运行`php artisan courses:import-legacy`。不需要新迁移或环境变量。全程仅新增缺少的课程slug，遇到同slug整门跳过；重复运行新增0。导入16门草稿与网站已有10课时，不补造其他15门的大纲，不发布或收费，不覆盖既有数据。审核见[docs/LEGACY_COURSE_IMPORT.md](../docs/LEGACY_COURSE_IMPORT.md)。Hook继续不自动导入。
+
 ## Free Lab首次初始化（D-031）
 
 本地push、服务器pull后，新增路由需要三张课程学习表。审阅`2026_10_01_180000_create_course_learning_tables`，确认目标项目数据库和迁移状态，再独立执行一次：
