@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Lessons\Tables;
 
+use App\Filament\Resources\Lessons\Pages\ListLessons;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -24,6 +25,8 @@ class LessonsTable
                 IconColumn::make('is_free')->label('免费试看')->boolean(),
             ])
             ->filters([
+                SelectFilter::make('course_series_id')->label('所属课程')->relationship('series', 'title')->searchable()->preload()
+                    ->visible(fn ($livewire) => $livewire instanceof ListLessons),
                 SelectFilter::make('status')->label('状态')->options(['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档']),
             ])
             ->recordActions([

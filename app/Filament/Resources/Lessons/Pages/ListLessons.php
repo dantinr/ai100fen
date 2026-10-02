@@ -13,7 +13,7 @@ class ListLessons extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()->url(fn () => LessonResource::getUrl('create', ['series' => $this->getTableFilterState('course_series_id')['value'] ?? null])),
         ];
     }
 }

@@ -5,9 +5,12 @@ namespace Tests\Feature;
 use App\Filament\Pages\ThemeSettings;
 use App\Filament\Resources\CourseSeries\Pages\CreateCourseSeries;
 use App\Filament\Resources\CourseSeries\Pages\EditCourseSeries;
+use App\Filament\Resources\CourseSeries\Pages\ListCourseSeries;
 use App\Filament\Resources\CourseSeries\RelationManagers\LessonsRelationManager;
+use App\Filament\Resources\Lessons\LessonResource;
 use App\Filament\Resources\Lessons\Pages\CreateLesson;
 use App\Filament\Resources\Lessons\Pages\EditLesson;
+use App\Filament\Resources\Lessons\Pages\ListLessons;
 use App\Models\CourseSeries;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
@@ -107,6 +110,11 @@ class AdministrationTest extends TestCase
         app(FreeLabInstaller::class)->install();
         $series = CourseSeries::first();
         $lesson = $series->lessons->first();
+        $lessonListUrl = LessonResource::getUrl('index', ['filters' => ['course_series_id' => ['value' => $series->id]]]);
+        Livewire::test(ListCourseSeries::class)->assertTableColumnExists('id')->assertTableActionHasUrl('manageLessons', $lessonListUrl, $series);
+        Livewire::withQueryParams(['filters' => ['course_series_id' => ['value' => $series->id]]])->test(ListLessons::class)
+            ->assertCanSeeTableRecords([$lesson])
+            ->assertCanNotSeeTableRecords(Lesson::where('course_series_id', '!=', $series->id)->get());
         $this->get('/galaxy/course-series/'.$series->slug.'/edit')->assertOk()->assertSee('课程大纲');
         $this->get('/galaxy/lessons/'.$lesson->id.'/edit')->assertOk()->assertSee('课时大纲');
         Livewire::test(EditLesson::class, ['record' => $lesson->id])->fillForm([
