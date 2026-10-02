@@ -800,3 +800,26 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
     .question-submit-note { flex-wrap:wrap; align-items:flex-start; padding:18px; }
     .question-submit-note>.text-link { margin-left:34px; }
 }
+
+/* Course connections stay readable below the current task. */
+.course-relations { margin-top:40px; }
+.course-relations-heading h2 { font-size:26px; margin:10px 0; }
+.course-relations-heading p { font-size:13px; line-height:1.8; }
+.course-relation-group { margin-top:24px; }
+.course-relation-group>h3 { font-size:18px; margin-bottom:14px; }
+.course-relation-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.course-relation-card { min-width:0; padding:22px; }
+.course-relation-meta { display:flex; flex-wrap:wrap; gap:8px 16px; font-size:12px; }
+.course-relation-card h4 { font-size:18px; line-height:1.6; margin:12px 0 8px; }
+.course-relation-card h4 a { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; min-height:44px; }
+.course-relation-card h4 svg { flex:none; width:18px; height:18px; margin-top:5px; }
+.course-relation-card p { font-size:13px; line-height:1.9; overflow-wrap:anywhere; }
+.course-relation-reason { margin-top:12px; padding-top:12px; }
+.course-overview { max-width:920px; }
+.course-overview>.free-panel { margin-top:22px; }
+.course-overview-outline { padding-left:24px; margin:20px 0; list-style:decimal; }
+.course-overview-outline li { padding:10px 0; }
+.course-overview-outline h3 { font-size:17px; }
+.course-overview-outline p { font-size:14px; margin:8px 0; }
+.course-overview-checks { padding-left:22px; list-style:disc; font-size:14px; line-height:1.9; }
+@media(max-width:760px) { .course-relation-list { grid-template-columns:1fr; } .course-relation-card { padding:18px; } }

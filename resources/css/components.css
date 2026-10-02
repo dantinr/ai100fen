@@ -499,3 +499,10 @@ h1,h2,h3 { font-family:var(--font-heading); }
 @keyframes question-panel-enter { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
 @media(hover:hover) and (pointer:fine) { .question-topic-tag:hover { transform:translateY(-2px); box-shadow:var(--shadow-hover); background:var(--color-highlight); } }
 @media(prefers-reduced-motion:reduce) { .question-topic-tag,.question-topic-panel:not([hidden]) { animation:none; transition:none; } .question-topic-tag:hover { transform:none; } }
+
+.course-relations-heading p,.course-relation-meta,.course-relation-reason { color:var(--color-text-muted); }
+.course-relation-card { background:var(--color-surface); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-card); box-shadow:var(--shadow-sm); }
+.course-relation-card h4 a { color:var(--color-text); }
+.course-relation-card h4 a:focus-visible { outline:3px solid var(--color-secondary); outline-offset:4px; }
+.course-relation-card h4 a:hover { text-decoration:underline; text-underline-offset:4px; }
+.course-relation-reason { border-top:var(--border-width-default) solid var(--color-border); }

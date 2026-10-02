@@ -5,6 +5,7 @@ namespace App\Filament\Resources\CourseSeries;
 use App\Filament\Resources\CourseSeries\Pages\CreateCourseSeries;
 use App\Filament\Resources\CourseSeries\Pages\EditCourseSeries;
 use App\Filament\Resources\CourseSeries\Pages\ListCourseSeries;
+use App\Filament\Resources\CourseSeries\RelationManagers\CourseRelationsRelationManager;
 use App\Filament\Resources\CourseSeries\RelationManagers\LessonsRelationManager;
 use App\Filament\Resources\CourseSeries\Schemas\CourseSeriesForm;
 use App\Filament\Resources\CourseSeries\Tables\CourseSeriesTable;
@@ -43,6 +44,7 @@ class CourseSeriesResource extends Resource
     {
         return [
             LessonsRelationManager::class,
+            CourseRelationsRelationManager::class,
         ];
     }
 

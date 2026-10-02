@@ -57,5 +57,6 @@
             <details class="free-roles"><summary>Agent 做什么，人判断什么？</summary><h3>Agent 负责</h3><ul>@foreach($series->agent_role as $item)<li>{{ $item }}</li>@endforeach</ul><h3>你来判断</h3><ul>@foreach($series->human_judgment_required as $item)<li>{{ $item }}</li>@endforeach</ul></details>
         </div></aside>
     </div>
+    <x-course-relations :groups="$relationGroups ?? []" />
 </div>
 @endsection

@@ -9,5 +9,6 @@
     @if($series->objectives)<section class="free-panel"><h2>课程目标</h2><ul>@foreach($series->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul></section>@endif
     <section class="free-panel"><h2>课程大纲</h2><p>还没有课时，添加后可以预览课时正文与完整路线。</p><a class="button button-primary" href="{{ \App\Filament\Resources\Lessons\LessonResource::getUrl('create', ['series' => $series->id]) }}">添加课时<i data-lucide="plus"></i></a></section>
     @if($series->completion_criteria)<section class="free-panel"><h2>整个任务怎么验收？</h2><ul>@foreach($series->completion_criteria as $criterion)<li>{{ $criterion }}</li>@endforeach</ul></section>@endif
+    <x-course-relations :groups="$relationGroups ?? []" />
 </div>
 @endsection

@@ -636,3 +636,26 @@ entitlements
 > 产品可以迭代，支付数据不能乱。
 
 > 不用为了未来十年提前建五十张表。
+
+
+## course_relations（D-039，当前实现）
+
+迁移`2026_10_02_160000_create_course_relations_table`仅新建表，保留全部现有课程、课时、用户及进度；不自动创建课程关系。
+
+| 字段 | 类型与约束 |
+| --- | --- |
+| id | 主键 |
+| course_series_id | 所属CourseSeries外键，禁止关联课程被硬删除 |
+| related_course_series_id | 目标CourseSeries外键，禁止关联课程被硬删除 |
+| relation_type | varchar(24)，服务端白名单prerequisite/recommended/next |
+| sort_order | unsigned integer，默认1000，服务端整数0–999999 |
+| description | nullable varchar(500)，向用户解释关联理由，安全转义 |
+| created_at / updated_at | 时间戳 |
+
+唯一约束：`(course_series_id, related_course_series_id, relation_type)`；展示索引：`(course_series_id, relation_type, sort_order)`。CourseSeries.courseRelations为出向hasMany，CourseRelation.course/relatedCourse为belongsTo。关系是单向的；同一目标可有不同类型，推荐不自动双向。前置关系方向为“当前课程建议先完成目标课程”，服务拒绝自身、重复及直接/间接前置循环；recommended与next可以回链，不自动递归遍历。
+
+所有关系写入通过CourseRelationService：授权管理员更新源课程，拒绝跨源关系ID；事务中先锁固定的最小ID课程行，保证并发图写入的循环检查一致。数字排序修改与移除连接也使用该服务；仅删除关系记录，保留实际内容及进度。关系内排序同值按关系ID升序，与CourseSeries.sort_order和Lesson.position独立。
+
+公开介绍`/courses/{series}`及公开关联目标要求课程published且有published课时；完整免费须满足Free Lab过滤规则。课程元信息与已发布大纲可公开，课时正文/Prompt/代码/附件不随路径输出，付费学习仍未开放。草稿/归档源或目标不出现在关系模块；管理员只读预览可查看这些连接，并只跳转到受保护预览。
+
+本阶段不新增level、outcome或course_type：已有category/final_outcome及is_free继续使用；会员访问权益不能由课程类型替代。

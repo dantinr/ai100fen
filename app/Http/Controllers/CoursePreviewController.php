@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CourseSeries;
+use App\Services\CourseRelationPresenter;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
@@ -18,6 +19,7 @@ class CoursePreviewController extends Controller
         return response()->view($lesson ? 'frontend.free.lesson' : 'frontend.preview.course', [
             'series' => $series, 'lessons' => $lessons, 'lesson' => $lesson,
             'isPreview' => true, 'progress' => null, 'score' => 0,
+            'relationGroups' => app(CourseRelationPresenter::class)->groups($series, preview: true),
         ])->header('Cache-Control', 'private, no-store');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\CoursePreviewController;
 use App\Http\Controllers\FreeLabController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicCourseController;
 use App\Http\Controllers\QuestionTopicsController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,7 @@ Route::get('/free', [FreeLabController::class, 'index'])->name('free.index');
 Route::get('/free/{series}/{lessonSlug}', [FreeLabController::class, 'show'])->name('free.lesson');
 Route::get('/free/{series}/{lessonSlug}/resources/{resource}', [FreeLabController::class, 'download'])->name('free.resource');
 Route::get('/series', [FrontendController::class, 'index'])->name('series.index');
+Route::get('/courses/{series}', PublicCourseController::class)->name('courses.show');
 Route::get('/series/{slug}', [FrontendController::class, 'series'])->name('series.show');
 Route::get('/series/{slug}/lessons/{lessonSlug}', [FrontendController::class, 'lesson'])->name('lessons.show');
 Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FrontendController::class, 'checklist'])->name('lessons.checklist');

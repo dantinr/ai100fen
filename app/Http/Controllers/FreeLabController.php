@@ -6,6 +6,7 @@ use App\Models\CourseSeries;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
 use App\Services\CourseAccessService;
+use App\Services\CourseRelationPresenter;
 use App\Services\FreeCourseRecommendationService;
 use App\Services\ProgressService;
 use Illuminate\Http\Request;
@@ -43,7 +44,9 @@ class FreeLabController extends Controller
         $lessons = $series->lessons()->where('status', 'published')->get();
         $score = $request->user() ? $progressService->seriesScore($request->user(), $series) : 0;
 
-        return view('frontend.free.lesson', compact('series', 'lesson', 'progress', 'lessons', 'score'));
+        return view('frontend.free.lesson', compact('series', 'lesson', 'progress', 'lessons', 'score') + [
+            'relationGroups' => app(CourseRelationPresenter::class)->groups($series),
+        ]);
     }
 
     public function save(Request $request, CourseSeries $series, string $lessonSlug, CourseAccessService $access, ProgressService $progress)

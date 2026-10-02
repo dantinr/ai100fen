@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\CourseDisplayOrder;
+use App\Services\CourseRelationPresenter;
 use App\Support\FrontendCatalog;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -23,7 +24,8 @@ class FrontendController extends Controller
 
     public function series(string $slug): View
     {
-        return view('frontend.series', ['series' => $this->catalog->find($slug)]);
+        return view('frontend.series', ['series' => $this->catalog->find($slug),
+            'relationGroups' => app(CourseRelationPresenter::class)->forLegacy($slug)]);
     }
 
     public function lesson(string $slug, string $lessonSlug): View

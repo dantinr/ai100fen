@@ -25,7 +25,7 @@ class FrontendTheme
             request()->routeIs('questions') => 'question-pool',
             request()->routeIs('lessons.*', 'free.lesson', 'free.progress', 'courses.preview') => 'lesson',
             request()->routeIs('free.index') => 'series',
-            request()->routeIs('series.*') => 'series',
+            request()->routeIs('series.*', 'courses.show') => 'series',
             request()->routeIs('login', 'register') => 'account',
             request()->routeIs('pricing') => 'checkout',
             request()->routeIs('me') => 'progress',

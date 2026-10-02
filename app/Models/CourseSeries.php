@@ -74,6 +74,11 @@ class CourseSeries extends Model
         return $this->hasMany(Lesson::class)->orderBy('position')->orderBy('id');
     }
 
+    public function courseRelations(): HasMany
+    {
+        return $this->hasMany(CourseRelation::class)->orderBy('sort_order')->orderBy('id');
+    }
+
     public function scopeFreeLab(Builder $query): void
     {
         $query->where('status', 'published')->where('is_free', true)
