@@ -741,3 +741,58 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .free-markdown ol { list-style: decimal; }
 .free-markdown pre { overflow: auto; padding: 1rem; }
 .free-markdown img { max-width: 100%; height: auto; }
+
+/* Question topics: layout and responsive interaction geometry. */
+.question-hero { display:grid; grid-template-columns:1fr 190px; align-items:center; gap:28px; margin-bottom:44px; }
+.question-hero .page-heading { margin:0; }
+.question-hero h1 { font-size:clamp(36px,4.4vw,56px); line-height:1.2; margin:14px 0 18px; }
+.question-hero .page-heading p { max-width:550px; }
+.question-hero-art { display:flex; flex-direction:column; align-items:center; }
+.question-hero-art .ufo-widget { width:190px; }
+.question-hero-art>span { padding:6px 12px; font-size:12px; }
+.question-explorer { display:grid; grid-template-columns:1.15fr 1fr; gap:40px; align-items:start; }
+.question-topic-board,.question-topic-detail { min-width:0; }
+.question-section-heading { display:flex; flex-wrap:wrap; gap:12px; align-items:baseline; justify-content:space-between; margin-bottom:24px; }
+.question-section-heading h2 { font-size:20px; }
+.question-section-heading>span { font-size:12px; }
+.question-topic-cloud { display:flex; flex-wrap:wrap; gap:14px 12px; padding-bottom:12px; }
+.question-topic-tag { display:inline-flex; align-items:center; gap:8px; min-height:46px; max-width:100%; padding:10px 14px; font-size:14px; line-height:1.6; }
+.question-topic-tag svg { width:15px; height:15px; flex:none; }
+.question-tag-mark { font-size:18px; }
+.question-topic-note { margin-top:22px; font-size:11px; line-height:1.8; }
+.question-topic-detail { padding:28px; scroll-margin-top:110px; }
+.question-topic-panel { min-height:415px; }
+.question-topic-panel[hidden] { display:none; }
+.question-topic-panel h2 { font-size:23px; line-height:1.5; margin:14px 0; }
+.question-topic-context { font-size:13px; line-height:1.9; }
+.question-first-step { display:grid; grid-template-columns:28px 1fr; gap:12px; padding:18px; margin:22px 0; }
+.question-step-number { font-size:20px; line-height:1.4; }
+.question-first-step h3 { font-size:14px; margin-bottom:7px; }
+.question-first-step p { font-size:13px; line-height:1.9; }
+.question-topic-panel>.button { max-width:100%; }
+.question-course-link { display:flex; width:fit-content; margin-top:16px; font-size:12px; }
+.question-source-link { font-size:11px; line-height:1.8; margin-top:24px; }
+.question-submit-note { display:flex; align-items:center; gap:14px; margin-top:36px; padding:20px; }
+.question-submit-note>svg { width:20px; height:20px; flex:none; }
+.question-submit-note p { font-size:13px; line-height:1.8; flex:1; }
+.question-submit-note>.text-link { font-size:12px; flex:none; }
+.question-research-notes { margin-top:22px; font-size:12px; line-height:1.9; }
+.question-research-notes summary { cursor:pointer; width:fit-content; padding:6px 0; }
+.question-research-notes p { margin:12px 0; max-width:750px; }
+.question-research-notes ul { display:flex; flex-wrap:wrap; gap:8px 22px; }
+.question-research-notes li { max-width:100%; overflow-wrap:anywhere; }
+@media(max-width:1050px) { .question-explorer { gap:24px; } .question-topic-tag { font-size:13px; padding:9px 12px; } }
+@media(max-width:760px) {
+    .question-hero { grid-template-columns:1fr 90px; gap:10px; margin-bottom:32px; }
+    .question-hero h1 { font-size:34px; }
+    .question-hero .page-heading p { font-size:13px; }
+    .question-hero-art .ufo-widget { width:90px; }
+    .question-hero-art>span { display:none; }
+    .question-explorer { grid-template-columns:1fr; gap:28px; }
+    .question-topic-cloud { gap:12px 10px; }
+    .question-topic-detail { padding:22px; scroll-margin-top:90px; }
+    .question-topic-panel { min-height:0; }
+    .question-topic-panel h2 { font-size:21px; }
+    .question-submit-note { flex-wrap:wrap; align-items:flex-start; padding:18px; }
+    .question-submit-note>.text-link { margin-left:34px; }
+}

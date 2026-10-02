@@ -2,6 +2,7 @@ import { createIcons, ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownT
 import { updateUfoProgress } from './ufo';
 import './paul';
 import './free-lab';
+import './question-topics';
 
 const icons = { ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays, LayoutTemplate, Table2, FlaskConical };
 createIcons({ icons });

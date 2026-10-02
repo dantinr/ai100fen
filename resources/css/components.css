@@ -473,3 +473,29 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .free-categories a { color:var(--color-text); background:var(--color-surface); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-button); }
 .free-categories a[aria-current=page] { background:var(--color-accent); color:var(--color-action-text); font-weight:var(--weight-strong); }
 @media(hover:hover) and (prefers-reduced-motion:no-preference) { .home-intent-card:hover { transform:var(--transform-hover); box-shadow:var(--shadow-card-hover); } }
+
+/* Topic cards inherit the active theme; motion is brief and never loops. */
+.question-hero-art>span { color:var(--color-text); background:var(--color-highlight); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-badge); font-weight:var(--weight-strong); box-shadow:var(--shadow-sm); }
+.question-hero-art .ufo-widget[data-state] .ufo-ship,.question-hero-art .ufo-widget[data-state] .ufo-lights { animation-iteration-count:1; }
+.heading-question { color:var(--color-text); }
+.question-section-heading>span,.question-topic-note,.question-topic-context,.question-source-link,.question-research-notes { color:var(--color-text-muted); }
+.question-topic-tag { color:var(--color-text); background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-round); font-weight:var(--weight-strong); box-shadow:var(--shadow-sticker); text-decoration:none; transition:transform var(--motion-fast) var(--ease-default),box-shadow var(--motion-fast) var(--ease-default),background var(--motion-fast) var(--ease-default); animation:question-tag-enter var(--motion-enter) var(--ease-emphasis) both; }
+.question-topic-tag:nth-child(4n+2) { animation-delay:50ms; }
+.question-topic-tag:nth-child(4n+3) { animation-delay:100ms; }
+.question-topic-tag:nth-child(4n) { animation-delay:150ms; }
+.question-topic-tag[data-tone=highlight] { background:var(--color-highlight); }
+.question-topic-tag[data-tone=success] { background:var(--color-success-surface); }
+.question-tag-mark { color:var(--color-text-muted); }
+.question-topic-tag[aria-current] { background:var(--color-highlight); box-shadow:var(--shadow-pressed); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:4px; }
+.question-topic-tag:focus-visible,.question-research-notes summary:focus-visible { outline:3px solid var(--color-secondary); outline-offset:5px; }
+.question-topic-detail { background:var(--color-surface); border:var(--border-width-strong) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-card); }
+.question-topic-panel:not([hidden]) { animation:question-panel-enter var(--motion-enter) var(--ease-emphasis); }
+.question-first-step { background:var(--color-success-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-sm); }
+.question-step-number { font-family:var(--font-display); font-weight:var(--weight-heading); }
+.question-source-link a,.question-research-notes a { color:inherit; text-decoration:underline; text-underline-offset:3px; }
+.question-submit-note { background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); }
+.question-submit-note p { color:var(--color-text-muted); }
+@keyframes question-tag-enter { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+@keyframes question-panel-enter { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+@media(hover:hover) and (pointer:fine) { .question-topic-tag:hover { transform:translateY(-2px); box-shadow:var(--shadow-hover); background:var(--color-highlight); } }
+@media(prefers-reduced-motion:reduce) { .question-topic-tag,.question-topic-panel:not([hidden]) { animation:none; transition:none; } .question-topic-tag:hover { transform:none; } }

@@ -24,6 +24,20 @@ class FrontendPreviewTest extends TestCase
             ->assertSee('通过公网 IP 能打开页面');
     }
 
+    public function test_question_topics_support_direct_links_and_invalid_queries_fall_back_safely(): void
+    {
+        $this->get('/questions?topic=memory')->assertOk()
+            ->assertViewHas('selectedTopic', 'memory')
+            ->assertSee('Agent 为什么忘记目标')
+            ->assertSee('/free?category=solve', false)
+            ->assertSee('不代表原文提问、全网热度排名或实时统计');
+
+        foreach (['/questions?topic=missing', '/questions?topic[]=memory', '/questions?topic=%3Cscript%3E'] as $path) {
+            $this->get($path)->assertOk()->assertViewHas('selectedTopic', 'make-software')
+                ->assertDontSee('<script>', false);
+        }
+    }
+
     public function test_unpublished_lesson_cannot_be_unlocked_by_frontend_parameters(): void
     {
         $this->get('/series/build-a-website/lessons/domain?is_free=1&purchased=1&subscription=active')

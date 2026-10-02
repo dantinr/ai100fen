@@ -6,6 +6,7 @@ use App\Http\Controllers\CoursePreviewController;
 use App\Http\Controllers\FreeLabController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionTopicsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontendController::class, 'home'])->name('home');
@@ -18,7 +19,7 @@ Route::get('/series/{slug}/lessons/{lessonSlug}', [FrontendController::class, 'l
 Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FrontendController::class, 'checklist'])->name('lessons.checklist');
 Route::get('/pricing', [FrontendController::class, 'pricing'])->name('pricing');
 Route::get('/live', [FrontendController::class, 'live'])->name('live');
-Route::view('/questions', 'frontend.questions')->name('questions');
+Route::get('/questions', QuestionTopicsController::class)->name('questions');
 Route::get('/commits', CommitHistoryController::class)->name('commits');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
