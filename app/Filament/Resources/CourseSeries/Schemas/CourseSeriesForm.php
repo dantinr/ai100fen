@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CourseSeries\Schemas;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -38,6 +39,13 @@ class CourseSeriesForm
                     TextInput::make('sort_order')->label('展示排序')->numeric()->integer()->minValue(0)->maxValue(999999)->required()->default(1000)
                         ->helperText('数字越小越靠前，默认1000。控制首页、课程目录与免费实验室展示顺序，不改变课时顺序。'),
                     TextInput::make('price')->label('单课程价格（元）')->readOnly()->default('100.00')->dehydrateStateUsing(fn (Get $get) => $get('is_free') ? '0.00' : '100.00')->helperText('当前固定定价：付费100元，完整免费0元。'),
+                    FileUpload::make('cover')->label('上传封面图')->image()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                        ->disk('public')->directory('course-covers')->visibility('public')->maxSize(2048)
+                        ->imageEditor()->imageEditorAspectRatioOptions(['16:9'])->imageAspectRatio('16:9')
+                        ->automaticallyCropImagesToAspectRatio()->automaticallyResizeImagesMode('cover')
+                        ->automaticallyResizeImagesToWidth('1600')->automaticallyResizeImagesToHeight('900')
+                        ->automaticallyUpscaleImagesWhenResizing(false)->columnSpanFull()
+                        ->helperText('建议横图 1600×900（16:9），支持 JPG、PNG、WebP，最大 2 MB。已在公开目录展示的课程更换后会立即显示新封面。'),
                     TagsInput::make('recommendation_keywords')->label('推荐关键词')->default([])->helperText('填写用户可能提出的任务意图；按回车添加。'),
                     MarkdownEditor::make('description')->label('课程介绍')->disableToolbarButtons(['attachFiles'])->columnSpanFull(),
                     TagsInput::make('objectives')->label('课程目标')->default([])->columnSpanFull()->helperText('逐项描述阶段成果，按回车添加；最终成果与验收请填写下方定义。'),

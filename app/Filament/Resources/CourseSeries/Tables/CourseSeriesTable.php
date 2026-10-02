@@ -4,12 +4,13 @@ namespace App\Filament\Resources\CourseSeries\Tables;
 
 use App\Filament\Resources\Lessons\LessonResource;
 use App\Models\CourseSeries;
-use Filament\Facades\Filament;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -26,6 +27,7 @@ class CourseSeriesTable
             ->columns([
                 TextColumn::make('id')->label('ID')->sortable(),
                 TextColumn::make('sort_order')->label('展示排序')->sortable(),
+                ImageColumn::make('cover')->label('封面')->disk('public')->imageWidth(72)->imageHeight(40),
                 TextColumn::make('title')->label('课程')->searchable()->sortable()->description(fn ($record) => $record->slug),
                 TextColumn::make('category')->label('价值路径')->badge()->formatStateUsing(fn (string $state) => ['solve' => 'Solve · 解决', 'create' => 'Create · 创作', 'explore' => 'Explore · 探索'][$state] ?? $state),
                 TextColumn::make('status')->label('状态')->badge()->formatStateUsing(fn (string $state) => ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$state] ?? $state),

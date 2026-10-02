@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -77,6 +78,14 @@ class CourseSeries extends Model
     public function courseRelations(): HasMany
     {
         return $this->hasMany(CourseRelation::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function coverUrl(): ?string
+    {
+        return is_string($this->cover) && preg_match('~\Acourse-covers/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)\z~i', $this->cover)
+            && Storage::disk('public')->exists($this->cover)
+            ? Storage::disk('public')->url($this->cover)
+            : null;
     }
 
     public function scopeFreeLab(Builder $query): void

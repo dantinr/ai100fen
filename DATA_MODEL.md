@@ -133,9 +133,11 @@ archived
 
 ### 3.3 当前示例与迁移差距
 
-`FrontendCatalog`的`category=build/work`仍属于旧公共页面筛选。D-036已逐门审核并将16门课程以草稿导入共用模型：question→user_intent、outcome→final_outcome、deliverables→objectives；description与prerequisites组合为Markdown介绍。completion_criteria、agent_role、human_judgment_required逐门补充，category独立判断为Create 9/Solve 7，不盲目转换旧类别。封面、图标、旧公开筛选与页面数据源暂仍保留在FrontendCatalog。
+`FrontendCatalog`的`category=build/work`仍属于旧公共页面筛选。D-036已逐门审核并将16门课程以草稿导入共用模型：question→user_intent、outcome→final_outcome、deliverables→objectives；description与prerequisites组合为Markdown介绍。completion_criteria、agent_role、human_judgment_required逐门补充，category独立判断为Create 9/Solve 7，不盲目转换旧类别。图标、旧公开筛选与主要页面内容仍来自FrontendCatalog；D-046只按slug读取数据库封面。
 
-D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提供`courses:import-legacy`独立事务命令及只读--dry-run，仅新增不存在的课程slug，遇到同slug整门跳过，保留全部既有字段与关联记录。网站已有10课时按position/score/points导入，首课已有Prompt、步骤、代码与验收清单，其余9课保留目标与简介并标记草稿；其他15门不生成不存在的课时。无新表或迁移，导入不触发购买权限或正式发布。审核与逐门六项报告见`docs/LEGACY_COURSE_IMPORT.md`。
+D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提供`courses:import-legacy`独立事务命令及只读--dry-run，仅新增不存在的课程slug，遇到同slug整门跳过，保留全部既有字段与关联记录。网站已有10课时按position/score/points导入，首课已有Prompt、步骤、代码与验收清单，其余9课保留目标与简介并标记草稿；其他15门不生成不存在的课时。导入不触发购买权限或正式发布。审核与逐门六项报告见`docs/LEGACY_COURSE_IMPORT.md`。
+
+D-046新增`course_series.cover`可空字符串，仅存`public`磁盘中`course-covers/`下的图片路径。管理员上传JPG/PNG/WebP（最多2 MB），统一按16:9展示；无图或文件缺失时沿用既有海报/图标。旧目录只按slug读取封面和排序，不读取数据库草稿正文或改变访问权限。图片文件存于`storage/app/public`，不提交Git；部署环境需建立`public/storage`链接。新增迁移只加可空字段，生产须审阅后独立执行。
 
 不要把Series永久写死为10课。
 

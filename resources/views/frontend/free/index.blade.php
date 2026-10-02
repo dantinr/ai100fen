@@ -36,7 +36,11 @@
         @forelse($courses as $course)
             <article class="free-card">
                 <div class="free-card-top"><span class="eyebrow">{{ ['create' => 'CREATE · 创作作品', 'solve' => 'SOLVE · 解决问题', 'explore' => 'EXPLORE · 探索可能'][$course->category] }}</span><span class="free-badge">完整免费</span></div>
-                <span class="free-task-icon" aria-hidden="true"><i data-lucide="{{ ['create' => 'layout-template', 'solve' => 'table-2', 'explore' => 'flask-conical'][$course->category] }}"></i></span>
+                @if($coverUrl = $course->coverUrl())
+                    <img class="course-cover free-card-cover" src="{{ $coverUrl }}" alt="" loading="lazy" decoding="async">
+                @else
+                    <span class="free-task-icon" aria-hidden="true"><i data-lucide="{{ ['create' => 'layout-template', 'solve' => 'table-2', 'explore' => 'flask-conical'][$course->category] }}"></i></span>
+                @endif
                 <h3>{{ $course->title }}</h3><p>{{ $course->final_outcome }}</p>
                 <div class="free-card-meta"><span>{{ $course->minutes }} 分钟左右</span><span>{{ $course->lessons->count() }} 个完整步骤</span></div>
                 <a class="button button-primary" href="{{ route('free.lesson', [$course, $course->lessons->first()->slug]) }}">免费开始<i data-lucide="arrow-right"></i></a>

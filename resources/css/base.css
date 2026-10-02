@@ -802,6 +802,9 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .free-card p { font-size:14px; line-height:1.8; flex:1; }
 .free-card-meta { display:flex; gap:12px; font-size:12px; margin:20px 0; }
 .free-card .button { justify-content:space-between; }
+.course-cover { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
+.free-card-cover { margin:22px 0 18px; }
+.course-overview-cover { max-width:900px; margin-top:22px; }
 .free-preview-note { padding:24px 0; }
 .free-preview-note h2 { font-size:20px; }
 .free-preview-note p { line-height:1.8; margin:14px 0; }
@@ -861,6 +864,7 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .free-markdown pre { overflow: auto; padding: 1rem; }
 .free-markdown img { max-width: 100%; height: auto; }
 @media(max-width:760px) { .footer-inner>div { flex-wrap:wrap; gap:4px 18px; } }
+.course-visual:has(> img),.series-image:has(> img),.app-ui .course-visual:has(> img),.app-ui .series-image:has(> img) { aspect-ratio:16/9; }
 
 /* Question topics: layout and responsive interaction geometry. */
 .question-hero { display:grid; grid-template-columns:1fr 190px; align-items:center; gap:28px; margin-bottom:44px; }

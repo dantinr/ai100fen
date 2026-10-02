@@ -25,7 +25,7 @@ class FrontendController extends Controller
 
     public function series(string $slug): View
     {
-        return view('frontend.series', ['series' => $this->catalog->find($slug),
+        return view('frontend.series', ['series' => $this->displayOrder->previewCourse($this->catalog->find($slug)),
             'relationGroups' => app(CourseRelationPresenter::class)->forLegacy($slug)]);
     }
 

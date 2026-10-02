@@ -106,6 +106,17 @@ git pull
 
 Filament的Composer post-autoload-dump会执行`filament:upgrade`，发布被Git忽略的官方CSS/JS/字体；这些由dante写入并继承源码组只读ACL，不手工上传、不改为777。后台主题选择存数据库，前台新请求生效；选择“跟随APP_THEME”可恢复环境配置。后续无数据库变化时仍只需git pull。
 
+## 课程封面公开存储（D-046）
+
+封面使用`public`磁盘，文件由Filament写到`storage/app/public/course-covers`，不进入Git。代码发布后先审阅`2026_10_02_200000_add_course_series_cover.php`和目标库，再以`dante`独立执行：
+
+```sh
+php artisan migrate --path=database/migrations/2026_10_02_200000_add_course_series_cover.php --force --no-interaction
+php artisan storage:link
+```
+
+若链接已存在，`storage:link`应保持现状；核对`public/storage`确实指向项目`storage/app/public`，且Web进程能够读取上传文件。`storage`沿用D-033的组权限和默认ACL，不给源码目录额外写权限，不使用777。公开目录项的封面在管理员保存后即可显示；其他课程仍遵守既有发布过滤。git pull Hook不会迁移、创建链接或复制用户上传文件，备份策略应包含`storage/app/public`。
+
 ## 现有课程入库（D-036）
 
 与日常git pull分开，新增课程内容前保存私有课程/课时/学习记录快照，执行`php artisan courses:import-legacy --dry-run`核对新增与跳过清单，再独立运行`php artisan courses:import-legacy`。不需要新迁移或环境变量。全程仅新增缺少的课程slug，遇到同slug整门跳过；重复运行新增0。导入16门草稿与网站已有10课时，不补造其他15门的大纲，不发布或收费，不覆盖既有数据。审核见[docs/LEGACY_COURSE_IMPORT.md](../docs/LEGACY_COURSE_IMPORT.md)。Hook继续不自动导入。
