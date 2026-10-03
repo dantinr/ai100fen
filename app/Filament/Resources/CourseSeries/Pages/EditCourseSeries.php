@@ -14,6 +14,11 @@ class EditCourseSeries extends EditRecord
 
     protected static string $resource = CourseSeriesResource::class;
 
+    public function areFormActionsSticky(): bool
+    {
+        return true;
+    }
+
     #[On('course-outline-updated')]
     public function refreshPublicationState(): void
     {
