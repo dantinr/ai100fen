@@ -15,11 +15,10 @@
             <a class="brand" href="{{ route('home') }}" aria-label="AI100分首页"><span class="brand-mark">100<span>↗</span></span><span>AI100分<span class="brand-dot">.</span></span></a>
             <nav class="main-nav" aria-label="主导航" id="main-navigation">
                 <a href="{{ route('home') }}" @class(['active' => request()->routeIs('home')]) @if(request()->routeIs('home')) aria-current="page" @endif>首页</a>
-                <a href="{{ route('series.index') }}" @class(['active' => request()->routeIs('series.*', 'lessons.*')]) @if(request()->routeIs('series.*', 'lessons.*')) aria-current="page" @endif>100分钟</a>
-                <a href="{{ route('free.index') }}" @class(['active' => request()->routeIs('free.*')]) @if(request()->routeIs('free.*')) aria-current="page" @endif>免费实验室</a>
-                <x-black-hole-nav-link :href="route('questions')" :active="request()->routeIs('questions', 'questions.*')">问题池</x-black-hole-nav-link>
+                <a href="{{ route('series.index') }}" @class(['active' => request()->routeIs('series.*', 'lessons.*', 'courses.show')]) @if(request()->routeIs('series.*', 'lessons.*', 'courses.show')) aria-current="page" @endif>全部课程</a>
                 <a href="{{ route('live') }}" @class(['active' => request()->routeIs('live')]) @if(request()->routeIs('live')) aria-current="page" @endif>直播</a>
-                <a href="{{ route('me') }}" @class(['active' => request()->routeIs('me')]) @if(request()->routeIs('me')) aria-current="page" @endif>我的100分</a>
+                <a href="{{ route('free.index') }}" @class(['active' => request()->routeIs('free.*')]) @if(request()->routeIs('free.*')) aria-current="page" @endif>实验室</a>
+                <x-black-hole-nav-link :href="route('questions')" :active="request()->routeIs('questions', 'questions.*')">问题池</x-black-hole-nav-link>
             </nav>
             <div class="header-actions"><a class="login-link" href="{{ auth()->check() ? route('me') : route('login') }}">{{ auth()->check() ? '个人中心' : '登录' }}</a><a class="button button-small button-dark" href="{{ route('series.index') }}">开始解决问题<i data-lucide="arrow-up-right"></i></a><button class="icon-button menu-toggle" aria-label="展开导航" aria-expanded="false" aria-controls="main-navigation"><i data-lucide="menu"></i></button></div>
         </div>
