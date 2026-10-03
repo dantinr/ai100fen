@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="description" content="AI100分，从真实问题出发。10分钟解决一步，100分钟做成一个可验收的结果。">
+    <meta name="description" content="@yield('description', 'AI100分，从真实问题出发。10分钟解决一步，100分钟做成一个可验收的结果。')">
     <title>@yield('title', 'AI100分 · 把一个真实问题做成')</title>
     @vite(['resources/css/app.css', $theme['stylesheet'], 'resources/js/app.js'])
 </head>
@@ -29,6 +29,7 @@
             <a class="footer-brand" href="{{ route('home') }}">AI100分<span class="brand-dot">.</span></a>
             <span>10分钟，解决一步。100分，代表完成。</span>
             <div>
+                <a href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif>关于AI100分</a>
                 <a href="{{ route('series.index') }}">100分钟</a>
                 <a href="{{ route('free.index') }}">免费实验室</a>
                 <a href="{{ route('pricing') }}">购买与订阅</a>

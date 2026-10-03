@@ -22,6 +22,7 @@ class FrontendTheme
     {
         return match (true) {
             request()->routeIs('home') => 'home',
+            request()->routeIs('about') => 'about',
             request()->routeIs('questions', 'questions.*') => 'question-pool',
             request()->routeIs('lessons.*', 'free.lesson', 'free.progress', 'courses.preview') => 'lesson',
             request()->routeIs('free.index') => 'series',

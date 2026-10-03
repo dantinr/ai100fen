@@ -12,6 +12,7 @@ use App\Http\Controllers\QuestionTopicsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontendController::class, 'home'])->name('home');
+Route::view('/about', 'frontend.about')->name('about');
 Route::get('/free', [FreeLabController::class, 'index'])->name('free.index');
 Route::get('/free/{series}/{lessonSlug}', [FreeLabController::class, 'show'])->name('free.lesson');
 Route::get('/free/{series}/{lessonSlug}/resources/{resource}', [FreeLabController::class, 'download'])->name('free.resource');

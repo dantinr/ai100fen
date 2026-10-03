@@ -544,3 +544,17 @@ h1,h2,h3 { font-family:var(--font-heading); }
 }
 
 .footer-repo-icon { background:currentColor; border-radius:50%; --paul-skin:var(--color-surface); --paul-skin-shadow:var(--color-surface); --paul-stroke:currentColor; --paul-eye:currentColor; --paul-light:var(--color-surface); --paul-suit-accent:var(--color-surface); }
+.about-hero h1 { font-weight:var(--weight-heading); letter-spacing:var(--tracking-heading); }
+.about-lead,.about-direction p,.about-task p,.about-scale-note,.about-availability,.about-start>p { color:var(--color-text-muted); }
+.about-direction,.about-task,.about-maintainer,.about-start { background:var(--color-surface); border:var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-button); }
+.about-direction { transition:background-color var(--motion-fast),box-shadow var(--motion-fast); }
+.about-direction-icon { background:var(--color-highlight); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); }
+.about-direction-create .about-direction-icon { background:var(--color-success-surface); }
+.about-direction-explore .about-direction-icon { background:var(--color-surface-alt); }
+.about-direction h3,.about-task h3,.about-start h2,.about-maintainer-name strong { font-weight:var(--weight-heading); }
+.about-task-number { color:var(--color-text-muted); font-family:var(--font-display); font-weight:var(--weight-heading); }
+.about-story { border-block:var(--border-width-default) var(--border-style-default) var(--color-border-muted); }
+.about-principle { border-top:var(--border-width-default) var(--border-style-default) var(--color-border-muted); }
+.about-start { background:var(--color-highlight); }
+@media(hover:hover) and (pointer:fine) { .about-direction:hover { background:var(--color-bg); box-shadow:var(--shadow-card-hover); } }
+@media(prefers-reduced-motion:reduce) { .about-direction { transition:none; } }
