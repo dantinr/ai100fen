@@ -2,16 +2,13 @@
 @section('title', '问题池 · AI100分')
 @section('content')
 <div class="shell page-main questions-main" data-question-topics>
+    <div class="question-pool-backdrop" aria-hidden="true"><x-black-hole variant="backdrop" /></div>
     <header class="question-hero">
         <div class="page-heading">
             <span class="eyebrow">问题池 / AI + AGENT</span>
             <h1>把问题扔进黑洞<span class="heading-question">.</span></h1>
             <p>告诉 Z，你遇到了什么问题。你来确认，黑洞负责收集。</p>
             <a class="button button-primary question-chat-entry" href="#question-lab">开始与 Z 对话<i data-lucide="arrow-right"></i></a>
-        </div>
-        <div class="question-hero-art" aria-hidden="true">
-            <x-black-hole variant="hero" />
-            <span>收集未知，先想清楚。</span>
         </div>
     </header>
     <x-question-workspace />

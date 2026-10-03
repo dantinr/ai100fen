@@ -488,8 +488,6 @@ h1,h2,h3 { font-family:var(--font-heading); }
 @media(hover:hover) and (prefers-reduced-motion:no-preference) { .home-intent-card:hover { transform:var(--transform-hover); box-shadow:var(--shadow-card-hover); } }
 
 /* Topic cards inherit the active theme; motion is brief and never loops. */
-.question-hero-art>span:not(.black-hole) { color:var(--color-text); background:var(--color-highlight); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-badge); font-weight:var(--weight-strong); box-shadow:var(--shadow-sm); }
-.question-hero-art .ufo-widget[data-state] .ufo-ship,.question-hero-art .ufo-widget[data-state] .ufo-lights { animation-iteration-count:1; }
 .heading-question { color:var(--color-text); }
 .question-section-heading>span,.question-topic-note,.question-topic-context,.question-source-link,.question-research-notes { color:var(--color-text-muted); }
 .question-topic-tag { color:var(--color-text); background:var(--color-surface); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-round); font-weight:var(--weight-strong); box-shadow:var(--shadow-sticker); text-decoration:none; transition:transform var(--motion-fast) var(--ease-default),box-shadow var(--motion-fast) var(--ease-default),background var(--motion-fast) var(--ease-default); animation:question-tag-enter var(--motion-enter) var(--ease-emphasis) both; }
@@ -533,6 +531,8 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .question-lab[data-state="error"] .question-save-status { color:var(--color-text); background:var(--color-surface-alt); border-left:var(--border-width-default) solid var(--color-secondary); padding:10px; }
 .question-lab[data-state="success"] .question-save-status { font-weight:var(--weight-strong); }
 .question-lab[data-state="submitting"] .black-hole-disk { animation:black-hole-orbit var(--black-hole-orbit-duration) linear infinite; }
+.black-hole-backdrop .black-hole-disk { animation:black-hole-backdrop-drift var(--black-hole-backdrop-drift-duration) ease-in-out infinite; }
+.black-hole-backdrop .black-hole-halo { animation:black-hole-backdrop-breathe var(--black-hole-backdrop-breathe-duration) ease-in-out infinite; }
 .question-card-copy { background:var(--color-highlight); color:var(--color-text); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-card); box-shadow:var(--shadow-sm); }
 .black-hole-nav-link:focus-visible .black-hole-nav-label { color:var(--color-text); background:var(--color-highlight); }
 .black-hole-nav-link:focus-visible .black-hole-nav-scene { opacity:1; transform:translate(-50%,0); }

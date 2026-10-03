@@ -137,4 +137,9 @@ html[data-theme="pop"] {
     --black-hole-enter: 240ms;
     --black-hole-orbit-duration: 8000ms;
     --black-hole-receive-duration: 760ms;
+    --black-hole-backdrop-opacity: .62;
+    --black-hole-backdrop-mobile-opacity: .18;
+    --black-hole-backdrop-drift-duration: 14s;
+    --black-hole-backdrop-breathe-duration: 9s;
+    --black-hole-backdrop-glow-peak: .2;
 }
