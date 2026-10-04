@@ -4,6 +4,7 @@ import { copyText } from './clipboard';
 import './paul';
 import './free-lab';
 import './course-share';
+import './lesson-video';
 import './question-topics';
 import './question-lab';
 import './live-schedule';

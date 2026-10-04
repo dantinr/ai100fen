@@ -3,6 +3,7 @@
     $isPreview = $isPreview ?? false;
     $lessonRole = $series->slug === 'build-a-website' ? \App\Support\WebsiteSetupLessons::roleFor($lesson->slug) : null;
     $hasAgent = $lessonRole && str_contains($lessonRole, 'Agent');
+    $hasVideo = (bool) $lesson->video_url || (app()->environment('local') && config('player.demo_enabled'));
     $lessonIcon = match ($lesson->slug) {
         'server-and-ip' => 'server', 'authorize-agent' => 'terminal',
         'first-website' => 'layout-template', 'domain' => 'globe',
@@ -11,9 +12,17 @@
 @endphp
 @section('title', $series->title.($isPreview ? ' · 前台预览' : ' · 免费实验室').' · AI100分')
 @section('content')
-<div class="shell page-main free-learning">
+<div @class(['shell page-main free-learning', 'lesson-with-video' => $hasVideo])>
+    @if($hasVideo)<div class="lesson-learning-bar">@endif
     <a class="text-link" href="{{ $isPreview ? \App\Filament\Resources\CourseSeries\CourseSeriesResource::getUrl('edit', ['record' => $series]) : route('free.index') }}"><i data-lucide="arrow-left"></i>{{ $isPreview ? '返回课程编辑' : '免费实验室' }}</a>
+    @if($hasVideo)<a class="text-link lesson-course-link" href="{{ $isPreview ? \App\Filament\Resources\CourseSeries\CourseSeriesResource::getUrl('edit', ['record' => $series]) : route('courses.show', $series) }}" title="{{ $series->title }}">{{ $series->title }}<i data-lucide="chevron-right"></i></a></div>@endif
     @if($isPreview)<p class="free-panel" role="status">管理员前台预览 · {{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$series->status] }} · 当前课时：{{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$lesson->status] }}。预览不发布课程、不保存进度。</p>@endif
+    @if($hasVideo)
+    <header class="lesson-video-intro">
+        <h1 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /><x-lesson-completion :completed="!$isPreview && (bool) $progress?->completed_at" :lesson="$lesson->id" /></h1>
+        <div class="lesson-compact-meta"><span class="free-badge">{{ $series->is_free ? '完整免费' : '付费课程 · ¥'.$series->price }} · {{ strtoupper($series->category) }}</span><span>第{{ $lesson->position }}节 / {{ $lessons->count() }}节</span><span>约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</span></div>
+    </header>
+    @else
     <header class="free-lesson-heading lesson-hero">
         <div class="lesson-hero-copy">
             <div class="lesson-hero-kicker"><span class="free-badge">{{ $series->is_free ? '完整免费' : '付费课程 · ¥'.$series->price }} · {{ strtoupper($series->category) }}</span><span class="eyebrow">第{{ $lesson->position }}节 / {{ $lessons->count() }}节</span></div>
@@ -21,7 +30,7 @@
             <p>{{ $series->final_outcome }}</p>
             <span class="free-note">约 {{ $series->minutes }} 分钟 · 图文实践 · 验收后完成100分</span>
             @if(!$isPreview)<x-course-share :url="route('courses.show', $series)" :title="$series->title" :text="$series->final_outcome" />@endif
-            <nav class="lesson-quick-nav" aria-label="本课内容"><a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a></nav>
+            <nav class="lesson-quick-nav" aria-label="本课内容">@if($lesson->video_url || (app()->environment('local') && config('player.demo_enabled')))<a href="#lesson-video"><i data-lucide="video"></i>视频</a>@endif<a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a></nav>
         </div>
         <div class="lesson-hero-art" aria-hidden="true">
             <span class="lesson-art-orbit"></span><span class="lesson-art-orbit lesson-art-orbit-inner"></span>
@@ -32,11 +41,18 @@
             <span class="lesson-art-points">+{{ $lesson->points }}<small>验收分</small></span>
         </div>
     </header>
+    @endif
     <div class="free-learning-grid">
         <article class="free-lesson-content">
-            <section class="free-panel lesson-goal-panel"><div class="lesson-section-kicker"><i data-lucide="flag"></i>本课的小目标</div><h2 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /><x-lesson-completion :completed="!$isPreview && (bool) $progress?->completed_at" :lesson="$lesson->id" /></h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3><p class="lesson-goal-result">{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
+            @if($hasVideo)
+                <x-lesson-video :source="$lesson->video_url" :poster="$series->coverUrl()" :title="$lesson->title" :compact="true" />
+                <nav class="lesson-quick-nav" aria-label="本课内容"><a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a></nav>
+            @endif
+            <section class="free-panel lesson-goal-panel"><div class="lesson-section-kicker"><i data-lucide="flag"></i>本课的小目标</div>
+                @if($hasVideo)<h2>你要做成什么？</h2>@else<h2 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /><x-lesson-completion :completed="!$isPreview && (bool) $progress?->completed_at" :lesson="$lesson->id" /></h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3>@endif
+                <p class="lesson-goal-result">{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
                 @if($lesson->objectives)<ul>@foreach($lesson->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul>@endif
-                @if($lesson->video_url)<a class="text-link" href="{{ $lesson->video_url }}" target="_blank" rel="noopener noreferrer">观看本课视频<i data-lucide="external-link"></i></a>@endif
+                @if($hasVideo && !$isPreview)<x-course-share :url="route('courses.show', $series)" :title="$series->title" :text="$series->final_outcome" />@endif
             </section>
             @if($lesson->content)<section class="free-panel lesson-reading-panel"><div class="lesson-section-kicker"><i data-lucide="book-open"></i>先看清楚，再开始</div><div class="free-markdown">{!! \Illuminate\Support\Str::markdown($lesson->content, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div></section>@endif
             <section class="free-panel lesson-steps-panel" id="lesson-steps"><div class="lesson-section-kicker"><i data-lucide="route"></i>一步一步，做出结果</div><h2>跟着这几步做</h2><ol class="lesson-step-list">@foreach($lesson->steps as $step)<li class="free-step"><span class="lesson-step-number" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><div><h3>{{ $step['title'] }}</h3><p>{{ $step['body'] }}</p></div></li>@endforeach</ol></section>

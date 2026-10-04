@@ -1094,3 +1094,52 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .course-overview-outline p { font-size:14px; margin:8px 0; }
 .course-overview-checks { padding-left:22px; list-style:disc; font-size:14px; line-height:1.9; }
 @media(max-width:760px) { .course-relation-list { grid-template-columns:1fr; } .course-relation-card { padding:18px; } }
+
+.lesson-video { min-width:0; overflow:hidden; margin-bottom:24px; }
+.lesson-content>.lesson-video { margin-top:24px; }
+.lesson-video-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; }
+.lesson-video-heading h2 { margin:8px 0 0; font-size:20px; line-height:1.5; font-weight:var(--weight-heading); }
+.lesson-video-badge { flex:none; padding:6px 10px; font-size:11px; font-weight:var(--weight-strong); }
+.lesson-video-stage { position:relative; width:100%; aspect-ratio:16/9; min-width:0; isolation:isolate; }
+.lesson-video .lesson-video-mount { position:absolute; inset:0; width:100%; height:100%; }
+.lesson-video-placeholder { position:absolute; inset:0; z-index:2; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px; padding:24px; text-align:center; }
+.lesson-video-placeholder[hidden] { display:none; }
+.lesson-video-placeholder>svg { width:40px; height:40px; }
+.lesson-video-placeholder p { font-size:14px; line-height:1.8; margin:0; }
+.lesson-video-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 24px; font-size:12px; line-height:1.8; }
+.lesson-video-footer p { margin:0; }
+.lesson-video-footer>span { display:flex; align-items:center; gap:6px; flex:none; }
+.lesson-video-footer svg { width:14px; height:14px; }
+.lesson-video .prism-player video { object-fit:contain; }
+.lesson-video .prism-setting-list, .lesson-video .prism-setting-selector { max-height:calc(100% - 52px); overflow-y:auto; }
+.lesson-with-video.page-main { padding-top:16px; }
+.lesson-learning-bar { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:36px; }
+.lesson-learning-bar>.text-link { font-size:12px; min-height:36px; }
+.lesson-learning-bar>.text-link:first-child { flex:none; }
+.lesson-learning-bar .lesson-course-link { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block; line-height:36px; }
+.lesson-course-link svg { display:inline-block; vertical-align:middle; width:14px; height:14px; margin-left:4px; }
+.lesson-video-intro { margin:12px 0 20px; }
+.lesson-video-intro h1 { font-size:clamp(24px,2.5vw,30px); font-weight:var(--weight-heading); line-height:1.4; margin:0 0 12px; }
+.lesson-compact-meta { display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; font-size:12px; line-height:1.7; }
+.lesson-with-video .lesson-quick-nav { margin:0 0 20px; }
+.lesson-with-video>.free-panel[role=status] { margin:8px 0; padding:12px 16px; font-size:12px; }
+.lesson-video-heading.lesson-video-heading-compact { padding:12px 16px; flex-direction:row; align-items:center; flex-wrap:wrap; gap:8px; }
+.lesson-video-heading-compact .lesson-section-kicker { margin-bottom:0; }
+@media(min-width:901px) { .lesson-with-video .lesson-video-stage { max-height:max(180px,calc(100svh - 340px)); } }
+@media(max-width:760px) {
+    .lesson-with-video.page-main { padding-top:10px; }
+    .lesson-learning-bar { gap:10px; }
+    .lesson-video-intro { margin:8px 0 16px; }
+    .lesson-video-intro h1 { margin-bottom:10px; }
+    .lesson-compact-meta { font-size:11px; gap:6px 10px; }
+    .lesson-with-video .lesson-quick-nav { gap:6px; }
+}
+@media(max-width:760px) {
+    .lesson-video-heading { align-items:flex-start; flex-direction:column; gap:10px; padding:16px; }
+    .lesson-video-heading h2 { font-size:18px; }
+    .lesson-video-footer { align-items:flex-start; flex-direction:column; gap:4px; padding:12px 16px; }
+    .lesson-video-placeholder { padding:12px; gap:8px; }
+    .lesson-video-placeholder>svg { width:28px; height:28px; }
+    .lesson-video-placeholder p { font-size:12px; }
+    .lesson-video-placeholder .button { min-height:36px; padding:6px 12px; font-size:12px; }
+}
