@@ -1,3 +1,5 @@
+import { copyText } from './clipboard';
+
 document.querySelectorAll('[data-course-share]').forEach((share) => {
     const trigger = share.querySelector('[data-share-trigger]');
     const fallback = share.querySelector('[data-share-fallback]');
@@ -5,7 +7,7 @@ document.querySelectorAll('[data-course-share]').forEach((share) => {
     const status = share.querySelector('[data-share-status]');
     const copy = async () => {
         try {
-            await navigator.clipboard.writeText(link.value);
+            await copyText(link.value);
             status.textContent = '课程链接已复制，可以发给好友。';
         } catch {
             fallback.hidden = false;

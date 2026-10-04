@@ -1,4 +1,5 @@
 /* Structure, spacing, responsive layout and interaction contracts. */
+.clipboard-copy-buffer { position:fixed; top:0; left:0; width:1px; height:1px; padding:0; opacity:0; pointer-events:none; }
 .lesson-title-with-agent { display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; }
 .lesson-agent-mark { display:inline-flex; align-items:center; gap:3px; flex:none; vertical-align:middle; }
 .lesson-agent-mark>.paul-avatar { width:30px; height:30px; }
@@ -39,15 +40,29 @@
 .lesson-step-list .free-step:not(:last-child)::after { content:''; position:absolute; top:42px; bottom:0; left:19px; width:2px; }
 .lesson-step-number { display:grid; place-items:center; width:40px; height:40px; font-size:15px; position:relative; z-index:1; }
 .lesson-step-list .free-step>div { min-width:0; padding:16px 18px; }
-.lesson-prompt-window { overflow:hidden; margin-top:6px; }
-.lesson-prompt-bar { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 16px; font:10px/1.5 var(--font-mono); }
-.lesson-prompt-bar>svg { width:14px; height:14px; }
-.lesson-window-dots { display:flex; gap:6px; }
-.lesson-window-dots i { width:7px; height:7px; border-radius:50%; }
-.lesson-prompt-window .free-code { margin:0; padding:22px; border:0; border-radius:0; }
-.lesson-resources-panel .free-downloads { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-.lesson-resources-panel .free-downloads>a,.lesson-resources-panel .free-downloads>span { display:flex; align-items:center; flex-wrap:wrap; padding:16px; min-width:0; gap:8px; font-size:13px; }
-.lesson-resources-panel .free-downloads small { display:block; width:100%; font:11px/1.6 var(--font-mono); }
+.agent-prompt { margin-top:22px; overflow:hidden; }
+.agent-prompt-header { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:16px 20px; }
+.agent-prompt-identity { display:flex; align-items:center; gap:10px; min-width:0; }
+.agent-prompt-identity>div { display:grid; gap:4px; }
+.agent-prompt-identity strong { font-size:15px; }
+.agent-prompt-identity span { font-size:11px; line-height:1.6; }
+.agent-prompt .paul-avatar { width:36px; height:36px; flex:none; }
+.agent-prompt .paul-avatar>svg { width:100%; height:100%; margin:0; }
+.agent-prompt-tag { font-size:10px; padding:5px 8px; white-space:nowrap; flex:none; }
+.agent-prompt-conversation { display:grid; gap:24px; padding:24px 20px; }
+.agent-prompt-message { min-width:0; }
+.agent-prompt-message-human { width:calc(100% - 28px); justify-self:end; }
+.agent-prompt-speaker { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-bottom:9px; font-size:11px; }
+.agent-prompt-human-avatar { display:grid; place-items:center; width:28px; height:28px; }
+.agent-prompt-human-avatar svg { width:15px; height:15px; }
+.agent-prompt-bubble { margin:0; padding:20px; font:14px/1.9 var(--font-body); white-space:pre-wrap; overflow-wrap:anywhere; }
+.agent-prompt-message-guide { display:flex; align-items:flex-start; gap:10px; max-width:90%; }
+.agent-prompt-guide-bubble { min-width:0; padding:13px 16px; }
+.agent-prompt-guide-bubble strong { font-size:11px; }
+.agent-prompt-guide-bubble p { margin:6px 0 0; font-size:12px; line-height:1.8; }
+.agent-prompt-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; padding:14px 20px; }
+.agent-prompt-footer>span { font-size:11px; }
+.agent-prompt-footer .button { min-height:44px; font-size:12px; padding:10px 14px; }
 .lesson-acceptance-panel .free-check { padding:14px; margin:12px 0; }
 .lesson-acceptance-panel .free-check input[type=checkbox] { width:20px; height:20px; margin-top:3px; }
 .lesson-route-panel .free-outline-link { padding:13px 12px; margin:7px -8px; }
@@ -55,6 +70,14 @@
 @keyframes lesson-scene-enter { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 @media(max-width:900px) { .lesson-hero { grid-template-columns:minmax(0,1fr) 220px; gap:16px; padding:26px; } .lesson-hero-art { transform:scale(.85); transform-origin:center; margin-left:-15px; } }
 @media(max-width:600px) {
+    .agent-prompt-header { padding:14px; gap:8px; }
+    .agent-prompt-tag { display:none; }
+    .agent-prompt-conversation { padding:18px 14px; gap:20px; }
+    .agent-prompt-message-human { width:calc(100% - 12px); }
+    .agent-prompt-bubble { padding:15px; font-size:13px; }
+    .agent-prompt-message-guide { max-width:100%; gap:8px; }
+    .agent-prompt-guide-bubble { padding:12px; }
+    .agent-prompt-footer { padding:14px; }
     .lesson-hero { grid-template-columns:1fr; padding:22px; gap:12px; }
     .lesson-hero-art { width:250px; height:195px; justify-self:center; margin:0; transform:scale(.85); transform-origin:top center; }
     .lesson-art-character { bottom:0; } .lesson-art-sticker { bottom:-25px; } .lesson-art-points { bottom:20px; }
@@ -65,7 +88,6 @@
     .lesson-step-number { width:32px; height:32px; font-size:12px; }
     .lesson-step-list .free-step:not(:last-child)::after { left:15px; top:35px; }
     .lesson-step-list .free-step>div { padding:14px; }
-    .lesson-resources-panel .free-downloads { grid-template-columns:1fr; }
 }
 .about-main { max-width:1040px; }
 .about-hero { display:grid; gap:22px; padding-block:18px 50px; }
@@ -940,8 +962,6 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .free-code { padding:18px; max-width:100%; overflow:auto; font:13px/1.8 var(--font-mono); white-space:pre-wrap; overflow-wrap:anywhere; margin-top:12px; }
 .free-source summary { cursor:pointer; padding-block:4px; font-weight:600; }
 .free-source .text-button { margin-top:18px; }
-.free-downloads { display:grid; gap:18px; }
-.free-downloads small { font-size:11px; overflow-wrap:anywhere; }
 .free-check { display:flex; gap:12px; align-items:flex-start; font-size:14px; line-height:1.8; margin:18px 0; cursor:pointer; }
 .free-check input[type=checkbox] { flex:none; width:18px; height:18px; margin-top:4px; }
 .free-check + .button { margin-top:8px; }
@@ -986,7 +1006,6 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
     .free-question-form .button { align-self:flex-start; }
     .free-progress-row { flex-direction:column; align-items:flex-start; }
     .free-main .me-section-title { flex-wrap:wrap; gap:10px; }
-    .free-downloads .text-link { flex-wrap:wrap; }
 }
 @media(max-width:760px) { .my-course-image .art-time { display:none; } .my-course-image .app-course-art { justify-content:center; padding:4px; } .my-course-image .art-icon { width:34px; height:34px; } }
 .free-markdown > * + * { margin-top: 1rem; }

@@ -1,5 +1,6 @@
 import { createIcons, ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays, LayoutTemplate, Table2, FlaskConical, Server, Terminal, PanelsTopLeft, Sparkles, BookOpen, Route, Command, FolderOpen, BadgeCheck, Share2 } from 'lucide';
 import { updateUfoProgress } from './ufo';
+import { copyText } from './clipboard';
 import './paul';
 import './free-lab';
 import './course-share';
@@ -132,21 +133,32 @@ tabs.forEach((tab, index) => {
     });
 });
 document.querySelectorAll('[data-open-tab]').forEach((button) => button.addEventListener('click', () => { activateTab(button.dataset.openTab, true); document.querySelector('#lesson-tabs').scrollIntoView({ block: 'start' }); }));
-document.querySelectorAll('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
-    try {
-        await navigator.clipboard.writeText(document.getElementById(button.dataset.copy).textContent);
-        const label = button.querySelector('span');
-        label.textContent = '已复制';
-        toast('已复制');
-        setTimeout(() => { label.textContent = '复制'; }, 2000);
-    } catch {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(document.getElementById(button.dataset.copy));
-        selection.removeAllRanges(); selection.addRange(range);
-        toast('暂时无法复制，已选中文字');
-    }
-}));
+document.querySelectorAll('[data-copy]').forEach((button) => {
+    const label = button.querySelector('span');
+    const originalLabel = label?.textContent;
+    let restoreTimer;
+    button.addEventListener('click', async () => {
+        const target = document.getElementById(button.dataset.copy);
+        if (!target) return;
+        try {
+            await copyText(target.textContent);
+            if (label) {
+                label.textContent = '已复制';
+                clearTimeout(restoreTimer);
+                restoreTimer = setTimeout(() => { label.textContent = originalLabel; }, 2000);
+            }
+            toast('已复制');
+        } catch {
+            clearTimeout(restoreTimer);
+            if (label) label.textContent = originalLabel;
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(target);
+            selection.removeAllRanges(); selection.addRange(range);
+            toast('暂时无法复制，已选中文字，请手动复制');
+        }
+    });
+});
 
 // Browser progress is a preview record only and never grants access to a lesson.
 // Keep previous course records intact; the five-lesson course starts with server purchase.

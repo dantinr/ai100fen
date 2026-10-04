@@ -40,5 +40,5 @@ body[data-page="lesson"],body[data-page="account"],body[data-page="checkout"] { 
 [data-page="lesson"] .lesson-hero .ufo-widget * { animation:none; }
 @media(prefers-reduced-motion:reduce) {
     [data-page="lesson"] .lesson-hero { animation:none; }
-    [data-page="lesson"] .lesson-resources-panel .free-downloads>a,[data-page="lesson"] .lesson-acceptance-panel .free-check { transition:none; }
+    [data-page="lesson"] .lesson-acceptance-panel .free-check { transition:none; }
 }

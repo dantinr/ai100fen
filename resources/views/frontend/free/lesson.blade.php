@@ -13,7 +13,7 @@
 @section('content')
 <div class="shell page-main free-learning">
     <a class="text-link" href="{{ $isPreview ? \App\Filament\Resources\CourseSeries\CourseSeriesResource::getUrl('edit', ['record' => $series]) : route('free.index') }}"><i data-lucide="arrow-left"></i>{{ $isPreview ? '返回课程编辑' : '免费实验室' }}</a>
-    @if($isPreview)<p class="free-panel" role="status">管理员前台预览 · {{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$series->status] }} · 当前课时：{{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$lesson->status] }}。预览不发布课程、不保存进度；资料仅显示名称。</p>@endif
+    @if($isPreview)<p class="free-panel" role="status">管理员前台预览 · {{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$series->status] }} · 当前课时：{{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$lesson->status] }}。预览不发布课程、不保存进度。</p>@endif
     <header class="free-lesson-heading lesson-hero">
         <div class="lesson-hero-copy">
             <div class="lesson-hero-kicker"><span class="free-badge">{{ $series->is_free ? '完整免费' : '付费课程 · ¥'.$series->price }} · {{ strtoupper($series->category) }}</span><span class="eyebrow">第{{ $lesson->position }}节 / {{ $lessons->count() }}节</span></div>
@@ -40,14 +40,10 @@
             </section>
             @if($lesson->content)<section class="free-panel lesson-reading-panel"><div class="lesson-section-kicker"><i data-lucide="book-open"></i>先看清楚，再开始</div><div class="free-markdown">{!! \Illuminate\Support\Str::markdown($lesson->content, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div></section>@endif
             <section class="free-panel lesson-steps-panel" id="lesson-steps"><div class="lesson-section-kicker"><i data-lucide="route"></i>一步一步，做出结果</div><h2>跟着这几步做</h2><ol class="lesson-step-list">@foreach($lesson->steps as $step)<li class="free-step"><span class="lesson-step-number" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><div><h3>{{ $step['title'] }}</h3><p>{{ $step['body'] }}</p></div></li>@endforeach</ol></section>
-            <section class="free-panel lesson-prompt-panel" id="lesson-prompt-section"><div class="lesson-section-kicker"><i data-lucide="terminal"></i>把执行交给 Agent</div><div class="free-section-heading"><h2>交给 Agent 的 Prompt</h2><button class="text-button" type="button" data-copy="free-prompt">复制 Prompt<i data-lucide="copy"></i></button></div><div class="lesson-prompt-window"><div class="lesson-prompt-bar" aria-hidden="true"><span class="lesson-window-dots"><i></i><i></i><i></i></span><span>PROMPT</span><i data-lucide="command"></i></div><pre id="free-prompt" class="free-code">{{ $lesson->prompt }}</pre></div></section>
+            <section class="free-panel lesson-prompt-panel" id="lesson-prompt-section"><div class="lesson-section-kicker"><i data-lucide="terminal"></i>把执行交给 Agent</div><h2>交给 Agent 的 Prompt</h2><x-agent-prompt :prompt="$lesson->prompt" id="free-prompt" /></section>
             @if($lesson->code)
                 <details class="free-panel free-source"><summary>查看完整示例：{{ $lesson->code_filename }}</summary><button class="text-button" type="button" data-copy="free-code">复制代码<i data-lucide="copy"></i></button><pre id="free-code" class="free-code">{{ $lesson->code }}</pre></details>
             @endif
-            <section class="free-panel lesson-resources-panel"><div class="lesson-section-kicker"><i data-lucide="folder-open"></i>带上这些，再出发</div><h2>资料与可运行起点</h2><div class="free-downloads">@foreach($lesson->resources as $resource)
-                @if($isPreview)<span>{{ $resource['label'] }} <small>{{ $resource['name'] }}</small></span>
-                @else<a class="text-link" href="{{ route('free.resource', [$series, $lesson->slug, $resource['name']]) }}"><i data-lucide="download"></i>{{ $resource['label'] }}<small>{{ $resource['name'] }}</small></a>@endif
-            @endforeach</div></section>
             <section class="free-panel lesson-acceptance-panel" id="lesson-acceptance" aria-labelledby="free-check-title">
                 <div class="lesson-section-kicker"><i data-lucide="badge-check"></i>用真实结果，拿到这{{ $lesson->points }}分</div>
                 <h2 id="free-check-title">亲自验收，才算做成</h2>
