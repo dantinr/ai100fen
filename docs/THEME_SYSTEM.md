@@ -1176,3 +1176,11 @@ Future用于验证机制，主题专属插图和完整页面细节尚未定稿�
 black-hole SVG及black-hole-nav-link独立于UFO；组件复用nav/hero/submission外观，颜色/描边/进入/旋转/吸入时间均由Pop/Future的`--black-hole-*` Token控制。新主题须补齐core、outline、disk、accent、detail、glow、glow-opacity、line-width、enter、orbit-duration、receive-duration；业务模板不写固定颜色。结构/响应式/几何动画在base，通用外观在components，具体值在主题；原UFO与paul-* Token契约保持。
 
 导航只有Hover或focus-visible激活旋转，触控/窄屏不展示导航图形，hero/提交图形默认静态；减少动态效果同时在CSS和JS取消吸入。问题页内联Z避免与悬浮向导重复；其他页面保持原Z/UFO。私有问题列表与详情采用question-pool页面类型，复用主题。
+
+## 课时阅读页视觉（2026-10-04）
+
+实际课程学习页及管理员课时预览共用`frontend/free/lesson`：开头采用任务编号、课时图标与Z/UFO插画；目标区突出可验收结果，操作步骤为编号时间线，Prompt采用终端窗口，资源采用下载卡片，验收勾选显示明确的选中反馈。操作步骤、Prompt、验收可通过原生页内链接和键盘进入；课程说明在侧栏可展开。
+
+几何与响应式放在base，通用外观放在components，阅读页装饰浓度和单次入场动画放在variants。全部复用现有配色、图案、倾斜、阴影、字体、角色与Motion Token，不新增主题判断或位图资源；Pop保留贴纸与网点，Future沿用既有网格/光晕。插画不拦截操作、不播放循环动画；减少动态效果关闭入场与反馈过渡，正文保持低装饰浓度。
+
+此次只调整展示，不修改课程内容、发布过滤、服务端访问/资料权限、验收标准或进度计算；管理员预览仍不保存进度。旧静态试看继续使用既有模板。

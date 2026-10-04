@@ -31,3 +31,14 @@ body[data-page="lesson"],body[data-page="account"],body[data-page="checkout"] { 
 [data-page="question-pool"] .me-empty { background:var(--color-highlight); box-shadow:var(--shadow-card); }
 [data-page="question-pool"] .me-empty:before { background-image:var(--theme-pattern); background-size:var(--pattern-size); opacity:var(--decoration-opacity); }
 [data-page="question-pool"] .me-empty>.button { background:var(--color-surface); color:var(--color-text); }
+
+/* Concentrate lesson decoration in the opening scene and task goal. */
+[data-page="lesson"] .lesson-hero { animation:lesson-scene-enter var(--motion-enter) var(--ease-emphasis) both; }
+[data-page="lesson"] .free-learning .free-panel { box-shadow:none; border-color:var(--color-border-muted); }
+[data-page="lesson"] .free-learning .lesson-goal-panel { background:var(--color-bg); border-color:var(--color-border-strong); box-shadow:var(--shadow-sm); }
+[data-page="lesson"] .free-learning .lesson-route-panel { border-color:var(--color-border-strong); }
+[data-page="lesson"] .lesson-hero .ufo-widget * { animation:none; }
+@media(prefers-reduced-motion:reduce) {
+    [data-page="lesson"] .lesson-hero { animation:none; }
+    [data-page="lesson"] .lesson-resources-panel .free-downloads>a,[data-page="lesson"] .lesson-acceptance-panel .free-check { transition:none; }
+}

@@ -559,3 +559,34 @@ h1,h2,h3 { font-family:var(--font-heading); }
 @media(hover:hover) and (pointer:fine) { .about-direction:hover { background:var(--color-bg); box-shadow:var(--shadow-card-hover); } }
 @media(prefers-reduced-motion:reduce) { .about-direction { transition:none; } }
 .lesson-agent-name { color:var(--color-text); font-weight:800; }
+
+.lesson-hero { background:var(--color-bg); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-md); }
+.lesson-hero::before { content:''; position:absolute; inset:0; z-index:-1; background-image:var(--theme-pattern); background-size:var(--pattern-size); opacity:var(--decoration-opacity); mask-image:linear-gradient(to right,transparent 40%,black); pointer-events:none; }
+.lesson-quick-nav a { background:var(--color-surface); border:var(--border-width-thin) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-button); font-weight:var(--weight-strong); }
+.lesson-quick-nav a:hover { background:var(--color-highlight); }
+.lesson-art-orbit { border:var(--border-width-thin) dashed var(--color-border-muted); }
+.lesson-art-index { color:var(--color-text); opacity:calc(var(--decoration-opacity) * .6); font-family:var(--font-display); font-weight:var(--weight-display); }
+.lesson-hero .free-badge { color:var(--color-action-text); }
+.lesson-art-symbol { transform:rotate(var(--tilt-art)); }
+.lesson-art-sticker { transform:rotate(var(--tilt-brand)); }
+.lesson-art-symbol { color:var(--color-action-text); background:var(--color-primary); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); box-shadow:var(--shadow-sticker); }
+.lesson-art-sticker { background:var(--color-success-surface); color:var(--color-text); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-badge); box-shadow:var(--shadow-sticker); font-weight:var(--weight-strong); }
+.lesson-art-points { background:var(--color-highlight); color:var(--color-text); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-round); font-weight:var(--weight-display); }
+.lesson-section-kicker { color:var(--color-text-muted); font-weight:var(--weight-strong); }
+.lesson-goal-result { font-weight:var(--weight-strong); }
+.free-learning .free-panel>h2,.free-learning .free-section-heading h2,.lesson-step-list h3 { font-weight:var(--weight-strong); }
+.lesson-step-number { background:var(--color-highlight); color:var(--color-text); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-badge); box-shadow:var(--shadow-sm); font-family:var(--font-mono); font-weight:var(--weight-strong); }
+.lesson-step-list .free-step::after { background:var(--color-border-muted); }
+.lesson-step-list .free-step>div { background:var(--color-bg); border:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-md); }
+.lesson-prompt-window { background:var(--color-code-bg); color:var(--color-code-text); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); }
+.lesson-prompt-bar { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); }
+.lesson-window-dots i { background:var(--color-code-text); opacity:.5; }
+.lesson-prompt-window .free-code { color:var(--color-code-text); background:var(--color-code-bg); }
+.lesson-resources-panel .free-downloads>a,.lesson-resources-panel .free-downloads>span { background:var(--color-bg); border:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-md); }
+.lesson-resources-panel .free-downloads>a { transition:background var(--motion-fast) var(--ease-default),border-color var(--motion-fast) var(--ease-default); }
+.lesson-resources-panel .free-downloads>a:hover { background:var(--color-highlight); border-color:var(--color-border-strong); }
+.lesson-acceptance-panel .free-check { background:var(--color-surface); border:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); border-radius:var(--radius-md); transition:background var(--motion-fast) var(--ease-default); }
+.lesson-acceptance-panel .free-check:has(input:checked) { background:var(--color-success-surface); border-color:var(--color-success); }
+.lesson-route-panel .free-outline-link { border:var(--border-width-thin) var(--border-style-default) transparent; border-radius:var(--radius-md); }
+.lesson-route-panel .free-outline-link[aria-current=page] { background:var(--color-highlight); border-color:var(--color-border-strong); text-decoration:none; }
+.lesson-route-panel .free-outline-link:hover { background:var(--color-bg); }

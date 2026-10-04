@@ -1,28 +1,54 @@
 @extends('layouts.frontend')
-@php($isPreview = $isPreview ?? false)
+@php
+    $isPreview = $isPreview ?? false;
+    $lessonRole = $series->slug === 'build-a-website' ? \App\Support\WebsiteSetupLessons::roleFor($lesson->slug) : null;
+    $hasAgent = $lessonRole && str_contains($lessonRole, 'Agent');
+    $lessonIcon = match ($lesson->slug) {
+        'server-and-ip' => 'server', 'authorize-agent' => 'terminal',
+        'first-website' => 'layout-template', 'domain' => 'globe',
+        'customize' => 'panels-top-left', default => 'flag',
+    };
+@endphp
 @section('title', $series->title.($isPreview ? ' · 前台预览' : ' · 免费实验室').' · AI100分')
 @section('content')
 <div class="shell page-main free-learning">
     <a class="text-link" href="{{ $isPreview ? \App\Filament\Resources\CourseSeries\CourseSeriesResource::getUrl('edit', ['record' => $series]) : route('free.index') }}"><i data-lucide="arrow-left"></i>{{ $isPreview ? '返回课程编辑' : '免费实验室' }}</a>
     @if($isPreview)<p class="free-panel" role="status">管理员前台预览 · {{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$series->status] }} · 当前课时：{{ ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$lesson->status] }}。预览不发布课程、不保存进度；资料仅显示名称。</p>@endif
-    <header class="free-lesson-heading"><span class="free-badge">{{ $series->is_free ? '完整免费' : '付费课程 · ¥'.$series->price }} · {{ strtoupper($series->category) }}</span><h1>{{ $series->title }}</h1><p>{{ $series->final_outcome }}</p><span class="free-note">约 {{ $series->minutes }} 分钟 · 图文实践 · 验收后完成100分</span></header>
+    <header class="free-lesson-heading lesson-hero">
+        <div class="lesson-hero-copy">
+            <div class="lesson-hero-kicker"><span class="free-badge">{{ $series->is_free ? '完整免费' : '付费课程 · ¥'.$series->price }} · {{ strtoupper($series->category) }}</span><span class="eyebrow">第{{ $lesson->position }}节 / {{ $lessons->count() }}节</span></div>
+            <h1>{{ $series->title }}</h1>
+            <p>{{ $series->final_outcome }}</p>
+            <span class="free-note">约 {{ $series->minutes }} 分钟 · 图文实践 · 验收后完成100分</span>
+            <nav class="lesson-quick-nav" aria-label="本课内容"><a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a></nav>
+        </div>
+        <div class="lesson-hero-art" aria-hidden="true">
+            <span class="lesson-art-orbit"></span><span class="lesson-art-orbit lesson-art-orbit-inner"></span>
+            <span class="lesson-art-symbol"><i data-lucide="{{ $lessonIcon }}"></i></span>
+            <span class="lesson-art-index">{{ str_pad($lesson->position, 2, '0', STR_PAD_LEFT) }}</span>
+            <div class="lesson-art-character">@if($hasAgent)<x-paul-avatar size="large" />@else<x-ufo-widget />@endif</div>
+            <span class="lesson-art-sticker"><i data-lucide="sparkles"></i>{{ $hasAgent ? '和 Z 一起做成' : '先把这一步做成' }}</span>
+            <span class="lesson-art-points">+{{ $lesson->points }}<small>验收分</small></span>
+        </div>
+    </header>
     <div class="free-learning-grid">
         <article class="free-lesson-content">
-            <section class="free-panel"><h2 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /></h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3><p>{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
+            <section class="free-panel lesson-goal-panel"><div class="lesson-section-kicker"><i data-lucide="flag"></i>本课的小目标</div><h2 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /></h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3><p class="lesson-goal-result">{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
                 @if($lesson->objectives)<ul>@foreach($lesson->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul>@endif
                 @if($lesson->video_url)<a class="text-link" href="{{ $lesson->video_url }}" target="_blank" rel="noopener noreferrer">观看本课视频<i data-lucide="external-link"></i></a>@endif
             </section>
-            @if($lesson->content)<section class="free-panel free-markdown">{!! \Illuminate\Support\Str::markdown($lesson->content, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</section>@endif
-            <section class="free-panel"><h2>跟着这几步做</h2>@foreach($lesson->steps as $step)<div class="free-step"><h3>{{ $step['title'] }}</h3><p>{{ $step['body'] }}</p></div>@endforeach</section>
-            <section class="free-panel"><div class="free-section-heading"><h2>交给 Agent 的 Prompt</h2><button class="text-button" type="button" data-copy="free-prompt">复制 Prompt<i data-lucide="copy"></i></button></div><pre id="free-prompt" class="free-code">{{ $lesson->prompt }}</pre></section>
+            @if($lesson->content)<section class="free-panel lesson-reading-panel"><div class="lesson-section-kicker"><i data-lucide="book-open"></i>先看清楚，再开始</div><div class="free-markdown">{!! \Illuminate\Support\Str::markdown($lesson->content, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div></section>@endif
+            <section class="free-panel lesson-steps-panel" id="lesson-steps"><div class="lesson-section-kicker"><i data-lucide="route"></i>一步一步，做出结果</div><h2>跟着这几步做</h2><ol class="lesson-step-list">@foreach($lesson->steps as $step)<li class="free-step"><span class="lesson-step-number" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><div><h3>{{ $step['title'] }}</h3><p>{{ $step['body'] }}</p></div></li>@endforeach</ol></section>
+            <section class="free-panel lesson-prompt-panel" id="lesson-prompt-section"><div class="lesson-section-kicker"><i data-lucide="terminal"></i>把执行交给 Agent</div><div class="free-section-heading"><h2>交给 Agent 的 Prompt</h2><button class="text-button" type="button" data-copy="free-prompt">复制 Prompt<i data-lucide="copy"></i></button></div><div class="lesson-prompt-window"><div class="lesson-prompt-bar" aria-hidden="true"><span class="lesson-window-dots"><i></i><i></i><i></i></span><span>PROMPT</span><i data-lucide="command"></i></div><pre id="free-prompt" class="free-code">{{ $lesson->prompt }}</pre></div></section>
             @if($lesson->code)
                 <details class="free-panel free-source"><summary>查看完整示例：{{ $lesson->code_filename }}</summary><button class="text-button" type="button" data-copy="free-code">复制代码<i data-lucide="copy"></i></button><pre id="free-code" class="free-code">{{ $lesson->code }}</pre></details>
             @endif
-            <section class="free-panel"><h2>资料与可运行起点</h2><div class="free-downloads">@foreach($lesson->resources as $resource)
+            <section class="free-panel lesson-resources-panel"><div class="lesson-section-kicker"><i data-lucide="folder-open"></i>带上这些，再出发</div><h2>资料与可运行起点</h2><div class="free-downloads">@foreach($lesson->resources as $resource)
                 @if($isPreview)<span>{{ $resource['label'] }} <small>{{ $resource['name'] }}</small></span>
                 @else<a class="text-link" href="{{ route('free.resource', [$series, $lesson->slug, $resource['name']]) }}"><i data-lucide="download"></i>{{ $resource['label'] }}<small>{{ $resource['name'] }}</small></a>@endif
             @endforeach</div></section>
-            <section class="free-panel" aria-labelledby="free-check-title">
+            <section class="free-panel lesson-acceptance-panel" id="lesson-acceptance" aria-labelledby="free-check-title">
+                <div class="lesson-section-kicker"><i data-lucide="badge-check"></i>用真实结果，拿到这{{ $lesson->points }}分</div>
                 <h2 id="free-check-title">亲自验收，才算做成</h2>
                 @if($isPreview)
                     <p>验收清单预览，学习进度不会保存。</p>
@@ -45,13 +71,13 @@
                 @endif
             </section>
         </article>
-        <aside class="free-sidebar"><div class="free-panel">
+        <aside class="free-sidebar"><div class="free-panel lesson-route-panel">
             <span class="eyebrow">你的任务路线</span><h2>{{ $lesson->title }}</h2>
             @if(!$isPreview)<p>已验收进度：<strong data-free-percent>{{ $progress?->progress_percent ?? 0 }}%</strong></p><p class="free-note">这是当前步骤的验收进度；完整任务全部通过才达到100分。</p>
             <p>任务完成：<strong data-free-score>{{ $score }}</strong> / 100分</p>
             @endif
             @foreach($lessons as $item)<a class="free-outline-link" href="{{ route($isPreview ? 'courses.preview' : 'free.lesson', [$series, $item->slug]) }}" @if($item->id === $lesson->id) aria-current="page" @endif><span class="lesson-title-with-agent"><span>{{ $item->position }}. {{ $item->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$item->slug" /></span></a>@endforeach
-            @if($series->description)<div class="free-markdown">{!! \Illuminate\Support\Str::markdown($series->description, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div>@endif
+            @if($series->description)<details class="free-roles"><summary>课程说明</summary><div class="free-markdown">{!! \Illuminate\Support\Str::markdown($series->description, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div></details>@endif
             @if($series->objectives)<details class="free-roles"><summary>课程目标</summary><ul>@foreach($series->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul></details>@endif
             <details class="free-roles"><summary>整个任务怎么验收？</summary><ul>@foreach($series->completion_criteria as $criterion)<li>{{ $criterion }}</li>@endforeach</ul></details>
             <details class="free-roles"><summary>Agent 做什么，人判断什么？</summary><h3>Agent 负责</h3><ul>@foreach($series->agent_role as $item)<li>{{ $item }}</li>@endforeach</ul><h3>你来判断</h3><ul>@foreach($series->human_judgment_required as $item)<li>{{ $item }}</li>@endforeach</ul></details>
