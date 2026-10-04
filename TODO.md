@@ -57,6 +57,7 @@
 - [x] 将产品核心方法论纳入后续设计必读与检查规则，同步PRODUCT、D-042及方法论文档；明确课时小目标/动作/验证、人与Agent分工、特殊课程格式与Z当前能力边界
 - [x] 添加Apache 2.0开源协议，同步README与项目包元数据，并在公共页脚加入GitHub仓库链接及SVG标识（D-024）
 - [x] 精简README为当前项目介绍与按日期整理的更新日志，移除Laravel模板介绍及详细运行、部署说明
+- [x] 核对Git历史及已记录的本地操作，补齐README的2026-10-03更新日志和缺失的2026-10-04日志，区分决策/实现日期、本地课程数据变更、代码推送与实际上线
 - [x] 配置服务器git pull更新上线：版本化public/build，自动安装锁定PHP依赖及刷新缓存，验证实际拉取与线上资源（D-025）
 - [x] 统一为本地push、服务器pull：本地同步GitHub main与Gitee master，服务器main跟踪gitee/master，安装脚本设置上游，实际pull验证Hook发布（D-029）
 - [x] D-033将服务器项目改为dante:dante，www-data加入dante组；隔离源码只读与运行目录写入，限制FPM重载免密sudo，验证普通用户git pull、权限继承与线上页面
