@@ -45,11 +45,11 @@ class CourseDisplayOrderTest extends TestCase
         $draft = CourseSeries::create(['title' => 'PRIVATE free draft', 'slug' => 'free-draft', 'category' => 'create', 'is_free' => true, 'sort_order' => 0]);
 
         $expected = [$courses[1]->id, $courses[2]->id, $courses[0]->id];
-        $this->get('/free')->assertOk()->assertDontSee($draft->title)
+        $this->get('/lab')->assertOk()->assertDontSee($draft->title)
             ->assertViewHas('courses', fn ($visible) => $visible->pluck('id')->all() === $expected);
         $this->assertSame('published', $courses[2]->fresh()->status);
         $this->assertSame($lessonBefore, $lesson->fresh()->getAttributes());
-        $this->get('/free/'.$courses[2]->slug.'/'.$lesson->slug)->assertOk();
-        $this->get('/free/free-draft/anything')->assertNotFound();
+        $this->get('/lab/'.$courses[2]->slug.'/'.$lesson->slug)->assertOk();
+        $this->get('/lab/lab-draft/anything')->assertNotFound();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CourseSeries;
 use App\Services\CourseRelationPresenter;
+use App\Services\ProgressService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -20,6 +21,7 @@ class PublicCourseController extends Controller
 
         return view('frontend.course', [
             'series' => $series, 'lessons' => $lessons,
+            'completedLessonIds' => request()->user() ? app(ProgressService::class)->completedLessonIds(request()->user(), $series) : [],
             'relationGroups' => $relations->groups($series),
         ]);
     }

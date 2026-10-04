@@ -35,7 +35,7 @@ class FrontendPreviewTest extends TestCase
         $this->get('/questions?topic=memory')->assertOk()
             ->assertViewHas('selectedTopic', 'memory')
             ->assertSee('Agent 为什么忘记目标')
-            ->assertSee('/free?category=solve', false)
+            ->assertSee('/lab?category=solve', false)
             ->assertSee('不代表原文提问、全网热度排名或实时统计');
 
         foreach (['/questions?topic=missing', '/questions?topic[]=memory', '/questions?topic=%3Cscript%3E'] as $path) {

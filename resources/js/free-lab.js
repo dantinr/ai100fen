@@ -22,6 +22,9 @@ if (form) {
                 const record = await response.json();
                 document.querySelector('[data-free-percent]').textContent = `${record.progress_percent}%`;
                 document.querySelector('[data-free-score]').textContent = record.series_score;
+                document.querySelectorAll('[data-lesson-completion]').forEach((mark) => {
+                    if (mark.dataset.lessonCompletion === form.dataset.lessonId) mark.hidden = !record.completed;
+                });
                 status.textContent = record.completed ? '本步骤全部验收通过，已保存到账号。' : '已保存到账号，可以随时回来继续。';
             } catch (error) {
                 status.textContent = error.message || '网络中断，未能保存，请重试。';

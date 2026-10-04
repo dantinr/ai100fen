@@ -132,4 +132,4 @@ php artisan free-lab:install
 
 迁移只建course_series、lessons、lesson_progress，不修改users或原课程数组。内容命令只新增不存在的首批三个slug；不覆盖编辑、不重置记录、不写示例用户，重复执行新增0。不能用migrate:fresh、通用db:seed代替。后续无数据库/新内容变更时仍只需git pull；Hook不自动运行上述命令。
 
-验证`/free`、三个任务页面、Paul推荐、下载及未登录进度保存拒绝；当前测试域名继续允许抓取并返回noindex响应头。登录验收的跨用户隔离与幂等由测试覆盖，不在线上创建测试账号。
+验证`/lab`、三个任务页面、Paul推荐、下载及未登录进度保存拒绝；当前测试域名继续允许抓取并返回noindex响应头。登录验收的跨用户隔离与幂等由测试覆盖，不在线上创建测试账号。

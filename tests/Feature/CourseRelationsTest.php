@@ -186,7 +186,7 @@ class CourseRelationsTest extends TestCase
         $this->get(route('courses.show', $free))->assertOk()->assertSee('data-theme="future"', false)->assertSee('下一步课程');
         $this->get(route('courses.show', $draft))->assertNotFound();
         $this->get(route('courses.show', $archived))->assertNotFound();
-        $this->get('/free/'.$paid->slug.'/'.$paid->lessons->first()->slug)->assertNotFound();
+        $this->get('/lab/'.$paid->slug.'/'.$paid->lessons->first()->slug)->assertNotFound();
         $this->assertDatabaseCount('lesson_progress', 0);
         $paid->update(['status' => 'archived']);
         $this->get(route('courses.show', $free))->assertDontSee('data-course-relations', false);

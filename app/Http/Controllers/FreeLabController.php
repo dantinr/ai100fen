@@ -45,6 +45,7 @@ class FreeLabController extends Controller
         $score = $request->user() ? $progressService->seriesScore($request->user(), $series) : 0;
 
         return view('frontend.free.lesson', compact('series', 'lesson', 'progress', 'lessons', 'score') + [
+            'completedLessonIds' => $request->user() ? $progressService->completedLessonIds($request->user(), $series) : [],
             'relationGroups' => app(CourseRelationPresenter::class)->groups($series),
         ]);
     }

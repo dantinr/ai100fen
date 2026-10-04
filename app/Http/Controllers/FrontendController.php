@@ -31,13 +31,19 @@ class FrontendController extends Controller
     {
         $series = $this->displayOrder->previewCourse($this->catalog->find($slug));
         $serverScore = null;
+        $completedLessonSlugs = [];
         if (isset($series['record_id'])) {
+            $record = CourseSeries::findOrFail($series['record_id']);
             $serverScore = request()->user()
-                ? $progress->seriesScore(request()->user(), CourseSeries::findOrFail($series['record_id']))
+                ? $progress->seriesScore(request()->user(), $record)
                 : 0;
+            if (request()->user()) {
+                $completedLessonSlugs = $record->lessons()->whereIn('id', $progress->completedLessonIds(request()->user(), $record))->pluck('slug')->all();
+            }
         }
 
         return view('frontend.series', ['series' => $series, 'serverScore' => $serverScore,
+            'completedLessonSlugs' => $completedLessonSlugs,
             'relationGroups' => app(CourseRelationPresenter::class)->forLegacy($slug)]);
     }
 

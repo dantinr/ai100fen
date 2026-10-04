@@ -87,7 +87,7 @@ class AdministrationTest extends TestCase
         $series = CourseSeries::where('slug', 'admin-task-page')->firstOrFail();
         $this->assertSame('draft', $series->status);
         $this->assertSame('0.00', $series->price);
-        $this->get('/free')->assertDontSee($series->title);
+        $this->get('/lab')->assertDontSee($series->title);
         Livewire::test(CreateLesson::class)->fillForm([
             'course_series_id' => $series->id, 'title' => '生成并验收网页', 'slug' => 'make-and-check',
             'score' => 100, 'points' => 100, 'goal' => '打开网页并核对真实信息', 'prompt' => '生成个人介绍网页',
@@ -99,7 +99,7 @@ class AdministrationTest extends TestCase
             'completion_criteria' => ['网页能打开'], 'agent_role' => ['生成文件'], 'human_judgment_required' => ['核对真实内容'], 'status' => 'published',
         ])->call('save')->assertHasNoFormErrors();
         $this->assertSame('published', $series->fresh()->status);
-        $this->get('/free/admin-task-page/make-and-check')->assertOk()->assertSee('生成真实成品');
+        $this->get('/lab/admin-task-page/make-and-check')->assertOk()->assertSee('生成真实成品');
     }
 
     public function test_invalid_publication_shows_a_form_error_and_does_not_save(): void
@@ -200,7 +200,7 @@ class AdministrationTest extends TestCase
         $table->call('reorderTable', $order)->assertHasNoErrors();
         $this->assertSame($order, CourseSeries::displayOrder()->pluck('id')->all());
         $this->assertSame([1, 2, 3], CourseSeries::displayOrder()->pluck('sort_order')->all());
-        $this->get('/free')->assertViewHas('courses', fn ($visible) => $visible->pluck('id')->all() === $order);
+        $this->get('/lab')->assertViewHas('courses', fn ($visible) => $visible->pluck('id')->all() === $order);
         foreach ($courses as $course) {
             $fresh = $course->fresh();
             $this->assertSame($before[$course->id]['status'], $fresh->status);
@@ -237,7 +237,7 @@ class AdministrationTest extends TestCase
         Livewire::test(EditLesson::class, ['record' => $lesson->id])->fillForm([
             'objectives' => ['完成真实网页'], 'content' => "## 正文目标\n\n<script>evil()</script>\n\n[危险](javascript:alert(1))", 'video_url' => 'https://example.test/video',
         ])->call('save')->assertHasNoFormErrors();
-        $this->get('/free/'.$series->slug.'/'.$lesson->slug)->assertOk()->assertSee('正文目标')->assertSee('完成真实网页')->assertDontSee('<script>evil()</script>', false)->assertDontSee('href="javascript:', false);
+        $this->get('/lab/'.$series->slug.'/'.$lesson->slug)->assertOk()->assertSee('正文目标')->assertSee('完成真实网页')->assertDontSee('<script>evil()</script>', false)->assertDontSee('href="javascript:', false);
     }
 
     public function test_frontend_preview_is_admin_only_read_only_and_supports_unpublished_paid_courses(): void
@@ -280,7 +280,7 @@ class AdministrationTest extends TestCase
             ->assertCanSeeTableRecords([$first, $second])->call('reorderTable', [$second->id, $first->id]);
         $this->assertSame(1, $second->fresh()->position);
         $this->assertSame('draft', $series->fresh()->status);
-        $this->get('/free/'.$series->slug.'/'.$first->slug)->assertNotFound();
+        $this->get('/lab/'.$series->slug.'/'.$first->slug)->assertNotFound();
         $other = CourseSeries::where('id', '!=', $series->id)->first()->lessons->first();
         try {
             app(CourseOutlineService::class)->reorder($admin, $series, [$first->id, $other->id]);

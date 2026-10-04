@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::view('/about', 'frontend.about')->name('about');
-Route::get('/free', [FreeLabController::class, 'index'])->name('free.index');
-Route::get('/free/{series}/{lessonSlug}', [FreeLabController::class, 'show'])->name('free.lesson');
-Route::get('/free/{series}/{lessonSlug}/resources/{resource}', [FreeLabController::class, 'download'])->name('free.resource');
+Route::get('/lab', [FreeLabController::class, 'index'])->name('free.index');
+Route::get('/lab/{series}/{lessonSlug}', [FreeLabController::class, 'show'])->name('free.lesson');
+Route::get('/lab/{series}/{lessonSlug}/resources/{resource}', [FreeLabController::class, 'download'])->name('free.resource');
 Route::get('/series', [FrontendController::class, 'index'])->name('series.index');
 Route::get('/courses/{series}', PublicCourseController::class)->name('courses.show');
 Route::get('/series/{slug}', [FrontendController::class, 'series'])->name('series.show');
@@ -40,7 +40,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/questions/mine', [QuestionController::class, 'index'])->name('questions.mine');
     Route::get('/questions/{question}', [QuestionController::class, 'show'])->whereNumber('question')->name('questions.show');
     Route::get('/preview/courses/{series}/{lessonSlug?}', CoursePreviewController::class)->name('courses.preview');
-    Route::post('/free/{series}/{lessonSlug}/progress', [FreeLabController::class, 'save'])->middleware('throttle:60,1,free-progress:')->name('free.progress');
+    Route::post('/lab/{series}/{lessonSlug}/progress', [FreeLabController::class, 'save'])->middleware('throttle:60,1,free-progress:')->name('free.progress');
     Route::get('/me', [ProfileController::class, 'show'])->name('me');
     Route::patch('/me/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/me/password', [ProfileController::class, 'password'])->middleware('throttle:6,1,password:')->name('password.update');

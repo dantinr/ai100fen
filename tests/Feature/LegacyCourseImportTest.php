@@ -69,7 +69,7 @@ class LegacyCourseImportTest extends TestCase
         $this->assertStringContainsString($content['checks'][0], $lessons->first()->resources[0]['content']);
         $this->assertFalse(app(CourseAccessService::class)->canAccess($website, $lessons->first()));
         $this->get('/series/build-a-website/lessons/server-and-ip')->assertOk()->assertSee('lesson-prompt');
-        $this->get('/free')->assertOk()->assertDontSee($website->title);
+        $this->get('/lab')->assertOk()->assertDontSee($website->title);
     }
 
     public function test_repeated_import_preserves_edited_courses_lessons_and_learning_records(): void

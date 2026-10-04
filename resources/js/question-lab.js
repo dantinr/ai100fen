@@ -192,7 +192,7 @@ document.querySelectorAll('[data-question-lab]').forEach((lab) => {
             if (!result.recommendations?.length) suggestions.textContent = '暂时没有匹配的免费任务，可以继续把自己的问题定义清楚。';
             for (const match of result.recommendations ?? []) {
                 const url = new URL(match.url, location.href);
-                if (url.origin !== location.origin || !url.pathname.startsWith('/free/')) continue;
+                if (url.origin !== location.origin || !url.pathname.startsWith('/lab/')) continue;
                 const link = document.createElement('a');
                 link.className = 'text-link'; link.href = url.href; link.target = '_blank'; link.rel = 'noopener noreferrer';
                 link.textContent = `${match.title}（新窗口）`;

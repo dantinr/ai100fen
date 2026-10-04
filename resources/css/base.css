@@ -946,12 +946,27 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .free-check input[type=checkbox] { flex:none; width:18px; height:18px; margin-top:4px; }
 .free-check + .button { margin-top:8px; }
 .free-outline-link { display:block; padding:12px 0; font-size:13px; line-height:1.7; }
+.lesson-completion { display:inline-flex; align-items:center; gap:4px; flex:none; padding:3px 7px; font-size:11px; line-height:1.4; vertical-align:middle; }
+.lesson-completion[hidden] { display:none; }
+.lesson-completion svg { width:14px; height:14px; }
+.course-heading-actions { display:flex; flex-direction:column; align-items:flex-start; gap:14px; min-width:0; max-width:320px; flex:none; }
+.course-share { display:flex; align-items:flex-start; flex-direction:column; gap:8px; margin-block:12px; max-width:100%; }
+.course-share .text-button { display:inline-flex; align-items:center; gap:6px; }
+.course-share svg { width:16px; height:16px; flex:none; }
+.course-share-fallback { display:flex; align-items:flex-end; flex-wrap:wrap; gap:8px; width:100%; }
+.course-share-fallback[hidden] { display:none; }
+.course-share-fallback label { display:grid; gap:6px; font-size:12px; flex:1; min-width:0; }
+.course-share-fallback input { width:100%; min-width:0; padding:8px; font:12px/1.5 var(--font-body); }
+.course-share-status { font-size:12px; line-height:1.6; }
+.course-share-status:empty { display:none; }
 .free-roles { margin-top:18px; font-size:12px; line-height:1.8; }
 .free-roles summary { cursor:pointer; }
 .free-roles h3 { font-size:13px; margin:16px 0 6px; }
 .free-roles ul { list-style:disc; padding-left:18px; }
 .free-account-progress { margin:30px 0; }
 .free-progress-row { display:flex; gap:18px; align-items:center; justify-content:space-between; padding:22px; margin-top:18px; }
+.free-progress-row>div { min-width:0; flex:1; }
+.free-progress-row>.button { flex:none; }
 .free-progress-row h3 { margin:10px 0; }
 .free-progress-row p { font-size:13px; }
 .free-paul-form { display:grid; gap:10px; margin:18px 0; font-size:12px; }
@@ -960,6 +975,8 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 @media(min-width:1051px) and (max-width:1240px) { .app-ui .header-inner { gap:20px; } .app-ui .main-nav { gap:17px; } .header-actions>.button { display:none; } }
 @media(max-width:900px) { .free-grid { grid-template-columns:1fr; } .free-learning-grid { grid-template-columns:1fr; } .free-sidebar { position:static; } }
 @media(max-width:760px) {
+    .series-heading { flex-direction:column; }
+    .course-heading-actions { width:100%; max-width:none; gap:8px; }
     .main-nav.open { flex-wrap:wrap; justify-content:flex-start; gap:0 20px; }
     .free-hero { gap:12px; align-items:flex-start; }
     .free-hero .paul-avatar { width:76px; height:96px; flex:none; }

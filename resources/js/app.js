@@ -1,12 +1,13 @@
-import { createIcons, ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays, LayoutTemplate, Table2, FlaskConical, Server, Terminal, PanelsTopLeft, Sparkles, BookOpen, Route, Command, FolderOpen, BadgeCheck } from 'lucide';
+import { createIcons, ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays, LayoutTemplate, Table2, FlaskConical, Server, Terminal, PanelsTopLeft, Sparkles, BookOpen, Route, Command, FolderOpen, BadgeCheck, Share2 } from 'lucide';
 import { updateUfoProgress } from './ufo';
 import './paul';
 import './free-lab';
+import './course-share';
 import './question-topics';
 import './question-lab';
 import './live-schedule';
 
-const icons = { ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays, LayoutTemplate, Table2, FlaskConical, Server, Terminal, PanelsTopLeft, Sparkles, BookOpen, Route, Command, FolderOpen, BadgeCheck };
+const icons = { ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays, LayoutTemplate, Table2, FlaskConical, Server, Terminal, PanelsTopLeft, Sparkles, BookOpen, Route, Command, FolderOpen, BadgeCheck, Share2 };
 createIcons({ icons });
 
 document.querySelectorAll('[data-contribution-grid]').forEach((grid) => {
@@ -183,6 +184,8 @@ function renderProgress() {
     if (progress.completed) document.querySelectorAll('[data-lesson-row="server-and-ip"]').forEach((row) => {
         if (row.closest('[data-series]')?.querySelector('[data-server-score]')) return;
         row.classList.add('is-completed');
+        const mark = row.querySelector('.lesson-completion');
+        if (mark) mark.hidden = false;
         const state = row.querySelector('.outline-state');
         if (state) state.textContent = '已完成';
     });

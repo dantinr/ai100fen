@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class ProgressService
 {
+    public function completedLessonIds(User $user, CourseSeries $series): array
+    {
+        return LessonProgress::where('user_id', $user->id)
+            ->whereIn('lesson_id', $series->lessons()->where('status', 'published')->select('id'))
+            ->whereNotNull('completed_at')->pluck('lesson_id')->all();
+    }
+
     public function seriesScore(User $user, CourseSeries $series): int
     {
         $lessons = $series->lessons()->where('status', '!=', 'archived')->get();

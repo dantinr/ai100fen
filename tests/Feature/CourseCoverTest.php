@@ -70,7 +70,7 @@ class CourseCoverTest extends TestCase
         $series->update(['cover' => $path]);
         $url = Storage::disk('public')->url($path);
 
-        $this->get('/free')->assertOk()->assertSee($url)->assertSee('free-card-cover', false);
+        $this->get('/lab')->assertOk()->assertSee($url)->assertSee('free-card-cover', false);
         $this->get('/courses/'.$series->slug)->assertOk()->assertSee($url)->assertSee('course-overview-cover', false);
     }
 
