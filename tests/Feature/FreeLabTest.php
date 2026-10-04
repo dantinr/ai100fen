@@ -190,7 +190,17 @@ class FreeLabTest extends TestCase
             $course->lessons()->create($definition + ['position' => $index + 1, 'status' => 'published']);
         }
         $course->update(['status' => 'published']);
-        $this->get('/series/build-a-website')->assertRedirect(route('courses.show', $course));
+        $this->get(route('courses.show', $course))->assertRedirect(route('series.show', $course->slug));
+        $introduction = $this->get('/series/build-a-website')->assertOk()->assertViewIs('frontend.series')
+            ->assertSee('class="series-layout"', false)->assertSee('class="series-sidebar"', false)
+            ->assertSee('开始免费学习')->assertSee('data-server-score="0"', false)
+            ->assertDontSee('data-availability="purchase"', false);
+        foreach ($course->lessons()->get() as $lesson) {
+            $introduction->assertSee(route('free.lesson', [$course, $lesson->slug]), false)
+                ->assertDontSee($lesson->prompt)->assertDontSee($lesson->content);
+        }
+        $introduction->assertViewHas('series', fn ($series) => count($series['lessons']) === 5
+            && array_column($series['lessons'], 'score') === [20, 40, 60, 80, 100]);
         $this->get('/')->assertViewHas('series', fn ($courses) => collect($courses)->firstWhere('slug', $course->slug)['is_free'] === true);
         $this->actingAs(User::factory()->create());
         foreach ($course->lessons()->get() as $index => $lesson) {
@@ -199,7 +209,13 @@ class FreeLabTest extends TestCase
                 ->assertViewHas('lessons', fn ($lessons) => $lessons->count() === 5);
             $this->postJson(route('free.lesson', [$course, $lesson->slug]).'/progress', ['checks' => array_fill(0, count($lesson->checks), true)])
                 ->assertOk()->assertJson(['series_score' => ($index + 1) * 20]);
+            $this->get('/series/build-a-website')->assertOk()
+                ->assertSee('data-server-score="'.(($index + 1) * 20).'"', false);
         }
+        $learner = LessonProgress::first()->user;
+        $this->actingAs(User::factory()->create())->get('/series/build-a-website')
+            ->assertOk()->assertSee('data-server-score="0"', false);
+        $this->actingAs($learner);
         $last = $course->lessons()->reorder()->orderByDesc('position')->first();
         $this->postJson(route('free.lesson', [$course, $last->slug]).'/progress', ['checks' => [true, true, true, false]])
             ->assertOk()->assertJson(['completed' => false, 'series_score' => 80]);

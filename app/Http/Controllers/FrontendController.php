@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\CourseDisplayOrder;
 use App\Services\CourseRelationPresenter;
 use App\Services\LiveSchedule;
+use App\Services\ProgressService;
 use App\Support\FrontendCatalog;
 use App\Models\CourseSeries;
 use Illuminate\Http\RedirectResponse;
@@ -26,12 +27,17 @@ class FrontendController extends Controller
         return view('frontend.catalog', ['series' => $this->displayOrder->previewCourses($this->catalog->all())]);
     }
 
-    public function series(string $slug): View|RedirectResponse
+    public function series(string $slug, ProgressService $progress): View
     {
-        if ($this->completeWebsiteCourse($slug)) {
-            return redirect()->route('courses.show', $slug);
+        $series = $this->displayOrder->previewCourse($this->catalog->find($slug));
+        $serverScore = null;
+        if (isset($series['record_id'])) {
+            $serverScore = request()->user()
+                ? $progress->seriesScore(request()->user(), CourseSeries::findOrFail($series['record_id']))
+                : 0;
         }
-        return view('frontend.series', ['series' => $this->displayOrder->previewCourse($this->catalog->find($slug)),
+
+        return view('frontend.series', ['series' => $series, 'serverScore' => $serverScore,
             'relationGroups' => app(CourseRelationPresenter::class)->forLegacy($slug)]);
     }
 

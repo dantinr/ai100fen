@@ -172,13 +172,16 @@ function saveProgress() {
 function renderProgress() {
     const score = progress.completed ? previewPoints : 0;
     document.querySelectorAll('[data-progress-for]').forEach((target) => {
-        const currentScore = target.dataset.progressFor === 'build-a-website' ? score : 0;
+        const currentScore = target.dataset.serverScore !== undefined
+            ? Number(target.dataset.serverScore)
+            : (target.dataset.progressFor === 'build-a-website' ? score : 0);
         target.querySelector('[data-score]').textContent = currentScore;
         const segments = target.querySelector('.progress-segments');
         [...segments.children].forEach((segment, index) => segment.classList.toggle('filled', index < currentScore / 10));
         updateUfoProgress(target, currentScore);
     });
     if (progress.completed) document.querySelectorAll('[data-lesson-row="server-and-ip"]').forEach((row) => {
+        if (row.closest('[data-series]')?.querySelector('[data-server-score]')) return;
         row.classList.add('is-completed');
         const state = row.querySelector('.outline-state');
         if (state) state.textContent = '已完成';

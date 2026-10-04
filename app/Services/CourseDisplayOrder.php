@@ -33,7 +33,27 @@ class CourseDisplayOrder
             return $course;
         }
 
-        return $this->withCover($course, CourseSeries::where('slug', $course['slug'])->first(['cover']));
+        $record = CourseSeries::where('slug', $course['slug'])->first([
+            'id', 'slug', 'cover', 'title', 'minutes', 'is_free', 'price', 'status',
+            'final_outcome', 'completion_criteria',
+        ]);
+        $course = $this->withCover($course, $record);
+        if ($course['is_free'] ?? false) {
+            $course['record_id'] = $record->id;
+            $course['title'] = $record->title;
+            $course['minutes'] = $record->minutes;
+            $course['outcome'] = $record->final_outcome;
+            $course['deliverables'] = $record->completion_criteria;
+            // The introduction only reads public outline metadata, never lesson content.
+            $course['lessons'] = $record->lessons()->where('status', 'published')
+                ->get(['slug', 'title', 'goal', 'score', 'minutes'])
+                ->map(fn ($lesson) => [
+                    'slug' => $lesson->slug, 'title' => $lesson->title, 'summary' => $lesson->goal,
+                    'score' => $lesson->score, 'minutes' => $lesson->minutes, 'is_free' => true,
+                ])->all();
+        }
+
+        return $course;
     }
 
     private function withCover(array $course, ?CourseSeries $record): array
