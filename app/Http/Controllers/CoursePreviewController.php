@@ -12,8 +12,8 @@ class CoursePreviewController extends Controller
     public function __invoke(CourseSeries $series, ?string $lessonSlug = null): Response
     {
         Gate::authorize('view', $series);
-        $lessons = $series->lessons()->get();
-        $lesson = $lessonSlug === null ? $lessons->first() : $lessons->firstWhere('slug', $lessonSlug);
+        $lessons = $series->lessons()->where('status', '!=', 'archived')->get();
+        $lesson = $lessonSlug === null ? $lessons->first() : $series->lessons()->where('slug', $lessonSlug)->first();
         abort_if($lessonSlug !== null && ! $lesson, 404);
 
         return response()->view($lesson ? 'frontend.free.lesson' : 'frontend.preview.course', [

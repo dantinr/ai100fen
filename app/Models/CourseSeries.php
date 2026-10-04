@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class CourseSeries extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'course_series';
 
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'deleted_at'];
 
     protected $attributes = [
         'user_intent' => '', 'final_outcome' => '', 'completion_criteria' => '[]',
@@ -28,7 +32,11 @@ class CourseSeries extends Model
 
     protected static function booted(): void
     {
+        static::created(fn (self $series) => DB::table('course_catalog_suppressions')->where('slug', $series->slug)->delete());
         static::saving(function (self $series) {
+            if ($series->exists && $series->trashed() && ! $series->isDirty('deleted_at')) {
+                throw ValidationException::withMessages(['status' => '请先从回收站恢复课程，再编辑内容。']);
+            }
             Validator::make(['sort_order' => $series->getAttributes()['sort_order'] ?? null], [
                 'sort_order' => ['required', 'integer', 'min:0', 'max:999999'],
             ])->validate();
@@ -59,13 +67,7 @@ class CourseSeries extends Model
                 }
             }
             if (! $series->exists || ! $series->lessons()->where('status', 'published')->exists()) {
-                throw ValidationException::withMessages(['lessons' => '发布前至少需要一个完整的 Lesson。']);
-            }
-            if ((int) $series->lessons()->where('status', 'published')->reorder()->orderByDesc('position')->orderByDesc('id')->first()->score !== 100) {
-                throw ValidationException::withMessages(['status' => '最后一个已发布课时须为100分，并按课程完成标准验收整个任务。']);
-            }
-            if ($series->is_free && ($series->lessons()->where('status', '!=', 'published')->exists() || (int) $series->lessons()->sum('points') !== 100)) {
-                throw ValidationException::withMessages(['lessons' => '完整免费任务的全部步骤须已发布，验收权重合计100分。']);
+                throw ValidationException::withMessages(['lessons' => '发布前至少需要一个已发布课时。']);
             }
         });
     }
@@ -91,8 +93,13 @@ class CourseSeries extends Model
     public function scopeFreeLab(Builder $query): void
     {
         $query->where('status', 'published')->where('is_free', true)
-            ->whereDoesntHave('lessons', fn (Builder $lessons) => $lessons->where('status', '!=', 'published'))
-            ->whereHas('lessons', fn (Builder $lessons) => $lessons->where('status', 'published'));
+            ->whereDoesntHave('lessons', fn (Builder $lessons) => $lessons->whereNotIn('status', ['published', 'archived']))
+            ->whereHas('lessons', fn (Builder $lessons) => $lessons->where('status', 'published'))
+            // Gradual publication is allowed; Free Lab still offers complete tasks.
+            ->where(Lesson::selectRaw('SUM(points)')->whereColumn('course_series_id', 'course_series.id')->where('status', '!=', 'archived'), 100)
+            ->where(Lesson::select('score')->whereColumn('course_series_id', 'course_series.id')
+                ->where('status', 'published')
+                ->orderByDesc('position')->orderByDesc('id')->limit(1), 100);
     }
 
     public function scopeDisplayOrder(Builder $query): void

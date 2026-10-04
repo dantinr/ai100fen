@@ -113,6 +113,48 @@ class AdministrationTest extends TestCase
         $this->assertSame('draft', $series->fresh()->status);
     }
 
+    public function test_admin_can_publish_a_course_with_only_its_first_lesson_published(): void
+    {
+        $this->administrator();
+        app(FreeLabInstaller::class)->install();
+
+        foreach ([false, true] as $isFree) {
+            $series = CourseSeries::first()->replicate();
+            $series->fill(['slug' => $isFree ? 'gradual-free' : 'gradual-paid', 'status' => 'draft',
+                'is_free' => $isFree, 'price' => $isFree ? 0 : 100])->save();
+            $first = Lesson::first()->replicate();
+            $first->fill(['course_series_id' => $series->id, 'score' => 10, 'points' => 10])->save();
+            $last = $first->replicate();
+            $last->fill(['slug' => 'final-check', 'position' => 10, 'score' => 100, 'points' => 10,
+                'status' => 'draft', 'goal' => '', 'prompt' => '', 'steps' => [], 'checks' => []])->save();
+
+            Livewire::test(EditCourseSeries::class, ['record' => $series->slug])
+                ->fillForm(['status' => 'published'])->call('save')->assertHasNoFormErrors();
+            $this->assertSame('published', $series->fresh()->status);
+            $this->assertSame(10, $first->fresh()->score);
+            $this->assertSame('draft', $last->fresh()->status);
+            Livewire::test(EditLesson::class, ['record' => $last->id])
+                ->fillForm(['status' => 'published'])->call('save')->assertHasFormErrors(['goal', 'prompt']);
+            $this->assertSame('draft', $last->fresh()->status);
+            $this->assertSame('published', $series->fresh()->status);
+        }
+    }
+
+    public function test_a_course_with_only_draft_or_archived_lessons_cannot_be_published(): void
+    {
+        $this->administrator();
+        app(FreeLabInstaller::class)->install();
+        $series = CourseSeries::first();
+        $lesson = $series->lessons()->first();
+
+        foreach (['draft', 'archived'] as $status) {
+            $lesson->update(['status' => $status]);
+            Livewire::test(EditCourseSeries::class, ['record' => $series->slug])
+                ->fillForm(['status' => 'published'])->call('save')->assertHasFormErrors(['status']);
+            $this->assertSame('draft', $series->fresh()->status);
+        }
+    }
+
     public function test_admin_can_edit_display_order_in_actions_and_forms_with_validation_and_policy_checks(): void
     {
         $this->administrator();
@@ -258,6 +300,27 @@ class AdministrationTest extends TestCase
         $this->assertSame(3, count($lesson->fresh()->checks));
         $this->assertSame(100, $progress->fresh()->progress_percent);
         $this->assertFalse(Gate::allows('delete', $lesson));
+    }
+
+    public function test_archived_lessons_stay_manageable_without_appearing_in_the_current_outline(): void
+    {
+        $admin = $this->administrator();
+        app(FreeLabInstaller::class)->install();
+        $series = CourseSeries::first();
+        $active = $series->lessons()->first();
+        $archived = $active->replicate();
+        $archived->fill(['slug' => 'old-outline', 'title' => '旧课时保留内容', 'position' => 9, 'status' => 'archived'])->save();
+
+        Livewire::test(ListLessons::class)->assertCanSeeTableRecords([$active])->assertCanNotSeeTableRecords([$archived])
+            ->filterTable('status', 'archived')->assertCanSeeTableRecords([$archived]);
+        Livewire::test(LessonsRelationManager::class, ['ownerRecord' => $series, 'pageClass' => EditCourseSeries::class])
+            ->assertCanSeeTableRecords([$active])->assertCanNotSeeTableRecords([$archived]);
+        Livewire::test(ListCourseSeries::class)->assertTableColumnStateSet('lessons_count', 1, $series);
+        app(CourseOutlineService::class)->reorder($admin, $series, [$active->id]);
+        $this->assertSame(9, $archived->fresh()->position);
+        $this->assertSame('archived', $archived->fresh()->status);
+        $this->get(route('courses.preview', $series))->assertOk()->assertDontSee('旧课时保留内容');
+        $this->get(route('courses.preview', [$series, $archived->slug]))->assertOk()->assertSee('已归档');
     }
 
     public function test_global_theme_configuration_switches_only_registered_themes_and_can_follow_environment(): void

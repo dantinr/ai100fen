@@ -10,9 +10,9 @@ class LegacyCourseDefinitions
         return [
             'build-a-website' => [
                 'category' => 'create',
-                'completion_criteria' => ['自己的域名能打开网站，HTTPS连接有效且HTTP正确跳转', '首页、导航和手机布局可用，页面包含自己的内容', '在独立测试环境成功恢复备份，并记录文件、数据与配置位置'],
-                'agent_role' => ['检查测试环境并部署页面与Web服务', '配置域名、HTTPS并修改网站内容', '诊断异常并协助备份与恢复演练'],
-                'human_judgment_required' => ['选择网站用途、内容与测试环境', '确认端口、服务和现有站点变更的影响与费用', '亲自核对访问、手机布局与恢复结果'],
+                'completion_criteria' => ['自己的.com域名能从公网打开网站', '首页、另一个页面及导航可用，页面包含自己确认的内容，手机布局可读', '完成一次内容修改并重新发布，浏览器能看到改动，记录本地与服务器文件位置'],
+                'agent_role' => ['在人的首次登录与授权下配置公钥登录和Nginx', '制作页面、协助配置站点域名并部署网站', '按人的要求修改内容、重新发布并提供验证结果'],
+                'human_judgment_required' => ['选择服务器与域名、确认费用并购买', '决定操作授权和真实页面内容，设置DNS记录', '亲自核对域名访问、页面导航、手机布局和修改发布结果'],
             ],
             'add-website-support' => [
                 'category' => 'solve',
@@ -111,14 +111,16 @@ class LegacyCourseDefinitions
     {
         $definitions = [];
         $reviewed = self::constitution();
-        foreach ($catalog->all() as $source) {
+        foreach ($catalog->curated() as $source) {
             $constitution = $reviewed[$source['slug']] ?? throw new \LogicException('课程尚未进行宪章审核：'.$source['slug']);
             $lessons = [];
             foreach ($source['lessons'] as $index => $outline) {
-                $content = $catalog->canPreview($source, $outline) ? $catalog->previewContent($source, $outline) : [];
+                $content = $source['slug'] === 'build-a-website'
+                    ? collect(WebsiteSetupLessons::all())->firstWhere('slug', $outline['slug'])
+                    : ($catalog->canPreview($source, $outline) ? $catalog->previewContent($source, $outline) : []);
                 $lessons[] = [
                     'slug' => $outline['slug'], 'title' => $outline['title'], 'position' => $index + 1,
-                    'score' => $outline['score'], 'points' => 10, 'minutes' => $outline['minutes'], 'is_free' => $outline['is_free'],
+                    'score' => $outline['score'], 'points' => $outline['points'] ?? 10, 'minutes' => $outline['minutes'], 'is_free' => $outline['is_free'],
                     'intro' => $content['intro'] ?? $outline['summary'], 'goal' => $content['goal'] ?? $outline['goal'],
                     'objectives' => [$content['goal'] ?? $outline['goal']], 'content' => $content['content'] ?? null,
                     'steps' => $content['steps'] ?? [], 'prompt' => $content['prompt'] ?? '',
@@ -127,14 +129,14 @@ class LegacyCourseDefinitions
                     'resources' => $content ? [[
                         'name' => 'lesson-checklist.md', 'label' => '本课验收清单',
                         'content' => '# '.$outline['title']."：验收清单\n\n".$content['goal']."\n\n".implode("\n", array_map(fn ($check) => '- [ ] '.$check, $content['checks']))."\n",
-                    ]] : [], 'status' => $content ? 'published' : 'draft',
+                    ]] : [], 'status' => $catalog->canPreview($source, $outline) ? 'published' : 'draft',
                 ];
             }
             $definitions[] = $constitution + [
                 'slug' => $source['slug'], 'title' => $source['title'], 'user_intent' => $source['question'],
                 'final_outcome' => $source['outcome'], 'objectives' => $source['deliverables'],
                 'description' => $source['description']."\n\n## 开始前准备\n\n".implode("\n", array_map(fn ($item) => '- '.$item, $source['prerequisites'])),
-                'recommendation_keywords' => [$source['tag'], $source['question']], 'price' => '100.00', 'minutes' => 100,
+                'recommendation_keywords' => [$source['tag'], $source['question']], 'price' => '100.00', 'minutes' => $source['minutes'] ?? 100,
                 'is_free' => false, 'status' => 'draft', 'lessons' => $lessons,
             ];
         }

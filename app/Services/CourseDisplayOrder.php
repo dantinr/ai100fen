@@ -14,7 +14,7 @@ class CourseDisplayOrder
             return $courses;
         }
 
-        $columns = ['slug', 'sort_order'];
+        $columns = ['id', 'slug', 'sort_order', 'is_free', 'price', 'minutes', 'status'];
         if (Schema::hasColumn('course_series', 'cover')) {
             $columns[] = 'cover';
         }
@@ -39,6 +39,11 @@ class CourseDisplayOrder
     private function withCover(array $course, ?CourseSeries $record): array
     {
         $course['cover_url'] = $record?->coverUrl();
+        if ($course['slug'] === 'build-a-website' && $record?->is_free && $record->minutes === 10
+            && CourseSeries::freeLab()->whereKey($record->id)->exists()) {
+            $course['is_free'] = true;
+            $course['price'] = $record->price;
+        }
 
         return $course;
     }

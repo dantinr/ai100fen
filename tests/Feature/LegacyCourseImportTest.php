@@ -31,9 +31,9 @@ class LegacyCourseImportTest extends TestCase
         $freeBefore = CourseSeries::freeLab()->get()->toArray();
         $report = app(LegacyCourseImporter::class)->run();
         $this->assertSame(16, $report['created']);
-        $this->assertSame(10, $report['lessons']);
+        $this->assertSame(5, $report['lessons']);
         $this->assertDatabaseCount('course_series', 19);
-        $this->assertDatabaseCount('lessons', 13);
+        $this->assertDatabaseCount('lessons', 8);
         $this->assertSame($freeBefore, CourseSeries::freeLab()->get()->toArray());
         $sources = app(FrontendCatalog::class)->all();
         foreach ($sources as $source) {
@@ -57,9 +57,9 @@ class LegacyCourseImportTest extends TestCase
         $this->assertSame('solve', CourseSeries::where('slug', 'add-website-support')->first()->category);
         $website = CourseSeries::where('slug', 'build-a-website')->firstOrFail();
         $lessons = $website->lessons()->get();
-        $this->assertSame(range(10, 100, 10), $lessons->pluck('score')->all());
+        $this->assertSame(range(20, 100, 20), $lessons->pluck('score')->all());
         $this->assertSame(100, $lessons->sum('points'));
-        $this->assertSame(9, $lessons->where('status', 'draft')->count());
+        $this->assertSame(4, $lessons->where('status', 'draft')->count());
         $this->assertSame('published', $lessons->first()->status);
         $content = app(FrontendCatalog::class)->previewContent($sources[0], $sources[0]['lessons'][0]);
         $this->assertSame($content['prompt'], $lessons->first()->prompt);
@@ -98,6 +98,8 @@ class LegacyCourseImportTest extends TestCase
             'objectives' => [$original['goal']], 'content' => null,
             'steps' => array_map(fn (array $step) => ['body' => $step['body'], 'title' => $step['title']], $original['steps']),
             'prompt' => $original['prompt'],
+            'checks' => $original['checks'],
+            'code' => $original['code'],
         ]);
         $progress = LessonProgress::create([
             'user_id' => User::factory()->create()->id, 'lesson_id' => $lesson->id,
@@ -110,7 +112,7 @@ class LegacyCourseImportTest extends TestCase
         $fresh = $lesson->fresh();
         $this->assertSame('published', $fresh->status);
         $this->assertSame($original['checks'], $fresh->checks);
-        $this->assertSame(10, $fresh->points);
+        $this->assertSame(20, $fresh->points);
         $this->assertSame($original['code'], $fresh->code);
         $this->assertSame(33, $progress->fresh()->progress_percent);
         $this->assertStringContainsString('连接超时', $fresh->content);

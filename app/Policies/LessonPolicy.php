@@ -14,7 +14,7 @@ class LessonPolicy
 
     public function view(User $user, Lesson $lesson): bool
     {
-        return $user->is_admin === true;
+        return $user->is_admin === true && $lesson->series()->exists();
     }
 
     public function create(User $user): bool
@@ -24,7 +24,7 @@ class LessonPolicy
 
     public function update(User $user, Lesson $lesson): bool
     {
-        return $user->is_admin === true;
+        return $user->is_admin === true && $lesson->series()->exists();
     }
 
     public function reorder(User $user): bool

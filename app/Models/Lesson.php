@@ -25,6 +25,9 @@ class Lesson extends Model
     protected static function booted(): void
     {
         static::saving(function (self $lesson) {
+            if (! $lesson->series()->exists()) {
+                throw ValidationException::withMessages(['course_series_id' => '所属课程不存在或已在回收站，请先恢复课程。']);
+            }
             if ($lesson->video_url && (! filter_var($lesson->video_url, FILTER_VALIDATE_URL) || parse_url($lesson->video_url, PHP_URL_SCHEME) !== 'https')) {
                 throw ValidationException::withMessages(['video_url' => '视频地址必须是有效的HTTPS链接。']);
             }

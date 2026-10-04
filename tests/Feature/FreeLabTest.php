@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Services\CourseAccessService;
 use App\Services\FreeLabInstaller;
 use App\Services\ProgressService;
+use App\Support\LegacyCourseDefinitions;
+use App\Support\WebsiteSetupLessons;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
@@ -155,6 +157,92 @@ class FreeLabTest extends TestCase
         $course = CourseSeries::first();
         $this->expectException(ValidationException::class);
         $course->update(['human_judgment_required' => true]);
+    }
+
+    public function test_archived_lessons_keep_records_without_blocking_free_lab_or_diluting_active_scores(): void
+    {
+        $course = CourseSeries::first();
+        $active = $course->lessons()->first();
+        $user = User::factory()->create();
+        $archived = $active->replicate();
+        $archived->fill(['slug' => 'old-stage', 'position' => 10, 'points' => 10, 'score' => 10, 'status' => 'archived'])->save();
+        $oldProgress = LessonProgress::create(['user_id' => $user->id, 'lesson_id' => $archived->id,
+            'checks' => [true, true, true], 'progress_percent' => 100, 'completed_at' => now()]);
+        $course->refresh()->update(['status' => 'published']);
+
+        $this->get('/free')->assertViewHas('courses', fn ($courses) => $courses->contains('id', $course->id));
+        $this->get(route('free.lesson', [$course, $active->slug]))->assertOk()->assertDontSee('old-stage');
+        $this->get(route('free.lesson', [$course, $archived->slug]))->assertNotFound();
+        app(ProgressService::class)->save($user, $active, [true, true, true]);
+        $this->assertSame(100, app(ProgressService::class)->seriesScore($user, $course));
+        $this->assertSame(100, $oldProgress->fresh()->progress_percent);
+        $this->assertDatabaseCount('lesson_progress', 2);
+    }
+
+    public function test_five_website_lessons_award_twenty_points_each_and_require_final_task_acceptance(): void
+    {
+        $course = CourseSeries::create(LegacyCourseDefinitions::constitution()['build-a-website'] + [
+            'slug' => 'build-a-website', 'title' => '10分钟搭建.com网站', 'minutes' => 10,
+            'user_intent' => '拥有自己的网站', 'final_outcome' => '可用.com域名访问并可更新的网站', 'is_free' => true, 'price' => 0,
+        ]);
+        foreach (WebsiteSetupLessons::all() as $index => $definition) {
+            unset($definition['role']);
+            $course->lessons()->create($definition + ['position' => $index + 1, 'status' => 'published']);
+        }
+        $course->update(['status' => 'published']);
+        $this->get('/series/build-a-website')->assertRedirect(route('courses.show', $course));
+        $this->get('/')->assertViewHas('series', fn ($courses) => collect($courses)->firstWhere('slug', $course->slug)['is_free'] === true);
+        $this->actingAs(User::factory()->create());
+        foreach ($course->lessons()->get() as $index => $lesson) {
+            $this->get('/series/build-a-website/lessons/'.$lesson->slug)->assertRedirect(route('free.lesson', [$course, $lesson->slug]));
+            $this->get(route('free.lesson', [$course, $lesson->slug]))->assertOk()->assertSee($lesson->title)
+                ->assertViewHas('lessons', fn ($lessons) => $lessons->count() === 5);
+            $this->postJson(route('free.lesson', [$course, $lesson->slug]).'/progress', ['checks' => array_fill(0, count($lesson->checks), true)])
+                ->assertOk()->assertJson(['series_score' => ($index + 1) * 20]);
+        }
+        $last = $course->lessons()->reorder()->orderByDesc('position')->first();
+        $this->postJson(route('free.lesson', [$course, $last->slug]).'/progress', ['checks' => [true, true, true, false]])
+            ->assertOk()->assertJson(['completed' => false, 'series_score' => 80]);
+        $this->postJson(route('free.lesson', [$course, $last->slug]).'/progress', ['checks' => [true, true, true, true]])
+            ->assertOk()->assertJson(['completed' => true, 'series_score' => 100]);
+        $this->assertDatabaseCount('lesson_progress', 5);
+    }
+
+    public function test_gradually_published_free_courses_are_excluded_until_the_task_is_complete(): void
+    {
+        $course = CourseSeries::first();
+        $first = $course->lessons()->first();
+        $first->update(['score' => 10, 'points' => 10]);
+        $last = $first->replicate();
+        $last->fill(['slug' => 'final-check', 'position' => 2, 'score' => 100, 'points' => 90, 'status' => 'draft'])->save();
+        $course->refresh()->update(['status' => 'published']);
+
+        $this->get('/free')->assertViewHas('courses', fn ($courses) => ! $courses->contains('id', $course->id));
+        $this->get('/free?q=网页')->assertDontSee('Z：可以从「'.$course->title);
+        $this->get(route('free.lesson', [$course, $first->slug]))->assertNotFound();
+        $this->get(route('free.resource', [$course, $first->slug, $first->resources[0]['name']]))->assertNotFound();
+        $this->actingAs(User::factory()->create())
+            ->postJson(route('free.lesson', [$course, $first->slug]).'/progress', ['checks' => [true, true, true]])->assertNotFound();
+        $this->assertDatabaseCount('lesson_progress', 0);
+
+        $last->update(['status' => 'published']);
+        $course->refresh()->update(['status' => 'published']);
+        $this->get(route('free.lesson', [$course, $first->slug]))->assertOk();
+        $this->get('/free')->assertViewHas('courses', fn ($courses) => $courses->contains('id', $course->id));
+    }
+
+    public function test_free_lab_requires_full_weight_and_a_final_acceptance_lesson(): void
+    {
+        $course = CourseSeries::first();
+        $lesson = $course->lessons()->first();
+
+        foreach ([['points' => 10, 'score' => 100], ['points' => 100, 'score' => 10]] as $incomplete) {
+            $lesson->update($incomplete);
+            $course->refresh()->update(['status' => 'published']);
+            $this->assertSame('published', $course->fresh()->status);
+            $this->get('/free')->assertViewHas('courses', fn ($courses) => ! $courses->contains('id', $course->id));
+            $this->get(route('free.lesson', [$course, $lesson->slug]))->assertNotFound();
+        }
     }
 
     public function test_future_theme_uses_same_content_and_login_returns_to_task_without_external_redirects(): void

@@ -17,13 +17,17 @@ class FrontendPreviewTest extends TestCase
     {
         $this->get('/series/build-a-website/lessons/server-and-ip')
             ->assertOk()->assertSee('lesson-prompt')->assertSee('data-acceptance', false)
-            ->assertSee('从浏览器验证公网访问')->assertSee('先只读检查当前 Web 服务')
-            ->assertSee('开始前，先准备好')->assertSee('http://你的公网 IP/hello.html');
+            ->assertSee('10分钟搭建.com网站')->assertSee('购买服务器 [人]')
+            ->assertSee('注册账号并准备费用')->assertSee('用 SSH 登录')
+            ->assertSee('公网 IP')->assertSee('外部等待另计')
+            ->assertViewHas('series', fn ($series) => count($series['lessons']) === 5 && $series['minutes'] === 10)
+            ->assertViewHas('content', fn ($content) => count($content['checks']) === 3 && $content['minutes'] === 2);
 
         $this->get('/series/build-a-website/lessons/server-and-ip/checklist')
             ->assertOk()->assertHeader('Content-Type', 'text/markdown; charset=UTF-8')
             ->assertHeader('Content-Disposition', 'attachment; filename="lesson-checklist.md"')
-            ->assertSee('通过公网 IP 能打开页面');
+            ->assertSee('我已确认服务器配置、计费方式和费用')
+            ->assertSee('我能通过 SSH 或控制台登录并确认是自己的服务器');
     }
 
     public function test_question_topics_support_direct_links_and_invalid_queries_fall_back_safely(): void

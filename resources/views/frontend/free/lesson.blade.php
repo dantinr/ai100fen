@@ -8,7 +8,7 @@
     <header class="free-lesson-heading"><span class="free-badge">{{ $series->is_free ? '完整免费' : '付费课程 · ¥'.$series->price }} · {{ strtoupper($series->category) }}</span><h1>{{ $series->title }}</h1><p>{{ $series->final_outcome }}</p><span class="free-note">约 {{ $series->minutes }} 分钟 · 图文实践 · 验收后完成100分</span></header>
     <div class="free-learning-grid">
         <article class="free-lesson-content">
-            <section class="free-panel"><h2>你要做成什么？</h2><p>{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
+            <section class="free-panel"><h2>{{ $lesson->title }}</h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3><p>{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
                 @if($lesson->objectives)<ul>@foreach($lesson->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul>@endif
                 @if($lesson->video_url)<a class="text-link" href="{{ $lesson->video_url }}" target="_blank" rel="noopener noreferrer">观看本课视频<i data-lucide="external-link"></i></a>@endif
             </section>

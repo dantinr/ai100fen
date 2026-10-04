@@ -14,7 +14,8 @@ class FreeLabInstaller
             $created = 0;
             foreach (FreeLabContent::courses() as $definition) {
                 // Never overwrite edited courses or any existing business records.
-                if (CourseSeries::where('slug', $definition['slug'])->exists()) {
+                if (CourseSeries::withTrashed()->where('slug', $definition['slug'])->exists()
+                    || DB::table('course_catalog_suppressions')->where('slug', $definition['slug'])->exists()) {
                     continue;
                 }
                 $lesson = $definition['lesson'];

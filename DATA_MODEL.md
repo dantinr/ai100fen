@@ -135,7 +135,7 @@ archived
 
 `FrontendCatalog`的`category=build/work`仍属于旧公共页面筛选。D-036已逐门审核并将16门课程以草稿导入共用模型：question→user_intent、outcome→final_outcome、deliverables→objectives；description与prerequisites组合为Markdown介绍。completion_criteria、agent_role、human_judgment_required逐门补充，category独立判断为Create 9/Solve 7，不盲目转换旧类别。图标、旧公开筛选与主要页面内容仍来自FrontendCatalog；D-046只按slug读取数据库封面。
 
-D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提供`courses:import-legacy`独立事务命令及只读--dry-run，仅新增不存在的课程slug，遇到同slug整门跳过，保留全部既有字段与关联记录。网站已有10课时按position/score/points导入，首课已有Prompt、步骤、代码与验收清单，其余9课保留目标与简介并标记草稿；其他15门不生成不存在的课时。导入不触发购买权限或正式发布。审核与逐门六项报告见`docs/LEGACY_COURSE_IMPORT.md`。
+D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提供`courses:import-legacy`独立事务命令及只读--dry-run，仅新增不存在的课程slug，遇到同slug整门跳过，保留全部既有字段与关联记录。网站10课时为D-036历史导入状态。D-049后首次导入网站采用五节独立正文/Prompt/验收，各2分钟/20分，课程仍为草稿、首课发布/其余草稿；已有slug不覆盖。其他15门不生成不存在的课时。导入不触发购买权限或正式发布。审核与逐门六项报告见`docs/LEGACY_COURSE_IMPORT.md`。
 
 D-046新增`course_series.cover`可空字符串，仅存`public`磁盘中`course-covers/`下的图片路径。管理员上传JPG/PNG/WebP（最多2 MB），统一按16:9展示；无图或文件缺失时沿用既有海报/图标。旧目录只按slug读取封面和排序，不读取数据库草稿正文或改变访问权限。图片文件存于`storage/app/public`，不提交Git；部署环境需建立`public/storage`链接。新增迁移只加可空字段，生产须审阅后独立执行。
 
@@ -153,13 +153,13 @@ D-038新增`course_series.sort_order`（unsigned integer、默认1000、有索�
 
 D-045拖动排序复用同一`sort_order`列，无新表或字段。管理员提交完整课程ID顺序，服务端在事务中锁定课程、校验ID集合及逐门更新权限，再将位置重排为1至N；筛选或搜索后的部分列表不能保存为全局顺序。原数值设置仍可用于精确调整。
 
-- `course_series`：id、唯一slug、title、category（varchar，模型白名单）、user_intent、final_outcome、三个宪章JSON字符串数组、recommendation_keywords（JSON）、minutes、price（decimal10,2）、is_free（默认false）、status（默认draft）、时间戳。没有新增FreeCourse模型。D-031初版要求完整提交；D-034已支持逐步保存草稿，新增字段见第4节。正式发布校验六项定义和至少一个完整Lesson。完整免费发布要求全部Lesson published且points合计100。
+- `course_series`：id、唯一slug、title、category（varchar，模型白名单）、user_intent、final_outcome、三个宪章JSON字符串数组、recommendation_keywords（JSON）、minutes、price（decimal10,2）、is_free（默认false）、status（默认draft）、时间戳。没有新增FreeCourse模型。D-031初版要求完整提交；D-034已支持逐步保存草稿，新增字段见第4节。D-047正式发布校验六项定义和至少一个已发布Lesson，免费与付费均支持逐课发布。Free Lab筛选额外要求全部未归档Lesson published、points合计100、按position/id排序的最后课时score=100；这些完整任务条件不再阻止课程状态设为published。
 - `lessons`：id、course_series_id、slug、title、position、score（累计展示分值）、points（本步验收权重）、minutes、is_free（默认false，仅代表该Lesson试看）、status、intro、goal、steps（JSON标题/正文）、prompt、可空code/code_filename、resources（JSON文件名/说明/文本）、checks（JSON验收清单）、时间戳。唯一(course_series_id,slug)，无课数硬限制。当前图文内容未建视频或独立附件表。
 - `lesson_progress`：id、user_id、lesson_id、checks（JSON布尔数组）、progress_percent（0–100整数）、last_position_seconds（预留0）、completed_at、时间戳。唯一(user_id,lesson_id)，外键限制删除。ProgressService在事务中锁当前用户，幂等保存本人记录；不接受客户端user_id、分数、完成时间或会员状态。
 
-Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一个付费试看步骤。CourseAccessService统一服务端检查所属关系、发布状态与免费配置，旧数组试看经兼容方法保持原规则。Free Lab读取/下载/保存额外限制完整免费系列；Z只查询已发布且所有步骤已发布的完整免费课程，不推荐付费试看。
+Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一个付费试看步骤。CourseAccessService统一服务端检查所属关系、发布状态与免费配置，旧数组试看经兼容方法保持原规则。Free Lab读取/下载/保存额外限制完整免费系列；Z只查询已发布且所有未归档步骤已发布的完整免费课程，不推荐付费试看。
 
-进度百分比=已确认清单项/全部项，只有全部明确确认才写completed_at；取消任一项撤销完成状态。系列分数=已验收published Lesson的points / 全系列points ×100，未发布步骤不获得分数，不硬编码10课。首批每Series一Lesson，score与points均100；标准10课可配置points各10、score依次10至100。
+进度百分比=已确认清单项/全部项，只有全部明确确认才写completed_at；取消任一项撤销完成状态。系列分数=已验收published Lesson的points / 全系列未归档Lesson的points ×100，未发布步骤不获得分数，归档课及其历史进度保留但不计入当前分数，不硬编码10课。首批每Series一Lesson，score与points均100；标准10课可配置points各10、score依次10至100。D-049网站特殊课程为五节约2分钟，points各20、score依次20/40/60/80/100；最后一节明确按课程完成标准验收整个任务。
 
 `free-lab:install`在事务中只新增不存在的三个固定slug，不覆盖人工编辑、不重置学习记录、不创建账号；重跑新增数为0。素材暂以可迁移文本保存在Lesson.resources内，由已校验权限的下载响应提供；不拼接磁盘路径。未来大文件存储与支付模型另行设计。
 
@@ -173,12 +173,20 @@ Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一�
 
 - `course_series.description`：nullable text，Markdown课程介绍；`objectives`：nullable JSON字符串数组，课程目标清单。沿用六项宪章字段，不以目标清单代替最终验收。
 - `lessons.objectives`：nullable JSON字符串数组；`content`：nullable longtext，Markdown正文；`video_url`：nullable text，校验HTTPS链接，前台提供跳转入口。`goal`仍是课时最终目标，`steps`仍是有序标题/正文数组，作为可编辑课时大纲；不新增重复outline表或字段。
-- 课程大纲直接按Lesson.position/id读取标题、目标、状态与分值。后台排序服务授权、锁课程与课时、校验完整ID集合及所属关系，不允许跨课程排序。
-- 草稿的旧非空文本列保存空字符串，JSON清单保存空数组，新增扩展字段可以为空；数据库不必放宽旧约束。发布需完整定义与已发布课时，最后课时score=100；完整免费还需全部课时发布且points合计100。课时结构/状态/分值变更后课程退回草稿，需重新发布。
-- 课时已有LessonProgress时禁止直接修改checks/points/score，所有已有课时禁止移到另一课程；不删除或重置学习记录。后台归档通过status实现，Policy禁用硬删除。
+- 课程大纲直接按未归档Lesson.position/id读取标题、目标、状态与分值；后台课时计数和排序集合同样排除归档课。后台排序服务授权、锁课程与课时、校验完整未归档ID集合及所属关系，不允许跨课程排序。主课时列表默认未归档，可切换归档筛选；管理员明确指定归档课地址仍可只读预览。
+- 草稿的旧非空文本列保存空字符串，JSON清单保存空数组，新增扩展字段可以为空；数据库不必放宽旧约束。按D-047，课程发布需完整定义与至少一个已发布课时；最终100分和完整免费要求改为Free Lab完整任务筛选，见第3.4节。单课发布仍校验目标、步骤、Prompt与验收。课时结构/状态/分值变更后课程退回草稿，需重新发布。
+- 课时已有LessonProgress时禁止直接修改checks/points/score，所有已有课时禁止移到另一课程；不删除或重置学习记录。后台归档通过status实现。D-050课程删除使用独立deleted_at回收站；单独课时删除仍禁用，只有没有任何学习记录的回收站课程可经管理员确认整体最终删除。
 - `theme_settings`：id、nullable theme、timestamps。只管理id=1的全站配置；null表示跟随APP_THEME，白名单来自config/themes.php，后台显式选择优先，非法值回退注册表默认。尚未迁移时前台继续用环境配置。不是用户偏好表；新增主题及Token仍通过代码登记。
 
-下列Lesson字段列表仍包含尚未实现的长期设计，以D-031及此节当前字段为准。
+### D-050课程回收站（当前实现）
+
+迁移`2026_10_04_010000_add_course_recycle_bin`增加可空且有索引的`course_series.deleted_at`，所有既有记录初始为null；Lesson和LessonProgress结构不变。CourseSeries使用SoftDeletes，正常查询与路由绑定排除回收站课程，后台回收站显式onlyTrashed。软删除不改写课时、记录或关系；恢复统一为draft，需重新发布。
+
+最终删除事务锁课程与课时，校验管理员、回收站状态、完整slug及该课程全部课时（含归档）不存在任何LessonProgress。条件满足后经CourseRelationService清理出入向连接、删除全部课时，最后forceDelete课程；条件失败保持全部记录。现有外键仍restrictOnDelete，不改为自动级联，学习记录不能因删除课程被连带删除。上传封面文件不删除。
+
+`course_catalog_suppressions`只含slug（varchar150主键）、created_at、updated_at；保存已最终删除slug，阻止旧静态目录/兼容路由和安装命令重新显示或导入，不保存课程内容或个人信息。管理员明确新建同slug课程时删除标记。自动导入同时检查withTrashed记录和该表。回收站课程也不参与课时管理、展示排序、关系目标选择、Free Lab/推荐和学习资料访问；原学习记录仍保留，重新发布后可继续读取。
+
+下列Lesson字段列表仍包含尚未实现的长期设计，以D-031及D-034当前字段为准。
 
 ```text
 id
@@ -240,7 +248,7 @@ updated_at
 
 标准Series每个已验收Lesson计10分，全部阶段及最终任务验收完成才到100分；非标准Series按配置计算。Solve依据问题目标状态，Create依据真实成品，Explore依据实验与证据结论，不能将实验失败视为未完成。
 
-D-031已对免费任务实现服务端LessonProgress与清单验收。网站第一课的旧浏览器记录仍为0或10分，与账号进度独立；旧付费Series完整验收尚未实现。
+D-031已对免费任务实现服务端LessonProgress与清单验收。网站旧v1/v2浏览器记录仍为0或10分，保留但不自动迁移；D-049独立首课试看使用v3、0或20分，与账号进度独立。满足完整免费条件的网站五节使用既有账号进度；旧付费Series完整验收尚未实现。
 
 ---
 

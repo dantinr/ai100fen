@@ -33,8 +33,8 @@ class CourseSeriesForm
                     Select::make('category')->label('主要价值类别')->options(['solve' => 'Solve · 解决一个问题', 'create' => 'Create · 创作一个作品', 'explore' => 'Explore · 探索一个可能'])->required()->native(false),
                     Select::make('status')->label('课程状态')->options(['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'])->required()->default('draft')->live()
                         ->disableOptionWhen(fn (string $value, string $operation) => $operation === 'create' && $value === 'published')
-                        ->helperText('先保存草稿，再添加并发布课时，最后发布课程。归档保留内容和学习记录。'),
-                    Toggle::make('is_free')->label('整门课程完整免费')->default(false)->live()->afterStateUpdated(fn (bool $state, Set $set) => $set('price', $state ? '0.00' : '100.00'))->helperText('完整免费须全部课时已发布，验收权重合计100。付费课程试看在课时中单独配置。'),
+                        ->helperText('课程定义完整且至少一个课时已发布，即可发布课程。归档保留内容和学习记录。'),
+                    Toggle::make('is_free')->label('整门课程完整免费')->default(false)->live()->afterStateUpdated(fn (bool $state, Set $set) => $set('price', $state ? '0.00' : '100.00'))->helperText('可逐课发布；进入免费实验室须全部课时发布、权重合计100且最终课时100分。付费试看在课时中单独配置。'),
                     TextInput::make('minutes')->label('预计总时长（分钟）')->numeric()->integer()->minValue(1)->maxValue(65535)->required()->default(100),
                     TextInput::make('sort_order')->label('展示排序')->numeric()->integer()->minValue(0)->maxValue(999999)->required()->default(1000)
                         ->helperText('数字越小越靠前，默认1000。控制首页、课程目录与免费实验室展示顺序，不改变课时顺序。'),

@@ -12,7 +12,7 @@ class ProgressService
 {
     public function seriesScore(User $user, CourseSeries $series): int
     {
-        $lessons = $series->lessons()->get();
+        $lessons = $series->lessons()->where('status', '!=', 'archived')->get();
         $total = $lessons->sum('points');
         if ($total === 0) {
             return 0;
@@ -30,6 +30,8 @@ class ProgressService
         return DB::transaction(function () use ($user, $lesson, $checks) {
             // Serialize updates for this user, including simultaneous first saves.
             User::whereKey($user->id)->lockForUpdate()->firstOrFail();
+            $series = CourseSeries::whereKey($lesson->course_series_id)->lockForUpdate()->first();
+            abort_unless($series && app(CourseAccessService::class)->canAccess($series, $lesson), 403);
             $progress = LessonProgress::firstOrNew(['user_id' => $user->id, 'lesson_id' => $lesson->id]);
             $percent = (int) floor(count(array_filter($checks)) * 100 / count($lesson->checks));
             $progress->fill([

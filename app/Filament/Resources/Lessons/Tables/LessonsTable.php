@@ -27,7 +27,14 @@ class LessonsTable
             ->filters([
                 SelectFilter::make('course_series_id')->label('所属课程')->relationship('series', 'title')->searchable()->preload()
                     ->visible(fn ($livewire) => $livewire instanceof ListLessons),
-                SelectFilter::make('status')->label('状态')->options(['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档']),
+                SelectFilter::make('status')->label('状态')->options(['active' => '未归档', 'draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'])
+                    ->default('active')->query(function ($query, array $data) {
+                        $value = $data['value'] ?? null;
+                        if ($value === 'active') {
+                            return $query->where('status', '!=', 'archived');
+                        }
+                        return $query->when($value, fn ($query) => $query->where('status', $value));
+                    }),
             ])
             ->recordActions([
                 EditAction::make()->label('编辑课时'),

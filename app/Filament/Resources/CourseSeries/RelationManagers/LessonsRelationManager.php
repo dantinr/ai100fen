@@ -23,6 +23,7 @@ class LessonsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->where('status', '!=', 'archived'))
             ->reorderable('position')
             ->headerActions([
                 CreateAction::make()->label('添加课时')->url(fn () => LessonResource::getUrl('create', ['series' => $this->getOwnerRecord()->id])),

@@ -25,7 +25,8 @@ class SyncWebsiteFirstLesson extends Command
                 }
 
                 $original = WebsiteFirstLessonContent::original();
-                $current = WebsiteFirstLessonContent::current();
+                // This historical sync preserves the original IP-only acceptance checks.
+                $current = WebsiteFirstLessonContent::ipPreview();
                 $changes = [
                     'goal' => $current['goal'],
                     'intro' => $current['intro'],

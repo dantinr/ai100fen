@@ -41,6 +41,9 @@ class CourseRelationPresenter
             $links = [];
             foreach ($relations->get($type, collect()) as $relation) {
                 $target = $relation->relatedCourse;
+                if (! $target) {
+                    continue;
+                }
                 $links[] = [
                     'title' => $target->title, 'outcome' => $target->final_outcome,
                     'reason' => $relation->description, 'minutes' => $target->minutes,

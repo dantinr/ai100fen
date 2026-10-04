@@ -6,6 +6,9 @@ use App\Services\CourseDisplayOrder;
 use App\Services\CourseRelationPresenter;
 use App\Services\LiveSchedule;
 use App\Support\FrontendCatalog;
+use App\Models\CourseSeries;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
@@ -23,14 +26,20 @@ class FrontendController extends Controller
         return view('frontend.catalog', ['series' => $this->displayOrder->previewCourses($this->catalog->all())]);
     }
 
-    public function series(string $slug): View
+    public function series(string $slug): View|RedirectResponse
     {
+        if ($this->completeWebsiteCourse($slug)) {
+            return redirect()->route('courses.show', $slug);
+        }
         return view('frontend.series', ['series' => $this->displayOrder->previewCourse($this->catalog->find($slug)),
             'relationGroups' => app(CourseRelationPresenter::class)->forLegacy($slug)]);
     }
 
-    public function lesson(string $slug, string $lessonSlug): View
+    public function lesson(string $slug, string $lessonSlug): View|RedirectResponse
     {
+        if ($this->completeWebsiteCourse($slug)) {
+            return redirect()->route('free.lesson', [$slug, $lessonSlug]);
+        }
         $series = $this->catalog->find($slug);
         $lesson = $this->catalog->findLesson($series, $lessonSlug);
         $canPreview = $this->catalog->canPreview($series, $lesson);
@@ -39,6 +48,12 @@ class FrontendController extends Controller
             'series' => $series, 'lesson' => $lesson, 'canPreview' => $canPreview,
             'content' => $canPreview ? $this->catalog->previewContent($series, $lesson) : null,
         ]);
+    }
+
+    private function completeWebsiteCourse(string $slug): bool
+    {
+        return $slug === 'build-a-website' && Schema::hasTable('course_series')
+            && CourseSeries::freeLab()->where('slug', $slug)->where('minutes', 10)->exists();
     }
 
     public function checklist(string $slug, string $lessonSlug): Response

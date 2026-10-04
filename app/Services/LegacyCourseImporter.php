@@ -16,7 +16,8 @@ class LegacyCourseImporter
         return DB::transaction(function () use ($definitions, $dryRun) {
             $report = ['created' => 0, 'skipped' => 0, 'lessons' => 0, 'rows' => []];
             foreach ($definitions as $definition) {
-                $existing = CourseSeries::where('slug', $definition['slug'])->exists();
+                $existing = CourseSeries::withTrashed()->where('slug', $definition['slug'])->exists()
+                    || DB::table('course_catalog_suppressions')->where('slug', $definition['slug'])->exists();
                 $report['rows'][] = [$definition['slug'], $definition['category'], $existing ? '保留已有课程' : ($dryRun ? '计划新增草稿' : '新增草稿'), $existing ? 0 : count($definition['lessons'])];
                 if ($existing) {
                     $report['skipped']++;

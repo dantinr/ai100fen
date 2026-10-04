@@ -11,6 +11,8 @@ class CourseAccessService
     {
         // Purchases and subscriptions are not implemented; never infer them from input.
         return $lesson->course_series_id === $series->id
+            && ! $series->trashed()
+            && CourseSeries::whereKey($series->id)->where('status', 'published')->exists()
             && $series->status === 'published' && $lesson->status === 'published'
             && ($series->is_free || $lesson->is_free);
     }

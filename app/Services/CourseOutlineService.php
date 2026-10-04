@@ -17,7 +17,7 @@ class CourseOutlineService
         Validator::make(['order' => $order], ['order' => ['array', 'list'], 'order.*' => ['integer', 'min:1', 'distinct']])->validate();
         DB::transaction(function () use ($series, $order) {
             $series = CourseSeries::whereKey($series->id)->lockForUpdate()->firstOrFail();
-            $lessons = $series->lessons()->lockForUpdate()->get()->keyBy('id');
+            $lessons = $series->lessons()->where('status', '!=', 'archived')->lockForUpdate()->get()->keyBy('id');
             $ids = array_map('strval', $lessons->keys()->all());
             if (! array_is_list($order) || count($order) !== count($ids) || count(array_unique($order)) !== count($order) || array_diff(array_map('strval', $order), $ids)) {
                 throw ValidationException::withMessages(['order' => '请显示本课程全部课时后再排序，不允许混入其他课程。']);

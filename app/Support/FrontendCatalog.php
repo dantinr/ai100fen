@@ -3,19 +3,44 @@
 namespace App\Support;
 
 use App\Services\CourseAccessService;
+use App\Models\CourseSeries;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 /** Curated preview content, independent of future persisted courses and entitlements. */
 class FrontendCatalog
 {
     public function all(): array
     {
+        $hidden = $this->hiddenSlugs();
+
+        return array_values(array_filter($this->curated(), fn (array $course) => ! in_array($course['slug'], $hidden, true)));
+    }
+
+    public function isVisible(string $slug): bool
+    {
+        return collect($this->all())->contains('slug', $slug);
+    }
+
+    private function hiddenSlugs(): array
+    {
+        if (! Schema::hasColumn('course_series', 'deleted_at')) {
+            return [];
+        }
+
+        return CourseSeries::onlyTrashed()->pluck('slug')->merge(DB::table('course_catalog_suppressions')->pluck('slug'))->all();
+    }
+
+    public function curated(): array
+    {
         return [
             [
                 'slug' => 'build-a-website',
-                'title' => '100分钟搭建网站',
+                'title' => '10分钟搭建.com网站',
                 'question' => '我想拥有自己的网站',
-                'description' => '从一个公网 IP 开始，让自己的想法真正出现在互联网上。',
-                'outcome' => '一个可访问、有域名和 HTTPS、能够备份恢复的网站。',
+                'description' => '五节各约2分钟，人与 Agent 协作，让自己的.com网站上线并持续更新。',
+                'outcome' => '一个能用自己的.com域名访问、有首页和导航、可以继续修改发布的网站。',
+                'minutes' => 10,
                 'category' => 'build',
                 'category_label' => '创造一个作品',
                 'tag' => '网站搭建',
@@ -23,8 +48,8 @@ class FrontendCatalog
                 'icon' => 'globe',
                 'available' => true,
                 'price' => '100',
-                'prerequisites' => ['一台可以联网的电脑', '能够使用的 Coding Agent', '自己的测试服务器（按需准备）'],
-                'deliverables' => ['用自己的域名访问网站', '完成 HTTPS 与移动端检查', '保留一份可恢复的网站备份'],
+                'prerequisites' => ['一台可以联网的电脑', '能够使用的 Coding Agent', '可管理服务器和域名的账号及购买预算'],
+                'deliverables' => ['自己的.com域名能打开网站', '首页、另一个页面与导航可用', '完成一次内容修改并重新发布'],
                 'lessons' => $this->websiteLessons(),
             ],
             [
@@ -309,23 +334,10 @@ class FrontendCatalog
 
     private function websiteLessons(): array
     {
-        $outline = [
-            ['server-and-ip', '服务器与 IP', '让第一个页面通过公网 IP 被访问。', '认识公网 IP，把 hello.html 部署到测试服务器。'],
-            ['domain', '域名', '用一个好记的名字找到你的网站。', '认识 DNS 和 A 记录，将自己的域名指向服务器。'],
-            ['https', 'HTTPS', '让浏览器安全地打开你的网站。', '配置证书与 HTTPS，验收安全连接和跳转。'],
-            ['first-website', '第一个网站', '从一张页面，变成一个有结构的网站。', '完成首页、关于页、导航和移动端布局。'],
-            ['open-source', '使用开源程序', '站在成熟项目的基础上开始。', '理解开源程序，用 Agent 安装并验证基础功能。'],
-            ['customize', '网站 DIY', '让网站有自己的内容与样子。', '修改标识、导航、颜色与内容，检查手机端。'],
-            ['architecture', '网站结构', '知道一次访问经过了哪些地方。', '认识浏览器、DNS、Web 服务、应用与数据库。'],
-            ['troubleshooting', '网站出问题怎么办', '先找到原因，再动手修改。', '通过状态码、服务与日志定位访问异常。'],
-            ['backup', '备份与恢复', '不只保存一份文件，还要能恢复。', '备份网站与数据，在测试环境完成恢复演练。'],
-            ['acceptance', '完整验收', '把一个真实网站，完整地做成。', '检查域名、HTTPS、页面、移动端与恢复能力。'],
-        ];
-
-        return array_map(fn (array $item, int $index) => [
-            'slug' => $item[0], 'title' => $item[1], 'summary' => $item[2],
-            'goal' => $item[3], 'score' => ($index + 1) * 10,
-            'minutes' => 10, 'is_free' => $index === 0,
-        ], $outline, array_keys($outline));
+        return array_map(fn (array $lesson, int $index) => [
+            'slug' => $lesson['slug'], 'title' => $lesson['title'], 'summary' => $lesson['goal'],
+            'goal' => $lesson['goal'], 'score' => $lesson['score'], 'points' => $lesson['points'],
+            'minutes' => $lesson['minutes'], 'is_free' => $index === 0,
+        ], WebsiteSetupLessons::all(), array_keys(WebsiteSetupLessons::all()));
     }
 }

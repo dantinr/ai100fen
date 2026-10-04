@@ -4,6 +4,7 @@ namespace App\Filament\Resources\CourseSeries\Pages;
 
 use App\Filament\Resources\CourseSeries\CourseSeriesResource;
 use App\Filament\Support\MapsContentErrors;
+use App\Filament\Support\CourseDeletionActions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\On;
@@ -13,6 +14,11 @@ class EditCourseSeries extends EditRecord
     use MapsContentErrors;
 
     protected static string $resource = CourseSeriesResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [CourseDeletionActions::trash()->successRedirectUrl(CourseSeriesResource::getUrl('index'))];
+    }
 
     public function areFormActionsSticky(): bool
     {

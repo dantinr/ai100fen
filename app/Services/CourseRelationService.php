@@ -20,12 +20,13 @@ class CourseRelationService
 
         return DB::transaction(function () use ($course, $data, $relation) {
             // Serialize graph writes on one stable course row, so concurrent edges cannot create a cycle.
-            CourseSeries::orderBy('id')->lockForUpdate()->firstOrFail();
+            CourseSeries::withTrashed()->orderBy('id')->lockForUpdate()->firstOrFail();
+            abort_unless(CourseSeries::whereKey($course->id)->exists(), 404);
             if ($relation) {
                 $relation = $course->courseRelations()->whereKey($relation->id)->lockForUpdate()->firstOrFail();
             }
             $validated = Validator::make($data, [
-                'related_course_series_id' => ['required', 'integer', Rule::exists('course_series', 'id'), Rule::notIn([$course->id])],
+                'related_course_series_id' => ['required', 'integer', Rule::exists('course_series', 'id')->whereNull('deleted_at'), Rule::notIn([$course->id])],
                 'relation_type' => ['required', Rule::in(array_keys(CourseRelation::TYPES))],
                 'sort_order' => ['required', 'integer', 'min:0', 'max:999999'],
                 'description' => ['nullable', 'string', 'max:500'],
@@ -55,7 +56,8 @@ class CourseRelationService
         abort_if($relation->course_series_id !== $course->id, 403);
 
         return DB::transaction(function () use ($course, $relation) {
-            CourseSeries::orderBy('id')->lockForUpdate()->firstOrFail();
+            CourseSeries::withTrashed()->orderBy('id')->lockForUpdate()->firstOrFail();
+            abort_unless(CourseSeries::whereKey($course->id)->exists(), 404);
 
             return (bool) $course->courseRelations()->whereKey($relation->id)->firstOrFail()->delete();
         }, 3);
@@ -81,5 +83,14 @@ class CourseRelationService
                 $pending[] = (int) $edge->related_course_series_id;
             }
         }
+    }
+
+    public function removeForDeletedCourse(User $user, CourseSeries $course): void
+    {
+        Gate::forUser($user)->authorize('forceDelete', $course);
+        DB::transaction(function () use ($course) {
+            CourseSeries::withTrashed()->orderBy('id')->lockForUpdate()->firstOrFail();
+            CourseRelation::where('course_series_id', $course->id)->orWhere('related_course_series_id', $course->id)->delete();
+        }, 3);
     }
 }

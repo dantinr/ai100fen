@@ -51,9 +51,9 @@ class CourseRelationsRelationManager extends RelationManager
             ->description('前置仅为建议，不锁定课程。移除关联保留课程和学习记录。')
             ->modifyQueryUsing(fn ($query) => $query->with('relatedCourse'))
             ->columns([
-                TextColumn::make('relatedCourse.title')->label('关联课程')->searchable()->description(fn ($record) => '#'.$record->related_course_series_id),
+                TextColumn::make('relatedCourse.title')->label('关联课程')->searchable()->placeholder('目标课程已在回收站')->description(fn ($record) => '#'.$record->related_course_series_id),
                 TextColumn::make('relatedCourse.status')->label('目标状态')->badge()
-                    ->formatStateUsing(fn ($state) => ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$state]),
+                    ->placeholder('回收站')->formatStateUsing(fn ($state) => ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$state] ?? '回收站'),
                 TextColumn::make('sort_order')->label('关系内排序')->sortable(),
                 TextColumn::make('description')->label('关联理由')->wrap()->limit(100),
             ])

@@ -14,7 +14,7 @@ class CourseSeriesPolicy
 
     public function view(User $user, CourseSeries $series): bool
     {
-        return $user->is_admin === true;
+        return $user->is_admin === true && ! $series->trashed();
     }
 
     public function create(User $user): bool
@@ -24,12 +24,22 @@ class CourseSeriesPolicy
 
     public function update(User $user, CourseSeries $series): bool
     {
-        return $user->is_admin === true;
+        return $user->is_admin === true && ! $series->trashed();
     }
 
     public function delete(User $user, CourseSeries $series): bool
     {
-        return false;
+        return $user->is_admin === true && ! $series->trashed();
+    }
+
+    public function restore(User $user, CourseSeries $series): bool
+    {
+        return $user->is_admin === true && $series->trashed();
+    }
+
+    public function forceDelete(User $user, CourseSeries $series): bool
+    {
+        return $user->is_admin === true && $series->trashed();
     }
 
     public function deleteAny(User $user): bool
