@@ -1,4 +1,9 @@
 /* Structure, spacing, responsive layout and interaction contracts. */
+.lesson-title-with-agent { display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; }
+.lesson-agent-mark { display:inline-flex; align-items:center; gap:3px; flex:none; vertical-align:middle; }
+.lesson-agent-mark>.paul-avatar { width:30px; height:30px; }
+.lesson-agent-mark .paul-avatar>svg { width:100%; height:auto; margin:0; }
+.lesson-agent-name { font-size:11px; line-height:1; }
 .about-main { max-width:1040px; }
 .about-hero { display:grid; gap:22px; padding-block:18px 50px; }
 .about-hero h1 { font-size:clamp(32px,4vw,58px); line-height:1.3; }

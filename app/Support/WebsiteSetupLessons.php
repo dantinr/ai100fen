@@ -4,6 +4,14 @@ namespace App\Support;
 
 final class WebsiteSetupLessons
 {
+    public static function roleFor(string $slug): ?string
+    {
+        static $roles = null;
+        $roles ??= array_column(self::all(), 'role', 'slug');
+
+        return $roles[$slug] ?? null;
+    }
+
     public static function all(): array
     {
         $combined = WebsiteFirstLessonContent::combined();

@@ -30,7 +30,7 @@
                 @forelse($series['lessons'] as $lesson)
                     <a class="outline-row" href="{{ $fullFree ? route('free.lesson', [$series['slug'], $lesson['slug']]) : route('lessons.show', ['slug' => $series['slug'], 'lessonSlug' => $lesson['slug']]) }}" data-lesson-row="{{ $lesson['slug'] }}">
                         <span class="outline-score">{{ $lesson['score'] }}<small>分</small></span>
-                        <div><h3>{{ $lesson['title'] }}</h3><p>{{ $lesson['summary'] }}</p></div>
+                        <div><h3 class="lesson-title-with-agent"><span>{{ $lesson['title'] }}</span><x-lesson-agent-mark :course="$series['slug']" :lesson="$lesson['slug']" /></h3><p>{{ $lesson['summary'] }}</p></div>
                         <span class="outline-state {{ $lesson['is_free'] ? 'free' : '' }}">{{ $fullFree ? '免费学习' : ($lesson['is_free'] ? '免费试看' : '待发布') }}</span>
                         <i data-lucide="{{ $lesson['is_free'] ? 'arrow-up-right' : 'lock-keyhole' }}"></i>
                     </a>

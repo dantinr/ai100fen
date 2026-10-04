@@ -8,7 +8,7 @@
     <header class="free-lesson-heading"><span class="free-badge">{{ $series->is_free ? '完整免费' : '付费课程 · ¥'.$series->price }} · {{ strtoupper($series->category) }}</span><h1>{{ $series->title }}</h1><p>{{ $series->final_outcome }}</p><span class="free-note">约 {{ $series->minutes }} 分钟 · 图文实践 · 验收后完成100分</span></header>
     <div class="free-learning-grid">
         <article class="free-lesson-content">
-            <section class="free-panel"><h2>{{ $lesson->title }}</h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3><p>{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
+            <section class="free-panel"><h2 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /></h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3><p>{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
                 @if($lesson->objectives)<ul>@foreach($lesson->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul>@endif
                 @if($lesson->video_url)<a class="text-link" href="{{ $lesson->video_url }}" target="_blank" rel="noopener noreferrer">观看本课视频<i data-lucide="external-link"></i></a>@endif
             </section>
@@ -50,7 +50,7 @@
             @if(!$isPreview)<p>已验收进度：<strong data-free-percent>{{ $progress?->progress_percent ?? 0 }}%</strong></p><p class="free-note">这是当前步骤的验收进度；完整任务全部通过才达到100分。</p>
             <p>任务完成：<strong data-free-score>{{ $score }}</strong> / 100分</p>
             @endif
-            @foreach($lessons as $item)<a class="free-outline-link" href="{{ route($isPreview ? 'courses.preview' : 'free.lesson', [$series, $item->slug]) }}" @if($item->id === $lesson->id) aria-current="page" @endif>{{ $item->position }}. {{ $item->title }}</a>@endforeach
+            @foreach($lessons as $item)<a class="free-outline-link" href="{{ route($isPreview ? 'courses.preview' : 'free.lesson', [$series, $item->slug]) }}" @if($item->id === $lesson->id) aria-current="page" @endif><span class="lesson-title-with-agent"><span>{{ $item->position }}. {{ $item->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$item->slug" /></span></a>@endforeach
             @if($series->description)<div class="free-markdown">{!! \Illuminate\Support\Str::markdown($series->description, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div>@endif
             @if($series->objectives)<details class="free-roles"><summary>课程目标</summary><ul>@foreach($series->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul></details>@endif
             <details class="free-roles"><summary>整个任务怎么验收？</summary><ul>@foreach($series->completion_criteria as $criterion)<li>{{ $criterion }}</li>@endforeach</ul></details>

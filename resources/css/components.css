@@ -558,3 +558,4 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .about-start { background:var(--color-highlight); }
 @media(hover:hover) and (pointer:fine) { .about-direction:hover { background:var(--color-bg); box-shadow:var(--shadow-card-hover); } }
 @media(prefers-reduced-motion:reduce) { .about-direction { transition:none; } }
+.lesson-agent-name { color:var(--color-text); font-weight:800; }
