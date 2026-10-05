@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 360" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">06 宇航 Z · 带你出发的探索员</title>
+  <desc id="desc">绿色小外星人戴透明圆头盔，穿深蓝宇航服和浅色手套，胸前有 Z 徽章。</desc>
+  <style>
+    .ink{stroke:var(--z-ink,#26303d);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+    .skin{fill:var(--z-skin,#b8df9d)}.shade{fill:var(--z-skin-shadow,#83b27e)}
+    .suit{fill:var(--z-suit,#515c82)}.trim{fill:var(--z-trim,#fff2dd)}
+    .eye{fill:var(--z-eye,#26303d)}.light{fill:var(--z-light,#fffef8)}.accent{fill:var(--z-accent,#f9a981)}
+  </style>
+  <ellipse cx="160" cy="337" rx="70" ry="9" fill="#26303d" opacity=".09"/>
+  <g class="ink">
+    <rect class="accent" x="105" y="221" width="108" height="78" rx="19"/>
+    <path class="suit" d="M116 286v35h32l8-34m12 0 9 34h31v-35"/>
+    <path class="trim" d="M115 313q-17 6-16 19h51v-19m26 0v19h48q1-15-19-19"/>
+    <path class="suit" d="M107 242q-14 19-6 67 57 14 115 0 9-44-5-67"/>
+    <path class="suit" d="M109 248q-29 9-36 28l17 14 29-29m88-12q16 10 28 0l14-21 19 10-21 34q-19 17-38 8"/>
+    <path class="trim" d="M72 272q-15-6-21 4-8 8 0 17 6 6 18-1l16-8m177-52q-4-15 5-22l9-5q9-4 11 2 1 5-8 12 13-3 15 3 2 8-12 13l-11 3"/>
+    <path class="accent" d="m68 274 22 13-6 11-24-14zm180-45 23 8-5 13-24-9z"/>
+    <path class="trim" d="M111 228q48-15 98 0l5 17q-55 16-107 0z"/>
+    <path d="M159 255v52" stroke-width="3"/>
+    <rect class="accent" x="173" y="261" width="30" height="29" rx="8" stroke-width="3"/>
+    <path d="M181 269h13l-13 12h13" stroke-width="3"/>
+    <rect class="trim" x="117" y="271" width="27" height="16" rx="5" stroke-width="3"/>
+    <circle class="accent" cx="123" cy="299" r="3" stroke="none"/>
+    <circle class="skin" cx="134" cy="299" r="3" stroke="none"/>
+    <circle cx="158" cy="147" r="105" fill="var(--z-helmet,#e7eee8)"/>
+    <path class="shade" d="m102 146-19-11-4 21 22 18m116-28 19-11 4 21-22 18"/>
+    <path d="M139 106q-9-21-3-38m47 38q12-13 12-31" stroke-width="4"/>
+    <circle class="accent" cx="136" cy="67" r="7" stroke-width="3"/>
+    <circle class="accent" cx="195" cy="74" r="6" stroke-width="3"/>
+    <path class="skin" d="M96 151q0-48 62-50 63 0 65 48 1 52-49 75-16 7-31-1-45-24-47-72z"/>
+    <ellipse class="eye" cx="132" cy="159" rx="16" ry="23" transform="rotate(-12 132 159)"/>
+    <ellipse class="eye" cx="187" cy="159" rx="16" ry="23" transform="rotate(12 187 159)"/>
+    <g class="light" stroke="none"><ellipse cx="127" cy="151" rx="5" ry="6"/><ellipse cx="182" cy="151" rx="5" ry="6"/><circle cx="139" cy="171" r="3"/><circle cx="194" cy="171" r="3"/></g>
+    <path d="M145 200q15 12 30-1" stroke-width="4"/>
+    <g class="shade" stroke="none"><ellipse cx="114" cy="192" rx="9" ry="4"/><ellipse cx="205" cy="192" rx="9" ry="4"/></g>
+    <path d="M76 124q8-43 43-57m-46 71-1 8" stroke="var(--z-light,#fffef8)" stroke-width="9"/>
+    <path d="M225 204q-22 23-58 28" stroke="var(--z-light,#fffef8)" stroke-width="5" opacity=".75"/>
+    <path class="accent" d="m276 64 4 10 10 4-10 4-4 10-4-10-10-4 10-4z" stroke-width="3"/>
+    <path d="M37 183v12m-6-6h12" stroke-width="3"/>
+  </g>
+</svg>

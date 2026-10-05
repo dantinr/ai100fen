@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 360" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">02 独眼 Z · 好奇的小观察员</title>
+  <desc id="desc">奶黄色的独眼外星人，有一根环形触角，穿紫色背带服，抱着星球。</desc>
+  <style>
+    .ink{stroke:var(--z-ink,#272532);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+    .skin{fill:var(--z-skin,#ffe38b)}.shade{fill:var(--z-skin-shadow,#e8ba58)}
+    .suit{fill:var(--z-suit,#a99bdc)}.trim{fill:var(--z-trim,#d9cef2)}
+    .eye{fill:var(--z-eye,#272532)}.light{fill:var(--z-light,#fffef8)}.accent{fill:var(--z-accent,#a7dccc)}
+  </style>
+  <ellipse cx="160" cy="337" rx="67" ry="9" fill="#272532" opacity=".09"/>
+  <g class="ink">
+    <path class="shade" d="M113 291v26q-14-2-19 13h44l6-35m34 0 6 35h43q-3-14-18-13v-26"/>
+    <path class="skin" d="M107 214q-26 25-16 67 13 37 70 37 57 0 69-37 10-44-22-69"/>
+    <path class="suit" d="M91 262q68 24 139 0l-4 39q-23 18-67 17-41 0-65-16z"/>
+    <path class="trim" d="m109 230 15-4 10 58-17 1zm84-4 15 4-8 55-17-1z"/>
+    <circle class="accent" cx="126" cy="270" r="5" stroke-width="3"/>
+    <circle class="accent" cx="193" cy="270" r="5" stroke-width="3"/>
+    <rect class="trim" x="147" y="287" width="26" height="24" rx="7" stroke-width="3"/>
+    <path d="M155 294h11l-11 9h11" stroke-width="3"/>
+    <path d="M159 99V67q0-35 22-31 16 3 12 20-5 14-18 8"/>
+    <circle class="accent" cx="173" cy="62" r="7"/>
+    <path class="shade" d="m91 130-24-12 1 28 21 17m142-33 23-12-1 28-20 17"/>
+    <path class="skin" d="M82 153q-5-57 78-61 80 0 80 61 0 57-78 82-78-22-80-82z"/>
+    <path d="M105 125q17-17 42-18" stroke="var(--z-light,#fffef8)" stroke-width="7" opacity=".6"/>
+    <path class="shade" d="M121 128q41-24 79 0" stroke-width="3"/>
+    <ellipse class="light" cx="160" cy="160" rx="44" ry="38"/>
+    <ellipse class="eye" cx="166" cy="158" rx="24" ry="28" stroke="none"/>
+    <g class="light" stroke="none"><ellipse cx="158" cy="148" rx="7" ry="9"/><circle cx="178" cy="172" r="4"/></g>
+    <ellipse class="shade" cx="104" cy="183" rx="10" ry="5" stroke="none"/>
+    <ellipse class="shade" cx="216" cy="183" rx="10" ry="5" stroke="none"/>
+    <path d="M147 210q14 11 29 0" stroke-width="4"/>
+    <circle class="accent" cx="251" cy="250" r="30"/>
+    <ellipse cx="251" cy="250" rx="44" ry="11" transform="rotate(-23 251 250)" stroke-width="4"/>
+    <circle class="light" cx="242" cy="239" r="6" stroke="none"/>
+    <path class="skin" d="M211 241q11-8 20-3 9 6-3 14l-5 10q-4 7-14 0"/>
+    <path class="skin" d="M100 235q-20 6-24 20l3 15q-7 7-15 1-11-18 1-31 13-18 32-15"/>
+    <path d="M38 143v12m-6-6h12m229-21v12m-6-6h12" stroke-width="3"/>
+  </g>
+</svg>

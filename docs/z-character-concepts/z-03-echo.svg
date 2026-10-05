@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 360" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">03 星耳 Z · 会认真听的小伙伴</title>
+  <desc id="desc">薄荷蓝外星人，拥有宽大的星耳，穿米白探险服和珊瑚色围巾。</desc>
+  <style>
+    .ink{stroke:var(--z-ink,#203333);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+    .skin{fill:var(--z-skin,#9bded5)}.shade{fill:var(--z-skin-shadow,#66bbae)}
+    .suit{fill:var(--z-suit,#fff2d7)}.trim{fill:var(--z-trim,#f58f7b)}
+    .eye{fill:var(--z-eye,#203333)}.light{fill:var(--z-light,#fffef8)}.accent{fill:var(--z-accent,#ffdc65)}
+  </style>
+  <ellipse cx="160" cy="337" rx="65" ry="9" fill="#203333" opacity=".09"/>
+  <g class="ink">
+    <path class="shade" d="M123 287v29q-19 0-20 15h44l7-44m18 0 6 44h42q-1-15-18-15v-29"/>
+    <path class="suit" d="M115 232q-20 20-17 71 27 19 121 0 2-49-23-71"/>
+    <path class="suit" d="M101 245q-17 15-19 43l17 6 21-39m88-8q17 15 19 42l-17 6-18-40"/>
+    <path class="skin" d="M84 282q-14 8-9 19 4 11 17 5l6-16m127-8q14 8 9 19-4 11-17 5l-6-16"/>
+    <path class="trim" d="m81 283 22 6-4 11-23-7zm128 6 19-7 7 13-22 7z"/>
+    <path d="M161 256v48" stroke-width="3"/>
+    <path class="trim" d="M125 228h73l-6 24h-70z"/>
+    <path class="trim" d="m182 245 10 42 22-10-19-35"/>
+    <path d="m195 273 12-6" stroke-width="3"/>
+    <rect class="accent" x="115" y="269" width="27" height="25" rx="7" stroke-width="3"/>
+    <path d="M123 276h11l-11 10h11" stroke-width="3"/>
+    <path class="skin" d="M95 119Q68 80 27 84q-1 32 14 50-12 7-17 17 38 27 75 4m125-37q28-38 69-34 1 32-14 50 12 7 17 17-38 27-76 4"/>
+    <path d="M83 137q-19-21-40-28m194 28q19-21 40-28" stroke="var(--z-skin-shadow,#66bbae)" stroke-width="7"/>
+    <path d="M161 100q-13-20-9-40"/>
+    <path class="accent" d="m153 40 5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2z" stroke-width="4"/>
+    <path class="skin" d="M86 146q0-49 75-54 74 4 74 54 0 68-74 90-75-24-75-90z"/>
+    <path d="M105 127q17-19 38-18" stroke="var(--z-light,#fffef8)" stroke-width="7" opacity=".65"/>
+    <ellipse class="eye" cx="128" cy="163" rx="17" ry="24" transform="rotate(-10 128 163)"/>
+    <ellipse class="eye" cx="195" cy="163" rx="17" ry="24" transform="rotate(10 195 163)"/>
+    <g class="light" stroke="none"><ellipse cx="122" cy="156" rx="5" ry="6"/><ellipse cx="189" cy="156" rx="5" ry="6"/><circle cx="134" cy="175" r="3"/><circle cx="201" cy="175" r="3"/></g>
+    <path d="M115 131q10-6 20-3m48 0q11-3 20 3" stroke-width="3"/>
+    <g class="shade" stroke="none"><ellipse cx="110" cy="195" rx="10" ry="5"/><ellipse cx="212" cy="195" rx="10" ry="5"/><circle cx="152" cy="192" r="2"/><circle cx="169" cy="192" r="2"/></g>
+    <path d="M146 209q15 10 29-1" stroke-width="4"/>
+    <path d="M51 214v14m-7-7h14m210-22v12m-6-6h12" stroke-width="3"/>
+  </g>
+</svg>

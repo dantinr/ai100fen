@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Z 的六种新模样 · AI100分角色探索</title>
+  <style>
+    :root{color-scheme:light;--paper:#faf8f0;--surface:#fffef9;--ink:#262b27;--muted:#687067;--line:#dcded2;--accent:#d6edaa;--stage:#f1f2e8;--dots:#d9dfce;--radius:22px}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.6}
+    button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer}a{color:inherit}button:focus-visible,a:focus-visible{outline:3px solid #597a3c;outline-offset:4px}
+    .wrap{width:min(1216px,calc(100% - 64px));margin:auto}.header{padding:47px 0 28px}.eyebrow{display:flex;align-items:center;gap:11px;font-size:12px;font-weight:700;letter-spacing:.1em}.wordmark{font-weight:900;font-size:14px;letter-spacing:0}.dot{width:5px;height:5px;border-radius:50%;background:var(--ink)}
+    .intro{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-top:15px}h1{font-size:43px;line-height:1.2;letter-spacing:-.045em;margin:0;font-weight:900}.intro p{font-size:14px;color:var(--muted);margin:13px 0 0}.switch{display:flex;gap:5px;padding:5px;border:1px solid var(--line);border-radius:999px;background:var(--surface);flex-shrink:0}.switch button{border:0;padding:7px 17px;background:transparent;border-radius:999px;font-size:12px;font-weight:700}.switch button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:13px;overflow:hidden}.stage{position:relative;height:265px;background-color:var(--stage);background-image:radial-gradient(var(--dots) 1px,transparent 1px);background-size:12px 12px;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden}.stage>img{width:220px;height:247px;object-fit:contain}.number{position:absolute;left:16px;top:13px;font-size:12px;font-weight:700;letter-spacing:.04em;opacity:.5}.stage-tag{position:absolute;right:13px;top:12px;font-size:10px;line-height:1.7;letter-spacing:.08em;color:var(--muted)}
+    .info{padding:16px 9px 6px}.name-row{display:flex;justify-content:space-between;gap:8px;align-items:center}h2{margin:0;font-size:20px;font-weight:900;letter-spacing:-.02em}.trait{border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-size:10px;color:var(--muted);white-space:nowrap}.description{margin:7px 0 12px;font-size:12px;color:var(--muted)}.card-bottom{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:9px}.small-samples{display:flex;align-items:center;gap:9px}.avatar{display:block;border-radius:50%;background:var(--stage);overflow:hidden;width:40px;height:40px}.avatar.tiny{width:28px;height:28px}.sample-label{font-size:10px;color:var(--muted)}.open{border:0;background:transparent;font-size:12px;font-weight:700;padding:7px 0 7px 10px}.open span{margin-left:7px}.footer{padding:22px 0 30px;display:flex;justify-content:space-between;gap:16px;font-size:11px;color:var(--muted)}
+    body[data-background="dark"]{--stage:#253239;--dots:#38454b}body[data-background="dark"] .number,body[data-background="dark"] .stage-tag{color:#dbe7d6}
+    dialog{padding:0;border:1px solid var(--line);border-radius:24px;width:min(860px,calc(100% - 32px));max-height:calc(100dvh - 32px);color:var(--ink);background:var(--surface)}dialog::backdrop{background:rgba(25,32,27,.55)}.detail{display:grid;grid-template-columns:1.1fr 1fr}.detail-stage{background-color:var(--stage);background-image:radial-gradient(var(--dots) 1px,transparent 1px);background-size:12px 12px;min-height:430px;display:grid;place-items:center}.detail-stage img{width:min(90%,320px)}.detail-copy{padding:34px 28px;position:relative}.close{position:absolute;right:17px;top:13px;border:0;background:transparent;width:36px;height:36px;font-size:25px}.detail-id{font-size:12px;letter-spacing:.1em;color:var(--muted);margin:14px 0 8px}.detail-copy h2{font-size:29px}.detail-copy p{font-size:13px;color:var(--muted);margin:13px 0 24px}.detail-avatars{display:flex;align-items:flex-end;gap:18px;margin:25px 0 29px}.detail-avatars>div{display:grid;gap:8px;justify-items:center;font-size:10px;color:var(--muted)}.detail-avatars .avatar{width:72px;height:72px}.detail-avatars .avatar.mid{width:48px;height:48px}.detail-avatars .avatar.mini{width:32px;height:32px}.downloads{display:flex;gap:10px;flex-wrap:wrap}.downloads a{font-size:12px;font-weight:700;border:1px solid var(--line);border-radius:999px;padding:9px 16px;text-decoration:none}.downloads a:first-child{background:var(--accent);border-color:var(--accent)}.detail-copy .note{font-size:11px;margin:18px 0 0}
+    @media(min-width:1600px){.wrap{width:1320px}.stage{height:294px}.stage>img{width:245px;height:276px}}
+    @media(max-width:900px){.wrap{width:calc(100% - 40px)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.intro{align-items:flex-start}h1{font-size:34px}.stage>img{width:200px;height:225px}.trait{font-size:9px}}
+    @media(max-width:590px){.wrap{width:calc(100% - 32px)}.header{padding-top:29px}.intro{display:block;margin-top:20px}h1{font-size:33px}.intro p{font-size:12px}.switch{display:inline-flex;margin-top:18px}.grid{grid-template-columns:1fr;gap:16px}.stage{height:278px}.stage>img{width:237px;height:267px}.info{padding:14px 8px 5px}.description{font-size:12px}.footer{display:block;font-size:10px}.footer span{display:block;margin:4px 0}.detail{grid-template-columns:1fr}.detail-stage{min-height:270px}.detail-stage img{width:220px;height:248px}.detail-copy{padding:20px 24px 26px}.detail-copy p{margin-bottom:15px}.detail-avatars{margin:18px 0}.detail-id{margin-top:0}}
+  </style>
+</head>
+<body data-background="light">
+  <main class="wrap">
+    <header class="header">
+      <div class="eyebrow"><span class="wordmark">AI100分</span><span class="dot"></span><span>Z / CHARACTER STUDIES</span></div>
+      <div class="intro">
+        <div><h1>给 Z 多一点性格。</h1><p>六种新模样，同一个愿望：陪你把第一步做成。</p></div>
+        <div class="switch" role="group" aria-label="预览背景"><button type="button" data-background="light" aria-pressed="true">浅底</button><button type="button" data-background="dark" aria-pressed="false">深底</button></div>
+      </div>
+    </header>
+    <section class="grid" aria-label="六款 Z 形象候选">
+      <article class="card">
+        <div class="stage"><span class="number">01</span><span class="stage-tag">SCOUT</span><img src="z-01-scout.svg" width="320" height="360" alt="豆豆 Z：双触角绿皮肤，橙色飞行服，挥手打招呼"></div>
+        <div class="info"><div class="name-row"><h2>豆豆 Z</h2><span class="trait">亲切 · 熟悉</span></div><p class="description">双触角、大眼睛，一见面就想打个招呼。</p><div class="card-bottom"><div class="small-samples" data-samples="scout"></div><button class="open" type="button" data-open="scout" aria-label="放大查看豆豆 Z">放大看<span aria-hidden="true">↗</span></button></div></div>
+      </article>
+      <article class="card">
+        <div class="stage"><span class="number">02</span><span class="stage-tag">ORBIT</span><img src="z-02-orbit.svg" width="320" height="360" alt="独眼 Z：奶黄色圆头，一只大眼睛，抱着小星球"></div>
+        <div class="info"><div class="name-row"><h2>独眼 Z</h2><span class="trait">好奇 · 呆萌</span></div><p class="description">一只大眼睛，也能发现很多新可能。</p><div class="card-bottom"><div class="small-samples" data-samples="orbit"></div><button class="open" type="button" data-open="orbit" aria-label="放大查看独眼 Z">放大看<span aria-hidden="true">↗</span></button></div></div>
+      </article>
+      <article class="card">
+        <div class="stage"><span class="number">03</span><span class="stage-tag">ECHO</span><img src="z-03-echo.svg" width="320" height="360" alt="星耳 Z：薄荷蓝大耳朵，戴珊瑚色围巾"></div>
+        <div class="info"><div class="name-row"><h2>星耳 Z</h2><span class="trait">温柔 · 专注</span></div><p class="description">先听你说，再一起找出下一步。</p><div class="card-bottom"><div class="small-samples" data-samples="echo"></div><button class="open" type="button" data-open="echo" aria-label="放大查看星耳 Z">放大看<span aria-hidden="true">↗</span></button></div></div>
+      </article>
+      <article class="card">
+        <div class="stage"><span class="number">04</span><span class="stage-tag">JELLY</span><img src="z-04-jelly.svg" width="320" height="360" alt="软糖 Z：紫色软糖身体，三只眼睛，背橙色挎包"></div>
+        <div class="info"><div class="name-row"><h2>软糖 Z</h2><span class="trait">松弛 · 灵动</span></div><p class="description">软乎乎的灵感搭子，总有一个新角度。</p><div class="card-bottom"><div class="small-samples" data-samples="jelly"></div><button class="open" type="button" data-open="jelly" aria-label="放大查看软糖 Z">放大看<span aria-hidden="true">↗</span></button></div></div>
+      </article>
+      <article class="card">
+        <div class="stage"><span class="number">05</span><span class="stage-tag">COMET</span><img src="z-05-comet.svg" width="320" height="360" alt="彗星 Z：桃色长头型，后掠长触角，穿深色飞行夹克"></div>
+        <div class="info"><div class="name-row"><h2>彗星 Z</h2><span class="trait">轻巧 · 利落</span></div><p class="description">长触角、轻悬浮，准备好了就出发。</p><div class="card-bottom"><div class="small-samples" data-samples="comet"></div><button class="open" type="button" data-open="comet" aria-label="放大查看彗星 Z">放大看<span aria-hidden="true">↗</span></button></div></div>
+      </article>
+      <article class="card">
+        <div class="stage"><span class="number">06</span><span class="stage-tag">COSMO</span><img src="z-06-cosmo.svg" width="320" height="360" alt="宇航 Z：透明圆头盔里的绿色小外星人，穿深蓝宇航服"></div>
+        <div class="info"><div class="name-row"><h2>宇航 Z</h2><span class="trait">探索 · 可靠</span></div><p class="description">戴上小头盔，陪你探索未知的那一步。</p><div class="card-bottom"><div class="small-samples" data-samples="cosmo"></div><button class="open" type="button" data-open="cosmo" aria-label="放大查看宇航 Z">放大看<span aria-hidden="true">↗</span></button></div></div>
+      </article>
+    </section>
+    <footer class="footer"><span>原创矢量候选 · 2026.10.04 · 点击查看全身与 72 / 48 / 32px 头像</span><span>角色外观探索，当前尚未选定最终形象。</span></footer>
+  </main>
+  <dialog id="detail-dialog" aria-labelledby="detail-name">
+    <div class="detail"><div class="detail-stage"><img id="detail-image" width="320" height="360" alt=""></div><div class="detail-copy">
+      <button class="close" type="button" aria-label="关闭放大预览">×</button><div class="detail-id" id="detail-id"></div><h2 id="detail-name"></h2><p id="detail-description"></p>
+      <div class="detail-avatars" id="detail-avatars" aria-label="不同尺寸头像预览"></div><div class="downloads"><a id="download-svg" download>下载 SVG</a><a id="download-png" download>下载透明 PNG</a></div><p class="note">全身 PNG 为 960 × 1080，头像可从矢量原稿裁切。</p>
+    </div></div>
+  </dialog>
+  <script>
+    const characters = {
+      scout: {id:'01 / SCOUT', name:'豆豆 Z', file:'z-01-scout', crop:'46 23 232 217', description:'保留现有 Z 的绿皮肤、双触角与大眼睛，补上更圆润的头型、橙色飞行服和主动打招呼的姿态。适合延续当前品牌识别。'},
+      orbit: {id:'02 / ORBIT', name:'独眼 Z', file:'z-02-orbit', crop:'62 25 195 217', description:'用一只大眼睛和环形触角建立鲜明轮廓，奶黄与紫色让它显得好奇、轻松。缩成小头像时也容易辨认。'},
+      echo: {id:'03 / ECHO', name:'星耳 Z', file:'z-03-echo', crop:'15 33 290 213', description:'宽大的星耳像在认真听你说话，薄荷蓝与珊瑚色围巾带来亲近感。适合陪用户梳理想法的向导形象。'},
+      jelly: {id:'04 / JELLY', name:'软糖 Z', file:'z-04-jelly', crop:'69 57 185 192', description:'三只眼睛加上柔软的身体，形成更自由的外星生物感。橙色小挎包让角色有生活气息，也给未来表情变化留出空间。'},
+      comet: {id:'05 / COMET', name:'彗星 Z', file:'z-05-comet', crop:'79 8 153 213', description:'长头型、后掠触角和轻悬浮的身体，比圆润款更利落。深色夹克与薄荷色细节让它像一个准备行动的探险伙伴。'},
+      cosmo: {id:'06 / COSMO', name:'宇航 Z', file:'z-06-cosmo', crop:'47 38 221 219', description:'圆头盔与小宇航服强化探索身份，内部仍保留绿皮肤和大眼睛。适合与现有 UFO 视觉一起出现。'}
+    };
+    const namespace = 'http://www.w3.org/2000/svg';
+    function avatar(character, sizeClass = '') {
+      const svg = document.createElementNS(namespace, 'svg');
+      svg.setAttribute('viewBox', character.crop); svg.setAttribute('class', 'avatar ' + sizeClass); svg.setAttribute('aria-hidden', 'true');
+      const image = document.createElementNS(namespace, 'image');
+      image.setAttribute('href', character.file + '.svg'); image.setAttribute('width', '320'); image.setAttribute('height', '360');
+      svg.append(image); return svg;
+    }
+    document.querySelectorAll('[data-samples]').forEach(container => {
+      const character = characters[container.dataset.samples];
+      container.append(avatar(character), avatar(character, 'tiny'));
+      const label = document.createElement('span'); label.className = 'sample-label'; label.textContent = '小头像'; container.append(label);
+    });
+    document.querySelectorAll('.switch button').forEach(button => button.addEventListener('click', () => {
+      document.body.dataset.background = button.dataset.background;
+      document.querySelectorAll('.switch button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    }));
+    const dialog = document.querySelector('#detail-dialog');
+    document.querySelectorAll('[data-open]').forEach(button => button.addEventListener('click', () => {
+      const character = characters[button.dataset.open];
+      const image = document.querySelector('#detail-image'); image.src = character.file + '.svg'; image.alt = character.name + '全身形象';
+      document.querySelector('#detail-id').textContent = character.id;
+      document.querySelector('#detail-name').textContent = character.name;
+      document.querySelector('#detail-description').textContent = character.description;
+      document.querySelector('#download-svg').href = character.file + '.svg'; document.querySelector('#download-png').href = character.file + '.png';
+      const samples = document.querySelector('#detail-avatars'); samples.replaceChildren();
+      [['',72],['mid',48],['mini',32]].forEach(([className,size]) => { const sample = document.createElement('div'); sample.append(avatar(character,className)); const label = document.createElement('span'); label.textContent = size + 'px'; sample.append(label); samples.append(sample); });
+      dialog.showModal();
+    }));
+    document.querySelector('.close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => { if (event.target !== dialog) return; const bounds = dialog.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close(); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 360" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">01 豆豆 Z · 双触角小向导</title>
+  <desc id="desc">绿皮肤、大眼睛的原创外星向导，穿橙色飞行服，抬手打招呼。</desc>
+  <style>
+    .ink{stroke:var(--z-ink,#202824);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+    .skin{fill:var(--z-skin,#bfdf91)}.shade{fill:var(--z-skin-shadow,#91b865)}
+    .suit{fill:var(--z-suit,#ff9b60)}.trim{fill:var(--z-trim,#fff4d9)}
+    .eye{fill:var(--z-eye,#202824)}.light{fill:var(--z-light,#fffef8)}.accent{fill:var(--z-accent,#ffdb58)}
+  </style>
+  <ellipse cx="159" cy="337" rx="66" ry="9" fill="#202824" opacity=".09"/>
+  <g class="ink">
+    <path class="shade" d="M112 292v27q-18 0-18 12h45l6-39m34 0 4 39h46q-1-14-20-13v-26"/>
+    <path class="suit" d="M111 235q-25 20-20 70 32 20 126 0 2-46-28-70"/>
+    <path class="suit" d="M103 247q-15 13-31 8l-13-22-17 8 16 36q26 16 49-5"/>
+    <path class="skin" d="M58 241q-13 0-20-15l-8-13q-4-8 3-10 5-1 12 11l-4-20q-1-9 6-9 7 0 9 18l5-17q3-8 8-5 6 3 1 20l9-7q8-5 10 2 2 7-15 20l-1 12z"/>
+    <path class="trim" d="m42 244 22-12 8 14-21 12z"/>
+    <path class="suit" d="M207 248q21 13 29 42l-16 8-25-35"/>
+    <path class="skin" d="M237 286q10 3 11 13 1 11-9 13-8 1-12-8l-4-8"/>
+    <path class="trim" d="m218 289 18-6 5 14-18 7z"/>
+    <path class="skin" d="M129 221v20l29 21 27-23v-20"/>
+    <path class="trim" d="m112 237 22-3 25 18 26-18 21 9-27 25-20-13-18 12z"/>
+    <path d="M158 259v49" stroke-width="3"/>
+    <rect class="trim" x="179" y="265" width="24" height="25" rx="7"/>
+    <path d="M185 273h11l-11 9h11" stroke-width="3"/>
+    <path class="shade" d="m91 138-30 6 13 32 25-8m131-30 28 7-12 30-22-7"/>
+    <path d="M123 103q-24-33-11-60m85 63q24-23 25-49"/>
+    <circle class="accent" cx="114" cy="40" r="10"/>
+    <circle class="accent" cx="222" cy="55" r="8"/>
+    <path class="skin" d="M86 145q-3-58 73-59 77-3 78 59 2 49-54 85-25 14-48-1-51-33-49-84z"/>
+    <path d="M101 130q11-24 39-28" stroke="var(--z-light,#fffef8)" stroke-width="7" opacity=".6"/>
+    <path d="m154 114 7-5 7 5-7 5z" class="shade" stroke="none"/>
+    <ellipse class="eye" cx="127" cy="163" rx="19" ry="28" transform="rotate(-16 127 163)"/>
+    <ellipse class="eye" cx="193" cy="163" rx="19" ry="28" transform="rotate(16 193 163)"/>
+    <g class="light" stroke="none"><ellipse cx="121" cy="153" rx="5" ry="7"/><ellipse cx="187" cy="153" rx="5" ry="7"/><circle cx="136" cy="176" r="3"/><circle cx="201" cy="176" r="3"/></g>
+    <path d="M119 125q9-5 18 0m46 0q10-5 18 1" stroke-width="3"/>
+    <ellipse class="shade" cx="110" cy="199" rx="10" ry="5" stroke="none"/>
+    <ellipse class="shade" cx="209" cy="199" rx="10" ry="5" stroke="none"/>
+    <path d="M143 204q17 15 35-1" stroke-width="4"/>
+    <path class="accent" d="m267 95 4 11 11 4-11 4-4 11-4-11-11-4 11-4z" stroke-width="3"/>
+    <path d="M56 90v12m-6-6h12" stroke-width="3"/>
+  </g>
+</svg>

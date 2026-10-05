@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 360" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">04 软糖 Z · 三只眼睛的灵感搭子</title>
+  <desc id="desc">紫色软糖形外星人，有三只眼睛、柔软的小手和橙色挎包。</desc>
+  <style>
+    .ink{stroke:var(--z-ink,#302738);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+    .skin{fill:var(--z-skin,#c6b0e7)}.shade{fill:var(--z-skin-shadow,#a78acb)}
+    .suit{fill:var(--z-suit,#ffac83)}.trim{fill:var(--z-trim,#ffdb91)}
+    .eye{fill:var(--z-eye,#302738)}.light{fill:var(--z-light,#fffef8)}.accent{fill:var(--z-accent,#a3dccc)}
+  </style>
+  <ellipse cx="160" cy="337" rx="74" ry="9" fill="#302738" opacity=".09"/>
+  <g class="ink">
+    <path class="shade" d="M83 256q-21-5-29-24-5-13-14-7-9 7 2 27 17 27 44 29m148-18q24-3 34-21 6-13 15-6 8 8-6 26-17 23-44 25"/>
+    <path class="skin" d="M92 148q2-43 38-64 10-8 13-22 20 5 22 22 60-5 68 58 9 49 20 98 13 52-8 73-16 16-42 8-11 19-34 8-18 9-35-3-24 11-40-5-34-25-20-72 15-53 18-101z"/>
+    <path d="M112 137q6-29 25-37" stroke="var(--z-light,#fffef8)" stroke-width="8" opacity=".6"/>
+    <path class="shade" d="M85 275q3 24 16 31 8 6 26 1 15 13 29 8 17 13 34 1 16 8 27-4 18 6 29-7-1 15-13 19-17 7-31-3-11 19-33 8-18 9-35-3-25 12-42-6-14-18-7-45z" stroke="none"/>
+    <ellipse class="light" cx="115" cy="174" rx="20" ry="25" transform="rotate(-12 115 174)" stroke-width="4"/>
+    <ellipse class="light" cx="160" cy="155" rx="20" ry="27" stroke-width="4"/>
+    <ellipse class="light" cx="205" cy="174" rx="20" ry="25" transform="rotate(12 205 174)" stroke-width="4"/>
+    <g class="eye" stroke="none"><ellipse cx="119" cy="177" rx="10" ry="15"/><ellipse cx="164" cy="158" rx="10" ry="16"/><ellipse cx="208" cy="177" rx="10" ry="15"/></g>
+    <g class="light" stroke="none"><circle cx="116" cy="172" r="4"/><circle cx="160" cy="152" r="4"/><circle cx="205" cy="172" r="4"/></g>
+    <g class="shade" stroke="none"><ellipse cx="107" cy="211" rx="11" ry="5"/><ellipse cx="215" cy="211" rx="11" ry="5"/><circle cx="101" cy="241" r="3"/><circle cx="115" cy="250" r="4"/><circle cx="103" cy="263" r="2"/></g>
+    <path d="M144 209q15 17 33-1" stroke-width="4"/>
+    <path d="M113 225q44 25 103 50" stroke="var(--z-suit,#ffac83)" stroke-width="12"/>
+    <path d="M110 219q47 25 109 48m-107-35q51 29 107 46" stroke-width="2.5"/>
+    <rect class="suit" x="202" y="255" width="49" height="48" rx="12" transform="rotate(9 226 279)"/>
+    <path class="trim" d="M203 261q24 10 49 8l-2 14q-23 5-48-8z"/>
+    <path d="m220 274 13 2-14 10 13 2" stroke-width="3"/>
+    <path class="accent" d="m253 95 5 13 13 5-13 5-5 13-5-13-13-5 13-5z" stroke-width="3"/>
+    <path d="M60 152v12m-6-6h12m211-6v10m-5-5h10" stroke-width="3"/>
+  </g>
+</svg>
