@@ -6,22 +6,20 @@
     <nav class="breadcrumb" aria-label="面包屑"><a href="{{ route('series.index') }}">100分钟</a><i data-lucide="chevron-right"></i><span>{{ $series['tag'] }}</span></nav>
     <div class="series-heading">
         <div>
-            <span class="eyebrow">{{ $series['category_label'] }} · {{ $fullFree ? '完整免费' : ($series['available'] ? '首发系列' : '筹备中') }}</span>
             <h1>{{ $series['title'] }}</h1>
-            <p class="series-question">{{ $series['question'] }}，从哪里开始？</p>
             <div class="heading-meta">
                 <span><i data-lucide="clock-3"></i>约{{ $series['minutes'] ?? 100 }}分钟</span>
                 <span><i data-lucide="list-checks"></i>{{ $series['available'] ? (count($series['lessons']).'个步骤') : '大纲准备中' }}</span>
                 <span><i data-lucide="flag"></i>一个可验收的结果</span>
             </div>
         </div>
-        <div class="course-heading-actions"><a class="text-link" href="{{ route('series.index') }}">看看其他问题<i data-lucide="arrow-up-right"></i></a><x-course-share :url="route('series.show', $series['slug'])" :title="$series['title']" :text="$series['outcome']" /></div>
+        <div class="course-heading-actions">
+            <x-course-share :url="route('series.show', $series['slug'])" :title="$series['title']" :text="$series['outcome']" /></div>
     </div>
     <div class="series-layout">
         <div class="series-content">
             <div class="series-image visual-{{ $series['image'] }}"><x-app-course-art :course="$series" /></div>
             <section class="outcome-section">
-                <span class="eyebrow">最后，你会得到什么</span>
                 <h2>{{ $series['outcome'] }}</h2>
                 <ul class="check-list">@foreach($series['deliverables'] as $item)<li><i data-lucide="circle-check"></i>{{ $item }}</li>@endforeach</ul>
             </section>
@@ -46,7 +44,7 @@
                 <p>{{ $series['description'] }}</p>
                 <x-ufo-progress :series="$series['slug']" :score="$serverScore ?? null" label="当前完成度" />
                 @if($series['available'])
-                    <a class="button button-primary full-width" href="{{ $fullFree ? route('free.lesson', [$series['slug'], $series['lessons'][0]['slug']]) : route('lessons.show', ['slug' => $series['slug'], 'lessonSlug' => 'server-and-ip']) }}">{{ $fullFree ? '开始免费学习' : '免费试看第一课' }}<i data-lucide="arrow-right"></i></a>
+                    <a class="button button-primary full-width" href="{{ $fullFree ? route('free.lesson', [$series['slug'], $series['lessons'][0]['slug']]) : route('lessons.show', ['slug' => $series['slug'], 'lessonSlug' => 'server-and-ip']) }}">{{ $fullFree ? '免费学习' : '免费试看第一课' }}<i data-lucide="arrow-right"></i></a>
                 @else
                     <span class="button button-disabled full-width">正在筹备</span>
                 @endif
