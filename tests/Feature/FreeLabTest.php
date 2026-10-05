@@ -213,8 +213,9 @@ class FreeLabTest extends TestCase
         $course->update(['status' => 'published']);
         $this->get(route('courses.show', $course))->assertRedirect(route('series.show', $course->slug));
         $introduction = $this->get('/series/build-a-website')->assertOk()->assertViewIs('frontend.series')
+            ->assertSee('data-course-goal', false)->assertSee($course->final_outcome)
             ->assertSee('class="series-layout"', false)->assertSee('class="series-sidebar"', false)
-            ->assertSee('开始免费学习')->assertSee('data-server-score="0"', false)
+            ->assertSee('免费学习')->assertSee('data-server-score="0"', false)
             ->assertDontSee('data-availability="purchase"', false);
         foreach ($course->lessons()->get() as $lesson) {
             $introduction->assertSee(route('free.lesson', [$course, $lesson->slug]), false)

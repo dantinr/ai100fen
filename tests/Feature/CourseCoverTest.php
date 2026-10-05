@@ -24,7 +24,7 @@ class CourseCoverTest extends TestCase
         Storage::fake('public');
         app(LegacyCourseImporter::class)->run();
         $series = CourseSeries::where('slug', 'build-a-website')->firstOrFail();
-        $this->get('/series/build-a-website')->assertOk()->assertSee('app-course-art', false);
+        $this->get('/series/build-a-website')->assertOk()->assertSee('data-course-goal', false);
 
         $this->administrator();
         Livewire::test(ListCourseSeries::class)->assertTableColumnExists('cover');
@@ -39,10 +39,10 @@ class CourseCoverTest extends TestCase
         $url = Storage::disk('public')->url($path);
         $this->get('/')->assertOk()->assertSee($url);
         $this->get('/series')->assertOk()->assertSee($url);
-        $this->get('/series/build-a-website')->assertOk()->assertSee($url)->assertDontSee('app-course-art', false);
+        $this->get('/series/build-a-website')->assertOk()->assertSee('data-course-goal', false)->assertDontSee($url);
 
         Storage::disk('public')->delete($path);
-        $this->get('/series/build-a-website')->assertOk()->assertSee('app-course-art', false);
+        $this->get('/series/build-a-website')->assertOk()->assertSee('data-course-goal', false);
     }
 
     public function test_cover_upload_rejects_non_image_files(): void

@@ -1,4 +1,10 @@
 /* Structure, spacing, responsive layout and interaction contracts. */
+.course-goal-cover { display:flex; flex-direction:column; justify-content:center; gap:20px; min-height:240px; padding:32px; min-width:0; }
+.course-goal-cover h2 { display:flex; align-items:center; gap:8px; font-size:13px; margin:0; }
+.course-goal-cover h2 svg { width:18px; height:18px; flex:none; }
+.course-goal-cover p { margin:0; font-size:clamp(20px,2vw,26px); line-height:1.8; overflow-wrap:anywhere; }
+.course-goal-cover + .lesson-outline { margin-top:28px; }
+@media(max-width:760px) { .course-goal-cover { min-height:220px; padding:24px 20px; gap:16px; } }
 .clipboard-copy-buffer { position:fixed; top:0; left:0; width:1px; height:1px; padding:0; opacity:0; pointer-events:none; }
 .lesson-title-with-agent { display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; }
 .lesson-agent-mark { display:inline-flex; align-items:center; gap:3px; flex:none; vertical-align:middle; }
@@ -452,6 +458,8 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .check-list { padding:0; margin:0; list-style:none; }
 .check-list li { display:flex; align-items:center; gap:10px; margin:12px 0; font-size:13px; }
 .check-list svg { width:16px; height:16px; }
+.course-goal-cover .check-list li { align-items:flex-start; font-size:16px; line-height:1.8; }
+.course-goal-cover .check-list svg { flex:none; margin-top:6px; }
 .lesson-outline>.section-heading { margin-bottom:18px; }
 .muted { font-size:12px; }
 .outline-row { display:flex; align-items:center; gap:20px; padding:20px 0; }
@@ -460,7 +468,7 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .outline-row p { font-size:12px; margin-top:4px; }
 .outline-state { margin-left:auto; white-space:nowrap; font-size:11px; }
 .outline-state.free { padding:3px 7px; }
-.outline-row>svg { width:16px; height:16px; }
+.outline-row>svg { width:16px; height:16px; flex:none; }
 .series-sidebar { position:sticky; top:26px; }
 .purchase-panel { padding:26px; }
 .purchase-panel h2 { font-size:21px; line-height:1.6; margin:10px 0; }

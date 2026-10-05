@@ -610,3 +610,6 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .lesson-video .prism-player .prism-controlbar { background:color-mix(in srgb,var(--color-code-bg) 92%,transparent); }
 .lesson-video .prism-player .prism-time-display { color:var(--color-code-text); }
 .lesson-compact-meta { color:var(--color-text-muted); }
+.course-goal-cover { color:var(--color-text); background:var(--color-success-surface); border:var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-card); }
+.course-goal-cover h2 { font-weight:var(--weight-strong); }
+.course-goal-cover p { font-weight:var(--weight-strong); }

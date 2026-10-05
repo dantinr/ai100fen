@@ -18,19 +18,16 @@
     </div>
     <div class="series-layout">
         <div class="series-content">
-            <div class="series-image visual-{{ $series['image'] }}"><x-app-course-art :course="$series" /></div>
-            <section class="outcome-section">
-                <h2>{{ $series['outcome'] }}</h2>
-                <ul class="check-list">@foreach($series['deliverables'] as $item)<li><i data-lucide="circle-check"></i>{{ $item }}</li>@endforeach</ul>
-            </section>
+            <x-course-goal-cover :goal="$series['outcome']">
+                <ul class="check-list">@foreach($series['deliverables'] as $item)<li><i data-lucide="flag" aria-hidden="true"></i>{{ $item }}</li>@endforeach</ul>
+            </x-course-goal-cover>
             <section class="lesson-outline">
-                <div class="section-heading row-heading"><h2>你的100分路径</h2><span class="muted">{{ $series['available'] ? ('每一步，约'.($series['lessons'][0]['minutes'] ?? 10).'分钟') : '内容正在细化' }}</span></div>
                 @forelse($series['lessons'] as $lesson)
                     <a @class(['outline-row', 'is-completed' => in_array($lesson['slug'], $completedLessonSlugs, true)]) href="{{ $fullFree ? route('free.lesson', [$series['slug'], $lesson['slug']]) : route('lessons.show', ['slug' => $series['slug'], 'lessonSlug' => $lesson['slug']]) }}" data-lesson-row="{{ $lesson['slug'] }}">
                         <span class="outline-index" aria-label="第{{ $loop->iteration }}课">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                         <div><h3 class="lesson-title-with-agent"><span>{{ $lesson['title'] }}</span><x-lesson-agent-mark :course="$series['slug']" :lesson="$lesson['slug']" /><x-lesson-completion :completed="in_array($lesson['slug'], $completedLessonSlugs, true)" /></h3><p>{{ $lesson['summary'] }}</p></div>
                         <span class="outline-state {{ $lesson['is_free'] ? 'free' : '' }}">{{ $fullFree ? '免费学习' : ($lesson['is_free'] ? '免费试看' : '待发布') }}</span>
-                        <i data-lucide="{{ $lesson['is_free'] ? 'arrow-up-right' : 'lock-keyhole' }}"></i>
+                        <i data-lucide="{{ $lesson['is_free'] ? 'play' : 'lock-keyhole' }}" aria-hidden="true"></i>
                     </a>
                 @empty
                     <div class="preparing-outline"><i data-lucide="notebook-pen"></i><h3>先把问题拆清楚，再带你做成。</h3><p>这个系列正在准备目标、步骤与验收方式，暂未开放购买。</p></div>
