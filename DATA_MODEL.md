@@ -174,6 +174,7 @@ Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一�
 - `course_series.description`：nullable text，Markdown课程介绍；`objectives`：nullable JSON字符串数组，课程目标清单。沿用六项宪章字段，不以目标清单代替最终验收。
 - `lessons.objectives`：nullable JSON字符串数组；`content`：nullable longtext，Markdown正文；`video_url`：nullable text，校验HTTPS链接，D-053在可访问课时页通过Aliplayer内嵌播放（HLS/MP4等直连媒体地址），公开介绍页不输出播放地址。无新增视频字段，PlayAuth/签名及DRM未实现；本地演示片源不入库、不代替真实录播。`goal`仍是课时最终目标，`steps`仍是有序标题/正文数组，作为可编辑课时大纲；不新增重复outline表或字段。
 - 课程大纲直接按未归档Lesson.position/id读取标题、目标、状态与分值；后台课时计数和排序集合同样排除归档课。后台排序服务授权、锁课程与课时、校验完整未归档ID集合及所属关系，不允许跨课程排序。主课时列表默认未归档，可切换归档筛选；管理员明确指定归档课地址仍可只读预览。
+- `lessons.video_poster`：nullable varchar(255)，由非破坏性迁移`2026_10_05_010000_add_lesson_video_poster`新增。保存public磁盘`lesson-video-posters/`下JPG/PNG/WebP图片路径；后台单图上传、16:9裁剪、最大2 MB，模型拒绝外部URL、路径穿越或其他目录/类型。可访问课时及管理员预览优先使用该图，未设置或文件缺失时回退课程封面，本地演示最后回退默认演示图。移除、更换或最终删除课程均保留原上传文件，不修改课时发布状态、验收或进度；封面是公开展示图片，不作为受保护的视频/资料附件。
 - 草稿的旧非空文本列保存空字符串，JSON清单保存空数组，新增扩展字段可以为空；数据库不必放宽旧约束。按D-047，课程发布需完整定义与至少一个已发布课时；最终100分和完整免费要求改为Free Lab完整任务筛选，见第3.4节。单课发布仍校验目标、步骤、Prompt与验收。课时结构/状态/分值变更后课程退回草稿，需重新发布。
 - 课时已有LessonProgress时禁止直接修改checks/points/score，所有已有课时禁止移到另一课程；不删除或重置学习记录。后台归档通过status实现。D-050课程删除使用独立deleted_at回收站；单独课时删除仍禁用，只有没有任何学习记录的回收站课程可经管理员确认整体最终删除。
 - `theme_settings`：id、nullable theme、timestamps。只管理id=1的全站配置；null表示跟随APP_THEME，白名单来自config/themes.php，后台显式选择优先，非法值回退注册表默认。尚未迁移时前台继续用环境配置。不是用户偏好表；新增主题及Token仍通过代码登记。

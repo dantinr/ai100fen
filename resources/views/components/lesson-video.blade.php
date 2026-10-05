@@ -7,7 +7,7 @@
     $options = [
         'version' => config('player.sdk_version'),
         'source' => $videoSource,
-        'cover' => $isDemo ? config('player.demo_poster') : $poster,
+        'cover' => $poster ?: ($isDemo ? config('player.demo_poster') : null),
         'license' => ['domain' => config('player.license_domain'), 'key' => config('player.license_key')],
     ];
 @endphp

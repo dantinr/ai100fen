@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class Lesson extends Model
@@ -30,6 +31,9 @@ class Lesson extends Model
             }
             if ($lesson->video_url && (! filter_var($lesson->video_url, FILTER_VALIDATE_URL) || parse_url($lesson->video_url, PHP_URL_SCHEME) !== 'https')) {
                 throw ValidationException::withMessages(['video_url' => '视频地址必须是有效的HTTPS链接。']);
+            }
+            if ($lesson->video_poster !== null && (! is_string($lesson->video_poster) || ! preg_match('~\Alesson-video-posters/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)\z~i', $lesson->video_poster))) {
+                throw ValidationException::withMessages(['video_poster' => '请选择上传的课时播放器封面。']);
             }
             if (! in_array($lesson->status, ['draft', 'published', 'archived'], true)) {
                 throw ValidationException::withMessages(['status' => '请选择有效的课时状态。']);
@@ -73,6 +77,14 @@ class Lesson extends Model
                 $lesson->series()->where('status', 'published')->update(['status' => 'draft']);
             }
         });
+    }
+
+    public function videoPosterUrl(): ?string
+    {
+        return is_string($this->video_poster) && preg_match('~\Alesson-video-posters/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)\z~i', $this->video_poster)
+            && Storage::disk('public')->exists($this->video_poster)
+            ? Storage::disk('public')->url($this->video_poster)
+            : null;
     }
 
     public function series(): BelongsTo

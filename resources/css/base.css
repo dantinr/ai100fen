@@ -918,10 +918,9 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .free-categories { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 24px; }
 .free-categories a { display:flex; align-items:center; min-height:44px; padding:8px 12px; font-size:12px; }
 @media(max-width:760px) { .home-intents { grid-template-columns:1fr; gap:18px; } .home-intent-card { padding:22px; } .home-intent-card h2 { font-size:22px; } }
-.free-hero { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:30px; }
-.free-hero h1 { font-size:clamp(32px,5vw,52px); margin:12px 0; }
-.free-hero p { max-width:630px; line-height:1.8; }
-.free-facts { display:flex; flex-wrap:wrap; gap:12px 22px; margin-top:20px; font-size:12px; }
+.free-lab-intro { margin-bottom:20px; }
+.free-lab-intro h1 { font-size:clamp(28px,3vw,36px); margin:0 0 12px; }
+.free-lab-intro p { max-width:900px; line-height:1.8; }
 .free-panel { padding:26px; margin-bottom:24px; }
 .free-panel h2 { font-size:21px; margin:0 0 16px; }
 .free-panel p { line-height:1.85; }
@@ -998,9 +997,6 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
     .series-heading { flex-direction:column; }
     .course-heading-actions { width:100%; max-width:none; gap:8px; }
     .main-nav.open { flex-wrap:wrap; justify-content:flex-start; gap:0 20px; }
-    .free-hero { gap:12px; align-items:flex-start; }
-    .free-hero .paul-avatar { width:76px; height:96px; flex:none; }
-    .free-hero p { font-size:13px; }
     .free-panel,.free-card { padding:20px; }
     .free-question-form { flex-direction:column; }
     .free-question-form .button { align-self:flex-start; }

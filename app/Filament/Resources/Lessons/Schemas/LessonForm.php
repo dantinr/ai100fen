@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Lessons\Schemas;
 
 use App\Models\Lesson;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -32,7 +33,16 @@ class LessonForm
                     TextInput::make('score')->label('累计展示分值')->numeric()->integer()->minValue(1)->maxValue(100)->required()->default(10)->helperText('标准课程依次10、20至100；最后一课应验收整个任务。'),
                     TextInput::make('points')->label('本课验收权重')->numeric()->integer()->minValue(1)->maxValue(100)->required()->default(10)->helperText('标准课时10；单课完整免费任务100。修改大纲、状态或分值后须重新发布课程。'),
                     Toggle::make('is_free')->label('付费课程的免费试看课时')->default(false)->helperText('完整免费由课程配置决定，此选项只表示单个课时试看。'),
-                    TextInput::make('video_url')->label('视频地址（可选）')->url()->startsWith('https://')->maxLength(2048)->helperText('填写HTTPS视频或录播页面链接。'),
+                ]),
+                Section::make('视频播放器')->schema([
+                    TextInput::make('video_url')->label('视频地址（可选）')->url()->startsWith('https://')->maxLength(2048)->helperText('填写 HTTPS 直连 HLS / MP4 媒体地址，不是视频网站观看页。'),
+                    FileUpload::make('video_poster')->label('播放器封面（可选）')->image()->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                        ->disk('public')->directory('lesson-video-posters')->visibility('public')->maxSize(2048)
+                        ->imageEditor()->imageEditorAspectRatioOptions(['16:9'])->imageAspectRatio('16:9')
+                        ->automaticallyCropImagesToAspectRatio()->automaticallyResizeImagesMode('cover')
+                        ->automaticallyResizeImagesToWidth('1600')->automaticallyResizeImagesToHeight('900')
+                        ->automaticallyUpscaleImagesWhenResizing(false)
+                        ->helperText('播放前展示。建议横图 1600×900（16:9），支持 JPG、PNG、WebP，最大 2 MB。未设置时使用课程封面；更换或移除不会删除原文件。'),
                 ]),
                 Section::make('课时目标与内容')->schema([
                     Textarea::make('intro')->label('课时简介')->default('')->dehydrateStateUsing(fn ($state) => $state ?? ''),

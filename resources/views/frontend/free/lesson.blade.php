@@ -45,7 +45,7 @@
     <div class="free-learning-grid">
         <article class="free-lesson-content">
             @if($hasVideo)
-                <x-lesson-video :source="$lesson->video_url" :poster="$series->coverUrl()" :title="$lesson->title" :compact="true" />
+                <x-lesson-video :source="$lesson->video_url" :poster="$lesson->videoPosterUrl() ?? $series->coverUrl()" :title="$lesson->title" :compact="true" />
                 <nav class="lesson-quick-nav" aria-label="本课内容"><a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a></nav>
             @endif
             <section class="free-panel lesson-goal-panel"><div class="lesson-section-kicker"><i data-lucide="flag"></i>本课的小目标</div>
