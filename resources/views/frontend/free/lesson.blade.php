@@ -51,7 +51,7 @@
             <section class="free-panel lesson-goal-panel"><div class="lesson-section-kicker"><i data-lucide="flag"></i>本课的小目标</div>
                 @if($hasVideo)<h2>你要做成什么？</h2>@else<h2 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /><x-lesson-completion :completed="!$isPreview && (bool) $progress?->completed_at" :lesson="$lesson->id" /></h2><p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p><h3>你要做成什么？</h3>@endif
                 <p class="lesson-goal-result">{{ $lesson->goal }}</p><p>{{ $lesson->intro }}</p>
-                @if($lesson->objectives)<ul>@foreach($lesson->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul>@endif
+                @if($lesson->objectives)<div class="lesson-objectives-inline"><x-lesson-objectives :objectives="$lesson->objectives" /></div>@endif
                 @if($hasVideo && !$isPreview)<x-course-share :url="route('courses.show', $series)" :title="$series->title" :text="$series->final_outcome" />@endif
             </section>
             @if($lesson->content)<section class="free-panel lesson-reading-panel"><div class="lesson-section-kicker"><i data-lucide="book-open"></i>先看清楚，再开始</div><div class="free-markdown">{!! \Illuminate\Support\Str::markdown($lesson->content, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div></section>@endif
@@ -84,18 +84,25 @@
                 @endif
             </section>
         </article>
-        <aside class="free-sidebar"><div class="free-panel lesson-route-panel">
-            <span class="eyebrow">你的任务路线</span><h2>{{ $lesson->title }}</h2>
-            @if(!$isPreview)<p>已验收进度：<strong data-free-percent>{{ $progress?->progress_percent ?? 0 }}%</strong></p><p class="free-note">这是当前步骤的验收进度；完整任务全部通过才达到100分。</p>
-            <p>任务完成：<strong data-free-score>{{ $score }}</strong> / 100分</p>
+        <aside class="free-sidebar" aria-label="当前课时">
+            <div class="free-panel lesson-focus-panel">
+                <div class="lesson-objectives-sidebar"><div class="lesson-section-kicker"><i data-lucide="flag"></i>这一课，要做成什么</div><h2>本课目标</h2><x-lesson-objectives :objectives="$lesson->objectives" :goal="$lesson->goal" /></div>
+                <p class="free-note">第{{ $lesson->position }}节 · 约{{ $lesson->minutes }}分钟 · {{ $lesson->points }}分</p>
+                @if(!$isPreview)<p>本课已验收：<strong data-free-percent>{{ $progress?->progress_percent ?? 0 }}%</strong></p>@endif
+                <a class="text-link lesson-focus-action" href="#lesson-acceptance">{{ $isPreview ? '查看本课验收' : '去验收本课' }}<i data-lucide="arrow-down"></i></a>
+            </div>
+        </aside>
+    </div>
+    <section class="free-panel lesson-route-panel" aria-labelledby="lesson-course-outline-title">
+            <span class="eyebrow">整门课程</span><h2 id="lesson-course-outline-title">{{ $series->title }}</h2>
+            @if(!$isPreview)<p>任务完成：<strong data-free-score>{{ $score }}</strong> / 100分</p>
             @endif
             @foreach($lessons as $item)<a class="free-outline-link" href="{{ route($isPreview ? 'courses.preview' : 'free.lesson', [$series, $item->slug]) }}" @if($item->id === $lesson->id) aria-current="page" @endif><span class="lesson-title-with-agent"><span>{{ $item->position }}. {{ $item->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$item->slug" /><x-lesson-completion :completed="!$isPreview && in_array($item->id, $completedLessonIds ?? [], true)" :lesson="$item->id" /></span></a>@endforeach
             @if($series->description)<details class="free-roles"><summary>课程说明</summary><div class="free-markdown">{!! \Illuminate\Support\Str::markdown($series->description, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div></details>@endif
             @if($series->objectives)<details class="free-roles"><summary>课程目标</summary><ul>@foreach($series->objectives as $objective)<li>{{ $objective }}</li>@endforeach</ul></details>@endif
             <details class="free-roles"><summary>整个任务怎么验收？</summary><ul>@foreach($series->completion_criteria as $criterion)<li>{{ $criterion }}</li>@endforeach</ul></details>
             <details class="free-roles"><summary>Agent 做什么，人判断什么？</summary><h3>Agent 负责</h3><ul>@foreach($series->agent_role as $item)<li>{{ $item }}</li>@endforeach</ul><h3>你来判断</h3><ul>@foreach($series->human_judgment_required as $item)<li>{{ $item }}</li>@endforeach</ul></details>
-        </div></aside>
-    </div>
+    </section>
     <x-course-relations :groups="$relationGroups ?? []" />
 </div>
 @endsection

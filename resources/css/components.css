@@ -130,14 +130,13 @@ a.contribution-cell:hover,a.contribution-cell[aria-current="date"] { outline:2px
 .muted { color:var(--color-text-muted); }
 .outline-row { border-bottom:var(--border-width-thin) var(--border-style-default) var(--color-border); }
 .outline-row:hover { background:var(--color-surface-alt); }
-.outline-score { color:var(--color-text-muted); font-weight:var(--weight-strong); }
-.outline-score small { font-weight:var(--weight-body); }
+.outline-index { color:var(--color-text-muted); font-weight:var(--weight-strong); }
 .outline-row h3 { font-weight:var(--weight-strong); }
 .outline-row p { color:var(--color-text-muted); }
 .outline-state { color:var(--color-text-muted); }
 .outline-state.free { color:var(--color-text); background:var(--color-surface-alt); border-radius:var(--radius-xs); }
 .outline-row>svg { color:var(--color-text-muted); }
-.outline-row.is-completed .outline-score { color:var(--color-text); }
+.outline-row.is-completed .outline-index { color:var(--color-text); }
 .purchase-panel { border:var(--border-width-thin) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); }
 .purchase-panel h2 { font-weight:var(--weight-strong); }
 .purchase-panel>p { color:var(--color-text-muted); }
@@ -413,9 +412,9 @@ body.app-ui { background:var(--color-bg); color:var(--color-text); }
 .app-ui .ufo-completion { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); color:var(--color-text); }
 .app-ui .outline-row { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-md); background:var(--color-surface); }
 .app-ui .outline-row:hover { background:var(--color-bg); }
-.app-ui .outline-score { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); border-radius:var(--radius-badge); color:var(--color-text); font-weight:var(--weight-heading); }
+.app-ui .outline-index { border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-highlight); border-radius:var(--radius-badge); color:var(--color-text); font-weight:var(--weight-heading); }
 .app-ui .outline-state.free { color:var(--color-text); border:var(--border-width-default) var(--border-style-default) var(--color-border-strong); background:var(--color-success-surface); font-weight:var(--weight-strong); }
-.app-ui .outline-row.is-completed .outline-score { color:var(--color-text); background:var(--color-success-surface); }
+.app-ui .outline-row.is-completed .outline-index { color:var(--color-text); background:var(--color-success-surface); }
 .app-ui .check-list li { color:var(--color-text-muted); }
 .app-ui .check-list svg { color:var(--color-text); }
 .app-ui .prerequisites>p { border-top-width:var(--border-width-default); }
@@ -597,6 +596,8 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .lesson-route-panel .free-outline-link { border:var(--border-width-thin) var(--border-style-default) transparent; border-radius:var(--radius-md); }
 .lesson-route-panel .free-outline-link[aria-current=page] { background:var(--color-highlight); border-color:var(--color-border-strong); text-decoration:none; }
 .lesson-route-panel .free-outline-link:hover { background:var(--color-bg); }
+.lesson-objectives li + li { border-top:var(--border-width-thin) var(--border-style-default) var(--color-border-muted); }
+.lesson-objectives strong { color:var(--color-text-muted); }
 
 .lesson-video { background:var(--color-surface); border:var(--border-width-strong) var(--border-style-default) var(--color-border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-card); }
 .lesson-video-heading { border-bottom:var(--border-width-default) var(--border-style-default) var(--color-border-strong); }
