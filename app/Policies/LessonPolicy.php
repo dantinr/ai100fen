@@ -14,7 +14,7 @@ class LessonPolicy
 
     public function view(User $user, Lesson $lesson): bool
     {
-        return $user->is_admin === true && $lesson->series()->exists();
+        return $user->is_admin === true && ! $lesson->trashed() && $lesson->series()->exists();
     }
 
     public function create(User $user): bool
@@ -24,7 +24,7 @@ class LessonPolicy
 
     public function update(User $user, Lesson $lesson): bool
     {
-        return $user->is_admin === true && $lesson->series()->exists();
+        return $user->is_admin === true && ! $lesson->trashed() && $lesson->series()->exists();
     }
 
     public function reorder(User $user): bool
@@ -34,10 +34,30 @@ class LessonPolicy
 
     public function delete(User $user, Lesson $lesson): bool
     {
-        return false;
+        return $this->update($user, $lesson) && ! $lesson->progress()->exists();
     }
 
     public function deleteAny(User $user): bool
+    {
+        return $user->is_admin === true;
+    }
+
+    public function restore(User $user, Lesson $lesson): bool
+    {
+        return $user->is_admin === true && $lesson->trashed() && $lesson->series()->exists();
+    }
+
+    public function restoreAny(User $user): bool
+    {
+        return $user->is_admin === true;
+    }
+
+    public function forceDelete(User $user, Lesson $lesson): bool
+    {
+        return false;
+    }
+
+    public function forceDeleteAny(User $user): bool
     {
         return false;
     }

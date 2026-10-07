@@ -178,18 +178,24 @@ Series.is_free开放该系列全部已发布Lesson；Lesson.is_free只开放一�
 - 课程大纲直接按未归档Lesson.position/id读取标题、目标、状态与分值；后台课时计数和排序集合同样排除归档课。后台排序服务授权、锁课程与课时、校验完整未归档ID集合及所属关系，不允许跨课程排序。主课时列表默认未归档，可切换归档筛选；管理员明确指定归档课地址仍可只读预览。
 - `lessons.video_poster`：nullable varchar(255)，由非破坏性迁移`2026_10_05_010000_add_lesson_video_poster`新增。保存public磁盘`lesson-video-posters/`下JPG/PNG/WebP图片路径；后台单图上传、16:9裁剪、最大2 MB，模型拒绝外部URL、路径穿越或其他目录/类型。可访问课时及管理员预览优先使用该图，未设置或文件缺失时回退课程封面，本地演示最后回退默认演示图。移除、更换或最终删除课程均保留原上传文件，不修改课时发布状态、验收或进度；封面是公开展示图片，不作为受保护的视频/资料附件。
 - 草稿的旧非空文本列保存空字符串，JSON清单保存空数组，新增扩展字段可以为空；数据库不必放宽旧约束。按D-047，课程发布需完整定义与至少一个已发布课时；最终100分和完整免费要求改为Free Lab完整任务筛选，见第3.4节。单课发布仍校验目标、步骤、Prompt与验收。课时结构/状态/分值变更后课程退回草稿，需重新发布。
-- 课时已有LessonProgress时禁止直接修改checks/points/score，所有已有课时禁止移到另一课程；不删除或重置学习记录。后台归档通过status实现。D-050课程删除使用独立deleted_at回收站；单独课时删除仍禁用，只有没有任何学习记录的回收站课程可经管理员确认整体最终删除。
+- 课时已有LessonProgress时禁止直接修改checks/points/score，所有已有课时禁止移到另一课程；不删除或重置学习记录。后台归档通过status实现。D-050课程删除使用独立deleted_at回收站；D-055增加课时批量软删除与恢复，任何学习记录阻止该批删除，不提供课时最终删除。只有没有任何学习记录的回收站课程可经管理员确认整体最终删除。
 - `theme_settings`：id、nullable theme、timestamps。只管理id=1的全站配置；null表示跟随APP_THEME，白名单来自config/themes.php，后台显式选择优先，非法值回退注册表默认。尚未迁移时前台继续用环境配置。不是用户偏好表；新增主题及Token仍通过代码登记。
 
 ### D-050课程回收站（当前实现）
 
 迁移`2026_10_04_010000_add_course_recycle_bin`增加可空且有索引的`course_series.deleted_at`，所有既有记录初始为null；Lesson和LessonProgress结构不变。CourseSeries使用SoftDeletes，正常查询与路由绑定排除回收站课程，后台回收站显式onlyTrashed。软删除不改写课时、记录或关系；恢复统一为draft，需重新发布。
 
-最终删除事务锁课程与课时，校验管理员、回收站状态、完整slug及该课程全部课时（含归档）不存在任何LessonProgress。条件满足后经CourseRelationService清理出入向连接、删除全部课时，最后forceDelete课程；条件失败保持全部记录。现有外键仍restrictOnDelete，不改为自动级联，学习记录不能因删除课程被连带删除。上传封面文件不删除。
+最终删除事务锁课程与课时，校验管理员、回收站状态、完整slug及该课程全部课时（含归档及D-055软删除课时）不存在任何LessonProgress。条件满足后经CourseRelationService清理出入向连接、永久删除全部课时，最后forceDelete课程；条件失败保持全部记录。现有外键仍restrictOnDelete，不改为自动级联，学习记录不能因删除课程被连带删除。上传封面文件不删除。
 
 `course_catalog_suppressions`只含slug（varchar150主键）、created_at、updated_at；保存已最终删除slug，阻止旧静态目录/兼容路由和安装命令重新显示或导入，不保存课程内容或个人信息。管理员明确新建同slug课程时删除标记。自动导入同时检查withTrashed记录和该表。回收站课程也不参与课时管理、展示排序、关系目标选择、Free Lab/推荐和学习资料访问；原学习记录仍保留，重新发布后可继续读取。
 
-下列Lesson字段列表仍包含尚未实现的长期设计，以D-031及D-034当前字段为准。
+### D-055课时回收站与批量管理（当前实现）
+
+迁移`2026_10_07_180000_add_lesson_soft_deletes`为lessons增加nullable timestamp `deleted_at`及索引，既有课时初始null，不改写状态、内容或进度。Lesson使用SoftDeletes，deleted_at禁止公开批量赋值；常规Eloquent查询、课程关联和路由排除软删除课时。主课时列表onlyTrashed显示回收站，不提供编辑或最终删除；恢复复用原ID和slug，状态统一draft，原上传文件保留。归档仍使用status，两者不混用；旧静态目录同时过滤匹配课程/slug的删除课时，避免再次开放试看或清单下载。
+
+批量管理通过LessonBulkActionService：管理员权限重新查询、参数/失效选择校验、所属课程及课时行锁、逐课Gate授权和模型发布校验、整批事务；课时有任何学习记录时阻止整批软删除。常规大纲、课时计数、完整免费筛选和进度分母不包含软删除课时，状态/结构变化后课程退回草稿，恢复也须审核后分别发布。课程最终删除显式withTrashed检查课时进度并清理全部课时，既有restrictOnDelete外键不变。
+
+下列Lesson字段列表仍包含尚未实现的长期设计，以D-031、D-034及D-055当前字段为准。
 
 ```text
 id

@@ -4,6 +4,7 @@ namespace App\Support;
 
 use App\Services\CourseAccessService;
 use App\Models\CourseSeries;
+use App\Models\Lesson;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -13,8 +14,18 @@ class FrontendCatalog
     public function all(): array
     {
         $hidden = $this->hiddenSlugs();
+        $deletedLessons = Schema::hasColumn('lessons', 'deleted_at')
+            ? Lesson::onlyTrashed()->whereHas('series')->with('series:id,slug')->get(['id', 'course_series_id', 'slug'])
+                ->groupBy(fn (Lesson $lesson) => $lesson->series->slug)
+            : collect();
 
-        return array_values(array_filter($this->curated(), fn (array $course) => ! in_array($course['slug'], $hidden, true)));
+        return collect($this->curated())->reject(fn (array $course) => in_array($course['slug'], $hidden, true))
+            ->map(function (array $course) use ($deletedLessons): array {
+                $slugs = $deletedLessons->get($course['slug'], collect())->pluck('slug')->all();
+                $course['lessons'] = array_values(array_filter($course['lessons'], fn (array $lesson) => ! in_array($lesson['slug'], $slugs, true)));
+
+                return $course;
+            })->values()->all();
     }
 
     public function isVisible(string $slug): bool

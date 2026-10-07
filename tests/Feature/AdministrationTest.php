@@ -58,12 +58,15 @@ class AdministrationTest extends TestCase
         }
     }
 
-    public function test_top_horizontal_scrollbar_is_scoped_to_course_list(): void
+    public function test_top_horizontal_scrollbar_is_scoped_to_course_and_lesson_lists(): void
     {
         $this->administrator();
 
         $this->get('/galaxy/course-series')->assertOk()->assertSee('课程列表横向滚动');
-        $this->get('/galaxy/lessons')->assertOk()->assertDontSee('课程列表横向滚动');
+        $this->get('/galaxy/lessons')->assertOk()->assertSee('课时列表横向滚动')->assertDontSee('课程列表横向滚动');
+        $this->get('/galaxy/course-series/create')->assertOk()->assertDontSee('课程列表横向滚动')->assertDontSee('课时列表横向滚动');
+        $this->get('/galaxy/lessons/create')->assertOk()->assertDontSee('课时列表横向滚动');
+        $this->get('/galaxy/theme-settings')->assertOk()->assertDontSee('课程列表横向滚动')->assertDontSee('课时列表横向滚动');
     }
 
     public function test_registration_cannot_grant_admin_access_and_cli_requires_confirmation(): void

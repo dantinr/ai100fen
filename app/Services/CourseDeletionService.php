@@ -42,7 +42,7 @@ class CourseDeletionService
             if ($confirmation !== $course->slug) {
                 throw ValidationException::withMessages(['confirmation' => '请输入完整课程地址标识以确认最终删除。']);
             }
-            $lessons = $course->lessons()->lockForUpdate()->get();
+            $lessons = $course->lessons()->withTrashed()->lockForUpdate()->get();
             if (LessonProgress::whereIn('lesson_id', $lessons->modelKeys())->exists()) {
                 throw ValidationException::withMessages(['confirmation' => '此课程已有学习记录，不能最终删除；请保留在回收站或恢复课程。']);
             }
@@ -51,7 +51,7 @@ class CourseDeletionService
                 'created_at' => now(), 'updated_at' => now(),
             ]);
             app(CourseRelationService::class)->removeForDeletedCourse($user, $course);
-            $course->lessons()->delete();
+            $course->lessons()->withTrashed()->forceDelete();
             $course->forceDelete();
         }, 3);
     }

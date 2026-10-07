@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class Lesson extends Model
 {
-    protected $guarded = ['id'];
+    use SoftDeletes;
+
+    protected $guarded = ['id', 'deleted_at'];
 
     protected $attributes = [
         'position' => 1, 'score' => 10, 'points' => 10, 'minutes' => 10,
@@ -26,6 +29,9 @@ class Lesson extends Model
     protected static function booted(): void
     {
         static::saving(function (self $lesson) {
+            if ($lesson->exists && $lesson->trashed() && ! $lesson->isDirty('deleted_at')) {
+                throw ValidationException::withMessages(['lesson' => '请先从课时回收站恢复，再编辑内容。']);
+            }
             if (! $lesson->series()->exists()) {
                 throw ValidationException::withMessages(['course_series_id' => '所属课程不存在或已在回收站，请先恢复课程。']);
             }
@@ -74,6 +80,16 @@ class Lesson extends Model
         static::saved(function (self $lesson) {
             // Structural lesson changes require a course review and republish.
             if ($lesson->wasRecentlyCreated || $lesson->wasChanged(['status', 'points', 'score', 'position'])) {
+                $lesson->series()->where('status', 'published')->update(['status' => 'draft']);
+            }
+        });
+        static::deleting(function (self $lesson) {
+            if ($lesson->progress()->exists()) {
+                throw ValidationException::withMessages(['lessons' => '课时已有学习记录，不能删除；请保留或归档。']);
+            }
+        });
+        static::deleted(function (self $lesson) {
+            if (! $lesson->isForceDeleting()) {
                 $lesson->series()->where('status', 'published')->update(['status' => 'draft']);
             }
         });

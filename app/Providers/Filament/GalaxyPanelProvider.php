@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Http\Middleware\AdminLocale;
 use App\Filament\Resources\CourseSeries\Pages\ListCourseSeries;
+use App\Filament\Resources\Lessons\Pages\ListLessons;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -37,8 +38,13 @@ class GalaxyPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 TablesRenderHook::CONTENT_BEFORE,
-                fn () => view('filament.course-series.top-scrollbar'),
+                fn () => view('filament.tables.top-scrollbar', ['label' => '课程列表横向滚动']),
                 ListCourseSeries::class,
+            )
+            ->renderHook(
+                TablesRenderHook::CONTENT_BEFORE,
+                fn () => view('filament.tables.top-scrollbar', ['label' => '课时列表横向滚动']),
+                ListLessons::class,
             )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

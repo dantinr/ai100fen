@@ -63,7 +63,7 @@
         x-ref="track"
         x-on:scroll="if (content && content.scrollLeft !== $el.scrollLeft) content.scrollLeft = $el.scrollLeft"
         tabindex="0"
-        aria-label="课程列表横向滚动"
+        aria-label="{{ $label }}"
         style="height: 18px; overflow-x: auto; overflow-y: hidden;"
     >
         <div x-ref="spacer" style="height: 1px;"></div>
