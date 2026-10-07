@@ -3,6 +3,15 @@
 @section('description', '了解AI100分：从真实任务出发，用AI解决问题、创作作品、探索可能。由激怒李维斯发起并维护，人负责目标与验收，Agent负责执行。')
 @section('content')
 <div class="shell page-main about-main">
+    <nav class="about-anchor-nav" aria-label="关于页内容导航">
+        <a href="#about-what-title">项目介绍</a>
+        <a href="#about-why-title">发起原因</a>
+        <a href="#about-help-title">能做什么</a>
+        <a href="#about-maintainer-title">维护者</a>
+        <a href="#about-start-title">开始实践</a>
+    </nav>
+
+    <div class="about-content">
     <header class="about-hero">
         <span class="eyebrow">关于 AI100分</span>
         <h1>用 AI，<span class="headline-mark">把一件事做成。</span></h1>
@@ -87,6 +96,48 @@
                 <p>AI100分由<strong>激怒李维斯</strong>发起并持续维护。我是一名有十年开发经验的程序员，也是一名内容创作者，长期关注系统设计、AI辅助开发和个人数字资产。</p>
                 <p>我负责项目的产品设计、开发维护、课程实践与内容更新，并在开发和整理过程中使用AI Agent协助完成具体任务。</p>
                 <p>这里的选题来自实际需求，课程需要经过实做和检验。项目会随着真实使用中的问题持续调整，逐步把零散经验整理成可复用的学习路径。</p>
+                <div class="about-social-links" aria-label="维护者相关入口">
+                    <button class="about-social-link" type="button" popovertarget="about-douyin-codes">抖音<i data-lucide="arrow-down" aria-hidden="true"></i></button>
+                    @if($profileUrl = config('about.maintainer.github'))
+                        <a class="about-social-link" href="{{ $profileUrl }}" target="_blank" rel="noopener noreferrer"><span class="about-social-avatar" aria-hidden="true"><x-paul-avatar :portrait="true" /></span><span>GitHub</span><i data-lucide="arrow-up-right" aria-hidden="true"></i><span class="sr-only">（维护者主页，新标签页打开）</span></a>
+                    @endif
+                    <button class="about-social-link" type="button" popovertarget="about-sovereignty">个人数字主权<i data-lucide="arrow-down" aria-hidden="true"></i></button>
+                </div>
+                <div class="about-douyin-panel" id="about-douyin-codes" popover role="dialog" aria-labelledby="about-douyin-title">
+                    <div class="about-douyin-heading">
+                        <h3 id="about-douyin-title">抖音主页</h3>
+                        <button class="icon-button" type="button" popovertarget="about-douyin-codes" popovertargetaction="hide" aria-label="关闭抖音二维码" autofocus><i data-lucide="x" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="about-douyin-codes">
+                        <figure>
+                            <a href="{{ asset('images/about/douyin-gnlws.png') }}" target="_blank" rel="noopener noreferrer" aria-label="查看激怒李维斯抖音二维码大图（新标签页打开）"><img src="{{ asset('images/about/douyin-gnlws.png') }}" width="758" height="758" alt="激怒李维斯的抖音二维码" loading="lazy"></a>
+                            <figcaption>激怒李维斯</figcaption>
+                        </figure>
+                        <figure>
+                            <a href="{{ asset('images/about/douyin-llditou.png') }}" target="_blank" rel="noopener noreferrer" aria-label="查看流浪地头抖音二维码大图（新标签页打开）"><img src="{{ asset('images/about/douyin-llditou.png') }}" width="1508" height="1508" alt="流浪地头的抖音二维码" loading="lazy"></a>
+                            <figcaption>流浪地头</figcaption>
+                        </figure>
+                    </div>
+                    <p class="about-douyin-hint">打开抖音扫一扫，或点击二维码查看大图。</p>
+                </div>
+                <div class="about-sovereignty-panel" id="about-sovereignty" popover role="dialog" aria-labelledby="about-sovereignty-title">
+                    <div class="about-sovereignty-heading">
+                        <h3 id="about-sovereignty-title">个人数字主权</h3>
+                        <button class="icon-button" type="button" popovertarget="about-sovereignty" popovertargetaction="hide" aria-label="关闭个人数字主权介绍" autofocus><i data-lucide="x" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="about-sovereignty-projects">
+                        <article>
+                            <h4>PDSI · 个人数字主权计划</h4>
+                            <p>研究个人数字主权的定义、框架与方法，让个人在数字生活中保有迁移、替换、恢复和退出的选择。</p>
+                            <a class="text-link" href="{{ config('about.sovereignty.pdsi') }}" target="_blank" rel="noopener noreferrer">访问 PDSI<i data-lucide="arrow-up-right" aria-hidden="true"></i><span class="sr-only">（新标签页打开）</span></a>
+                        </article>
+                        <article>
+                            <h4>CDSI · 创作者数字主权基础设施</h4>
+                            <p>通过 Anchor 建立自有基础设施，通过 Beacon 管理、备份与发布数字资产，让内容和数据可迁移、可恢复、可替换。</p>
+                            <a class="text-link" href="{{ config('about.sovereignty.cdsi') }}" target="_blank" rel="noopener noreferrer">访问 CDSI<i data-lucide="arrow-up-right" aria-hidden="true"></i><span class="sr-only">（新标签页打开）</span></a>
+                        </article>
+                    </div>
+                </div>
                 <p class="about-principle"><strong>人负责目标与验收，Agent负责执行。</strong>这是AI100分希望与你一起实践的工作方式。</p>
             </div>
         </div>
@@ -104,5 +155,6 @@
             <a class="text-link" href="{{ route('commits') }}">查看提交记录<i data-lucide="arrow-right" aria-hidden="true"></i></a>
         </div>
     </section>
+    </div>
 </div>
 @endsection

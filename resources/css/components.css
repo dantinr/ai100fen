@@ -567,6 +567,18 @@ h1,h2,h3 { font-family:var(--font-heading); }
 
 .footer-repo-icon { background:currentColor; border-radius:50%; --paul-skin:var(--color-surface); --paul-skin-shadow:var(--color-surface); --paul-stroke:currentColor; --paul-eye:currentColor; --paul-light:var(--color-surface); --paul-suit-accent:var(--color-surface); }
 .about-hero h1 { font-weight:var(--weight-heading); letter-spacing:var(--tracking-heading); }
+.about-anchor-nav { background:var(--color-surface); border:var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-button); }
+.about-anchor-nav a,.about-social-link { color:var(--color-text); border-radius:var(--radius-button); font-weight:var(--weight-strong); }
+.about-social-link { background:var(--color-surface-alt); border:var(--border-width-default) var(--border-style-default) var(--color-border); }
+.about-anchor-nav a:focus-visible,.about-social-link:focus-visible { outline:var(--focus-width) solid var(--color-secondary); outline-offset:2px; }
+.about-anchor-nav a:hover,.about-anchor-nav a:focus-visible,a.about-social-link:hover,button.about-social-link:hover { background:var(--color-highlight); }
+.about-douyin-panel,.about-sovereignty-panel { color:var(--color-text); background:var(--color-surface); border:var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-card); }
+.about-douyin-panel::backdrop,.about-sovereignty-panel::backdrop { background:var(--color-backdrop); }
+.about-douyin-heading h3,.about-sovereignty-heading h3,.about-douyin-codes figcaption { font-weight:var(--weight-strong); }
+.about-douyin-hint { color:var(--color-text-muted); }
+.about-sovereignty-projects article { background:var(--color-surface-alt); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-card); }
+.about-sovereignty-projects h4 { font-weight:var(--weight-strong); }
+.about-sovereignty-projects p { color:var(--color-text-muted); }
 .about-lead,.about-direction p,.about-task p,.about-scale-note,.about-availability,.about-start>p { color:var(--color-text-muted); }
 .about-direction,.about-task,.about-maintainer,.about-start { background:var(--color-surface); border:var(--border-strong); border-radius:var(--radius-card); box-shadow:var(--shadow-button); }
 .about-direction { transition:background-color var(--motion-fast),box-shadow var(--motion-fast); }
