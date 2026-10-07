@@ -699,6 +699,9 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .ufo-size-small .ufo-sparks,.ufo-size-small .ufo-shadow { display:none; }
 .ufo-home-heading { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:36px; align-items:center; }
 .home-heading-copy>p { max-width:650px; font-size:15px; }
+.typewriter-readable { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.typewriter-character { position:relative; }
+.typewriter-character.is-typing::after { content:""; position:absolute; top:.1em; right:-.08em; width:2px; height:1em; pointer-events:none; }
 .ufo-home-start { margin-top:24px; width:max-content; max-width:100%; }
 .ufo-explorer { position:relative; display:flex; flex-direction:column; align-items:center; padding:12px 8px; }
 .ufo-sticker { position:absolute; top:6px; right:8px; padding:4px 9px; font-size:10px; }
@@ -934,6 +937,15 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .free-categories { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 24px; }
 .free-categories a { display:flex; align-items:center; min-height:44px; padding:8px 12px; font-size:12px; }
 @media(max-width:760px) { .home-intents { grid-template-columns:1fr; gap:18px; } .home-intent-card { padding:22px; } .home-intent-card h2 { font-size:22px; } }
+.home-heading-copy { min-width:0; }
+.home-heading-copy .home-intents { gap:12px; margin:24px 0; }
+.home-heading-copy .home-intent-card { padding:14px; }
+.home-heading-copy .home-intent-kicker { gap:8px; }
+.home-heading-copy .home-intent-kicker svg { width:18px; height:18px; }
+.home-heading-copy .home-intent-card h2 { font-size:18px; line-height:1.5; margin:14px 0 8px; }
+.home-heading-copy .home-intent-card p { font-size:16px; line-height:1.65; }
+.home-heading-copy .home-intent-action { flex-wrap:wrap; gap:6px; margin-top:14px; }
+@media(min-width:761px) and (max-width:1199px) { .home-heading-copy .home-intents { grid-template-columns:1fr; } }
 .free-lab-intro { margin-bottom:20px; }
 .free-lab-intro h1 { font-size:clamp(28px,3vw,36px); margin:0 0 12px; }
 .free-lab-intro p { max-width:900px; line-height:1.8; }

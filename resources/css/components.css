@@ -288,6 +288,11 @@ a.contribution-cell:hover,a.contribution-cell[aria-current="date"] { outline:2px
 .ufo-size-small[data-state="idle"] .ufo-ship { animation:none; }
 .ufo-size-small .ufo-beam { opacity:.3; }
 .home-heading-copy>p { color:var(--color-text-muted); }
+.typewriter-character, .typewriter-decoration { opacity:0; }
+.typewriter-character.is-visible, .typewriter-decoration.is-visible { opacity:1; }
+.typewriter-character.is-typing::after { background:currentColor; animation:typewriter-caret 700ms step-end infinite; }
+@keyframes typewriter-caret { 50% { opacity:0; } }
+@media (prefers-reduced-motion:reduce) { .typewriter-character, .typewriter-decoration { opacity:1; } .typewriter-character.is-typing::after { display:none; } }
 .ufo-explorer { border-radius:var(--radius-round); background:var(--color-highlight); }
 .ufo-sticker { background:var(--color-surface-alt); border:var(--border-width-default) var(--border-style-default) var(--color-border); border-radius:var(--radius-badge); box-shadow:var(--shadow-sticker); font-weight:var(--weight-heading); letter-spacing:1px; transform:rotate(var(--tilt-sticker)); }
 .ufo-explorer>p { color:var(--color-text-muted); font-weight:var(--weight-strong); }

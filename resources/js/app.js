@@ -8,6 +8,7 @@ import './lesson-video';
 import './question-topics';
 import './question-lab';
 import './live-schedule';
+import './typewriter';
 
 const icons = { ArrowRight, ArrowUpRight, ArrowLeft, ArrowDown, ArrowDownToLine, Check, CircleCheck, ChevronRight, Clock3, Clapperboard, Copy, Download, Flag, Globe, Info, ListChecks, LockKeyhole, Menu, Monitor, NotebookPen, Play, Plus, Search, SearchX, Sprout, Timer, UserRound, Video, X, CalendarDays, LayoutTemplate, Table2, FlaskConical, Server, Terminal, PanelsTopLeft, Sparkles, BookOpen, Route, Command, FolderOpen, BadgeCheck, Share2 };
 createIcons({ icons });
