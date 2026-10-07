@@ -86,6 +86,11 @@ html[data-theme="pop"] {
     --animation-complete: ufo-celebrate;
     --transform-hover: translate(2px,2px);
     --transform-press: translate(3px,3px);
+    --intent-entry-stagger: 70ms;
+    --intent-entry-offset: 8px;
+    --intent-hover-transform: translateY(-4px) rotate(-.35deg);
+    --intent-icon-offset: -2px;
+    --intent-icon-tilt: -6deg;
     --tilt-brand: -4deg;
     --tilt-art: -8deg;
     --tilt-emblem: 9deg;

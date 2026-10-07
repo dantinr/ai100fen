@@ -491,10 +491,23 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .home-intent-card[data-intent=explore] .home-intent-kicker svg { background:var(--color-accent); }
 .home-intent-card p { color:var(--color-text-muted); }
 .home-intent-action { font-weight:var(--weight-strong); }
+.home-intent-kicker svg,.home-intent-action svg { transition:transform var(--motion-fast) var(--ease-default); }
 .home-intent-card:focus-visible { outline:3px solid var(--color-secondary); outline-offset:5px; }
 .free-categories a { color:var(--color-text); background:var(--color-surface); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-button); }
 .free-categories a[aria-current=page] { background:var(--color-accent); color:var(--color-action-text); font-weight:var(--weight-strong); }
-@media(hover:hover) and (prefers-reduced-motion:no-preference) { .home-intent-card:hover { transform:var(--transform-hover); box-shadow:var(--shadow-card-hover); } }
+@media(prefers-reduced-motion:no-preference) {
+    .home-intent-card:focus-visible { transform:var(--intent-hover-transform); box-shadow:var(--shadow-card-hover); }
+    .home-intent-card:focus-visible .home-intent-kicker svg { transform:rotate(var(--intent-icon-tilt)); }
+    .home-intent-card:focus-visible .home-intent-action svg { transform:translateX(3px); }
+    .home-intent-card:active { transform:var(--transform-press); }
+    .home-intent-card:active .home-intent-action svg { transform:translateX(3px); }
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+    .home-intent-card:hover { transform:var(--intent-hover-transform); box-shadow:var(--shadow-card-hover); }
+    .home-intent-card:hover .home-intent-kicker svg { transform:rotate(var(--intent-icon-tilt)); }
+    .home-intent-card:hover .home-intent-action svg { transform:translateX(3px); }
+    .home-intent-card:active { transform:var(--transform-press); }
+}
 
 /* Topic cards inherit the active theme; motion is brief and never loops. */
 .heading-question { color:var(--color-text); }

@@ -32,6 +32,22 @@ body[data-page="lesson"],body[data-page="account"],body[data-page="checkout"] { 
 [data-page="question-pool"] .me-empty:before { background-image:var(--theme-pattern); background-size:var(--pattern-size); opacity:var(--decoration-opacity); }
 [data-page="question-pool"] .me-empty>.button { background:var(--color-surface); color:var(--color-text); }
 
+/* Home entrances reveal once; only the small icons drift on desktop. */
+@media(prefers-reduced-motion:no-preference) {
+    [data-page="home"] .home-intent-card { animation:home-intent-enter var(--motion-enter) var(--ease-emphasis) calc(var(--intent-index) * var(--intent-entry-stagger)) backwards; }
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+    [data-page="home"] .home-intent-kicker svg { animation:home-intent-drift var(--motion-idle) var(--ease-default) calc(var(--intent-index) * -1s) infinite; }
+}
+@keyframes home-intent-enter {
+    from { opacity:.6; translate:0 var(--intent-entry-offset); }
+    to { opacity:1; translate:0 0; }
+}
+@keyframes home-intent-drift {
+    0%,100% { translate:0 0; }
+    50% { translate:0 var(--intent-icon-offset); }
+}
+
 /* Concentrate lesson decoration in the opening scene and task goal. */
 [data-page="lesson"] .lesson-hero { animation:lesson-scene-enter var(--motion-enter) var(--ease-emphasis) both; }
 [data-page="lesson"] .free-learning .free-panel { box-shadow:none; border-color:var(--color-border-muted); }

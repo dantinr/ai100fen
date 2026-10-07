@@ -1198,3 +1198,9 @@ D-053的`lesson-video`播放器共用组件在有视频的学习页紧接紧凑�
 布局、字号、自动换行与手机间距放在base，外观在components，复用已有颜色、边框、阴影和字重Token。按用户最终要求移除对话角色、收获气泡及全部播放逻辑，目标完整静态展示，不加载额外JS或动画，也不增加阅读区内部滚动。
 
 Series课时大纲可学习入口的右侧使用Lucide播放图标，未开放课时保留锁定图标；按既有公开访问状态选择，不检查或输出视频地址。图标为装饰并使用aria-hidden，固定尺寸及防收缩放在base，颜色沿用组件Token；编号、Z角色、完成标识和课时链接保持原结构。
+
+## 首页任务方向卡片动效（2026-10-07）
+
+`home-intents`沿用三个方向链接与原有结构，纯CSS实现单次错峰浮入；只在桌面精确指针下循环播放小图标轻漂浮。悬停或键盘焦点时卡片微抬、图标轻转、箭头前移；手机保留单次入场和按压反馈。动画不改变布局尺寸、不等待打字效果、不拦截点击，无JS仍可访问任务；减少动态效果时关闭动画、位移及过渡，保留键盘焦点标识。
+
+结构与卡片序号放在base，通用反馈放在components，首页装饰动画放在variants。新增五个语义Token：`--intent-entry-stagger`、`--intent-entry-offset`、`--intent-hover-transform`、`--intent-icon-offset`、`--intent-icon-tilt`；Pop/Future均提供，新主题须实现。时长与曲线复用既有`--motion-enter`、`--motion-fast`、`--motion-idle`、`--ease-emphasis`、`--ease-default`。Pop卡片250ms入场、相邻延迟70ms、悬停上移4px并轻微倾斜，图标上下2px；Future采用300ms、60ms、3px与1px，更克制。不增加主题分支、JS或动画库，不改变分类、权限及学习进度。
