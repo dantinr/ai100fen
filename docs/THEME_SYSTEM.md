@@ -1201,6 +1201,8 @@ Series课时大纲可学习入口的右侧使用Lucide播放图标，未开放�
 
 ## 首页任务方向卡片动效（2026-10-07）
 
+首页标题末尾光标（2026-10-07）：`home-title-caret`在问号后使用无文字CSS伪元素，颜色继承当前文字；布局位于base，外观在components，首页动画在variants，复用`typewriter-caret`及`--motion-fast`的5倍周期（现有Pop/Future均1秒）。已有逐字效果进行时隐藏末尾光标并预留宽度，完成后显示，避免与跟随字符的光标重复、避免闪烁改变布局。无需额外JS或主题分支；系统减少动态效果时保留静态光标，无JS时标题和光标完整可见，不增加读屏文字。双主题1440/390/320px验证闪烁、完整标题、稳定布局及减少动态效果；不改变课程分类、权限或进度。
+
 `home-intents`沿用三个方向链接与原有结构，纯CSS实现单次错峰浮入；只在桌面精确指针下循环播放小图标轻漂浮。悬停或键盘焦点时卡片微抬、图标轻转、箭头前移；手机保留单次入场和按压反馈。动画不改变布局尺寸、不等待打字效果、不拦截点击，无JS仍可访问任务；减少动态效果时关闭动画、位移及过渡，保留键盘焦点标识。
 
 结构与卡片序号放在base，通用反馈放在components，首页装饰动画放在variants。新增五个语义Token：`--intent-entry-stagger`、`--intent-entry-offset`、`--intent-hover-transform`、`--intent-icon-offset`、`--intent-icon-tilt`；Pop/Future均提供，新主题须实现。时长与曲线复用既有`--motion-enter`、`--motion-fast`、`--motion-idle`、`--ease-emphasis`、`--ease-default`。Pop卡片250ms入场、相邻延迟70ms、悬停上移4px并轻微倾斜，图标上下2px；Future采用300ms、60ms、3px与1px，更克制。不增加主题分支、JS或动画库，不改变分类、权限及学习进度。

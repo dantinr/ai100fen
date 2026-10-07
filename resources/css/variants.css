@@ -34,6 +34,7 @@ body[data-page="lesson"],body[data-page="account"],body[data-page="checkout"] { 
 
 /* Home entrances reveal once; only the small icons drift on desktop. */
 @media(prefers-reduced-motion:no-preference) {
+    [data-page="home"] .home-title-caret .heading-question::after { animation:typewriter-caret calc(var(--motion-fast) * 5) step-end infinite; }
     [data-page="home"] .home-intent-card { animation:home-intent-enter var(--motion-enter) var(--ease-emphasis) calc(var(--intent-index) * var(--intent-entry-stagger)) backwards; }
 }
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {

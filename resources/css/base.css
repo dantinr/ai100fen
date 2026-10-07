@@ -736,6 +736,8 @@ body:has(.paul-widget:not([hidden])) .footer-inner { padding-bottom:70px; }
 .typewriter-readable { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .typewriter-character { position:relative; }
 .typewriter-character.is-typing::after { content:""; position:absolute; top:.1em; right:-.08em; width:2px; height:1em; pointer-events:none; }
+.home-title-caret .heading-question::after { content:""; display:inline-block; width:2px; height:.8em; margin-left:.12em; vertical-align:-.04em; pointer-events:none; }
+.home-title-caret:has(.typewriter-character) .heading-question::after { visibility:hidden; }
 .ufo-home-start { margin-top:24px; width:max-content; max-width:100%; }
 .ufo-explorer { position:relative; display:flex; flex-direction:column; align-items:center; padding:12px 8px; }
 .ufo-sticker { position:absolute; top:6px; right:8px; padding:4px 9px; font-size:10px; }

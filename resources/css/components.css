@@ -289,6 +289,7 @@ a.contribution-cell:hover,a.contribution-cell[aria-current="date"] { outline:2px
 .ufo-size-small[data-state="idle"] .ufo-ship { animation:none; }
 .ufo-size-small .ufo-beam { opacity:.3; }
 .home-heading-copy>p { color:var(--color-text-muted); }
+.home-title-caret .heading-question::after { background:currentColor; opacity:.7; }
 .typewriter-character, .typewriter-decoration { opacity:0; }
 .typewriter-character.is-visible, .typewriter-decoration.is-visible { opacity:1; }
 .typewriter-character.is-typing::after { background:currentColor; animation:typewriter-caret 700ms step-end infinite; }
