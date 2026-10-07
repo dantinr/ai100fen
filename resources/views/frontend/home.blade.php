@@ -4,7 +4,7 @@
     <section class="home-heading ufo-home-heading">
         <div class="home-heading-copy" data-typewriter>
             <div class="eyebrow"><span class="status-dot"></span>先用 AI，把一件事做成</div>
-            <h1 data-typewriter-text data-typewriter-speed="75">你今天想<span class="headline-mark">做什么<span class="heading-question">？</span></span></h1>
+            <h1 data-typewriter-text data-typewriter-speed="75">用AI<span class="headline-mark">做点什么<span class="heading-question">？</span></span></h1>
             <section class="home-intents" aria-label="选择你想做的事">
                 <a class="home-intent-card" data-intent="solve" href="{{ route('free.index', ['category' => 'solve']) }}" aria-label="Solve：解决一个问题">
                     <div class="home-intent-kicker"><span>SOLVE</span><i data-lucide="list-checks"></i></div><h2>解决一个问题</h2><p>把现实中的麻烦解决掉，拿到能核对的结果。</p><span class="home-intent-action">从免费任务开始<i data-lucide="arrow-right"></i></span>

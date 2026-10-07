@@ -2,10 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Resources\CourseSeries\Pages\EditCourseSeries;
 use App\Models\CourseSeries;
+use App\Models\User;
 use App\Services\FreeLabInstaller;
 use App\Support\FrontendCatalog;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class CourseDisplayOrderTest extends TestCase
@@ -23,7 +27,8 @@ class CourseDisplayOrderTest extends TestCase
         $course = CourseSeries::create(['title' => 'PRIVATE edited draft content', 'slug' => 'remix-a-game', 'category' => 'create']);
         $this->assertSame(1000, $course->sort_order);
         $course->update(['sort_order' => 10]);
-        CourseSeries::create(['title' => 'PRIVATE unlisted course', 'slug' => 'not-in-preview', 'category' => 'create', 'sort_order' => 0]);
+        CourseSeries::create(['title' => 'PRIVATE unlisted course', 'slug' => 'not-in-preview', 'category' => 'create', 'sort_order' => 0,
+            'recommendation_keywords' => ['PRIVATE unlisted keyword']]);
         $expected = ['remix-a-game', ...array_values(array_diff($originalSlugs, ['remix-a-game']))];
         foreach (['/', '/series'] as $path) {
             $this->get($path)->assertOk()->assertDontSee('PRIVATE')
@@ -32,6 +37,41 @@ class CourseDisplayOrderTest extends TestCase
         $this->get('/series/remix-a-game')->assertViewHas('series', fn ($series) => $series['available'] === false);
         $course->update(['sort_order' => 1000]);
         $this->get('/')->assertViewHas('series', fn ($courses) => array_column($courses, 'slug') === $originalSlugs);
+    }
+
+    public function test_admin_keywords_reach_public_cards_and_search_without_publishing_draft_content(): void
+    {
+        $admin = User::factory()->create();
+        $admin->forceFill(['is_admin' => true])->save();
+        $this->actingAs($admin);
+        Filament::setCurrentPanel(Filament::getPanel('galaxy'));
+        Filament::bootCurrentPanel();
+
+        $course = CourseSeries::create(['title' => 'PRIVATE draft title', 'slug' => 'remix-a-game', 'category' => 'create',
+            'description' => 'PRIVATE draft body']);
+        $keywords = ['游戏改造', 'Agent 协作', '<script>alert("tag")</script>'];
+        $editor = Livewire::test(EditCourseSeries::class, ['record' => $course->slug]);
+        $editor->fillForm(['recommendation_keywords' => $keywords])->call('save')->assertHasNoFormErrors();
+        $this->assertSame($keywords, $course->fresh()->recommendation_keywords);
+        $this->assertSame('draft', $course->fresh()->status);
+
+        auth()->logout();
+        foreach (['pop', 'future'] as $theme) {
+            config(['themes.active' => $theme]);
+            foreach (['/', '/series'] as $path) {
+                $response = $this->get($path)->assertOk()->assertDontSee('PRIVATE')
+                    ->assertViewHas('series', fn ($courses) => collect($courses)->firstWhere('slug', $course->slug)['keywords'] === $keywords);
+                $this->assertStringContainsString('<span class="course-keyword">'.e($keywords[0]).'</span>', $response->getContent());
+                $this->assertStringContainsString(implode(' ', array_map('e', $keywords)), $response->getContent());
+                $response->assertSee($keywords[2])->assertDontSee($keywords[2], false);
+            }
+        }
+
+        $this->actingAs($admin);
+        $editor->fillForm(['recommendation_keywords' => []])->call('save')->assertHasNoFormErrors();
+        $tag = collect(app(FrontendCatalog::class)->all())->firstWhere('slug', $course->slug)['tag'];
+        $this->get('/')->assertViewHas('series', fn ($courses) => collect($courses)->firstWhere('slug', $course->slug)['keywords'] === [$tag]);
+        $this->assertSame([], $course->fresh()->recommendation_keywords);
     }
 
     public function test_free_lab_uses_display_order_and_stable_ties_without_publishing_drafts_or_changing_lessons(): void

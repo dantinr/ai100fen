@@ -14,7 +14,7 @@ class CourseDisplayOrder
             return $courses;
         }
 
-        $columns = ['id', 'slug', 'sort_order', 'is_free', 'price', 'minutes', 'status'];
+        $columns = ['id', 'slug', 'sort_order', 'is_free', 'price', 'minutes', 'status', 'recommendation_keywords'];
         if (Schema::hasColumn('course_series', 'cover')) {
             $columns[] = 'cover';
         }
@@ -23,7 +23,7 @@ class CourseDisplayOrder
         // Collection sorting is stable: equal values retain the curated order.
         return collect($courses)
             ->sortBy(fn (array $course) => $records->get($course['slug'])?->sort_order ?? 1000)
-            ->map(fn (array $course) => $this->withCover($course, $records->get($course['slug'])))
+            ->map(fn (array $course) => $this->withDisplayFields($course, $records->get($course['slug'])))
             ->values()->all();
     }
 
@@ -35,9 +35,9 @@ class CourseDisplayOrder
 
         $record = CourseSeries::where('slug', $course['slug'])->first([
             'id', 'slug', 'cover', 'title', 'minutes', 'is_free', 'price', 'status',
-            'final_outcome', 'completion_criteria',
+            'final_outcome', 'completion_criteria', 'recommendation_keywords',
         ]);
-        $course = $this->withCover($course, $record);
+        $course = $this->withDisplayFields($course, $record);
         if ($course['is_free'] ?? false) {
             $course['record_id'] = $record->id;
             $course['title'] = $record->title;
@@ -56,9 +56,10 @@ class CourseDisplayOrder
         return $course;
     }
 
-    private function withCover(array $course, ?CourseSeries $record): array
+    private function withDisplayFields(array $course, ?CourseSeries $record): array
     {
         $course['cover_url'] = $record?->coverUrl();
+        $course['keywords'] = $record?->recommendation_keywords ?: [$course['tag']];
         if ($course['slug'] === 'build-a-website' && $record?->is_free && $record->minutes === 10
             && CourseSeries::freeLab()->whereKey($record->id)->exists()) {
             $course['is_free'] = true;

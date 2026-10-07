@@ -46,7 +46,8 @@ class CourseSeriesForm
                         ->automaticallyResizeImagesToWidth('1600')->automaticallyResizeImagesToHeight('900')
                         ->automaticallyUpscaleImagesWhenResizing(false)->columnSpanFull()
                         ->helperText('建议横图 1600×900（16:9），支持 JPG、PNG、WebP，最大 2 MB。已在公开目录展示的课程更换后会立即显示新封面。'),
-                    TagsInput::make('recommendation_keywords')->label('推荐关键词')->default([])->helperText('填写用户可能提出的任务意图；按回车添加。'),
+                    TagsInput::make('recommendation_keywords')->label('课程标签 / 关键词')->default([])->columnSpanFull()
+                        ->helperText('按回车添加。已在公开目录展示的课程保存后，标签会显示在首页与课程列表卡片底部；也用于 Z 的免费任务推荐。留空时显示原有主题标签。'),
                     MarkdownEditor::make('description')->label('课程介绍')->disableToolbarButtons(['attachFiles'])->columnSpanFull(),
                     TagsInput::make('objectives')->label('课程目标')->default([])->columnSpanFull()->helperText('逐项描述阶段成果，按回车添加；最终成果与验收请填写下方定义。'),
                 ]),

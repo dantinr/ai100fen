@@ -17,7 +17,6 @@
                 <a href="{{ route('home') }}" @class(['active' => request()->routeIs('home')]) @if(request()->routeIs('home')) aria-current="page" @endif>首页</a>
                 <a href="{{ route('series.index') }}" @class(['active' => request()->routeIs('series.*', 'lessons.*', 'courses.show')]) @if(request()->routeIs('series.*', 'lessons.*', 'courses.show')) aria-current="page" @endif>全部课程</a>
                 <a href="{{ route('live') }}" @class(['active' => request()->routeIs('live')]) @if(request()->routeIs('live')) aria-current="page" @endif>直播</a>
-                <a href="{{ route('free.index') }}" @class(['active' => request()->routeIs('free.*')]) @if(request()->routeIs('free.*')) aria-current="page" @endif>实验室</a>
                 <x-black-hole-nav-link :href="route('questions')" :active="request()->routeIs('questions', 'questions.*')">问题池</x-black-hole-nav-link>
                 <a href="{{ route('about') }}" @class(['active' => request()->routeIs('about')]) @if(request()->routeIs('about')) aria-current="page" @endif>关于</a>
             </nav>

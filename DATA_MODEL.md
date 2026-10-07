@@ -133,11 +133,13 @@ archived
 
 ### 3.3 当前示例与迁移差距
 
-`FrontendCatalog`的`category=build/work`仍属于旧公共页面筛选。D-036已逐门审核并将16门课程以草稿导入共用模型：question→user_intent、outcome→final_outcome、deliverables→objectives；description与prerequisites组合为Markdown介绍。completion_criteria、agent_role、human_judgment_required逐门补充，category独立判断为Create 9/Solve 7，不盲目转换旧类别。图标、旧公开筛选与主要页面内容仍来自FrontendCatalog；D-046只按slug读取数据库封面。
+`FrontendCatalog`的`category=build/work`仍属于旧公共页面筛选。D-036已逐门审核并将16门课程以草稿导入共用模型：question→user_intent、outcome→final_outcome、deliverables→objectives；description与prerequisites组合为Markdown介绍。completion_criteria、agent_role、human_judgment_required逐门补充，category独立判断为Create 9/Solve 7，不盲目转换旧类别。图标、旧公开筛选与主要页面内容仍来自FrontendCatalog；按slug读取数据库的排序、D-046封面和课程标签等展示元信息。
 
 D-023当时只同步字段设计；D-031新增免费任务业务表；D-036提供`courses:import-legacy`独立事务命令及只读--dry-run，仅新增不存在的课程slug，遇到同slug整门跳过，保留全部既有字段与关联记录。网站10课时为D-036历史导入状态。D-049后首次导入网站采用五节独立正文/Prompt/验收，各2分钟/20分，课程仍为草稿、首课发布/其余草稿；已有slug不覆盖。其他15门不生成不存在的课时。导入不触发购买权限或正式发布。审核与逐门六项报告见`docs/LEGACY_COURSE_IMPORT.md`。
 
-D-046新增`course_series.cover`可空字符串，仅存`public`磁盘中`course-covers/`下的图片路径。管理员上传JPG/PNG/WebP（最多2 MB），统一按16:9展示；无图或文件缺失时沿用既有海报/图标。旧目录只按slug读取封面和排序，不读取数据库草稿正文或改变访问权限。图片文件存于`storage/app/public`，不提交Git；部署环境需建立`public/storage`链接。新增迁移只加可空字段，生产须审阅后独立执行。
+D-046新增`course_series.cover`可空字符串，仅存`public`磁盘中`course-covers/`下的图片路径。管理员上传JPG/PNG/WebP（最多2 MB），统一按16:9展示；无图或文件缺失时沿用既有海报/图标。旧目录按slug读取封面、排序和课程标签，不读取数据库草稿正文或改变访问权限。图片文件存于`storage/app/public`，不提交Git；部署环境需建立`public/storage`链接。新增迁移只加可空字段，生产须审阅后独立执行。
+
+2026-10-07课程标签复用既有`recommendation_keywords`（JSON字符串数组），后台名称为“课程标签 / 关键词”，不新增标签表或字段。首页和课程列表卡片底部显示其内容，列表搜索也包含这些关键词；为空或课程未入库时回退到原目录的`tag`。它属于公开展示元信息：已在策划目录展示的课程即使数据库记录仍为草稿，保存的关键词也立即展示；不会自动公开新草稿课程或其正文。标签不替代Solve/Create/Explore主要类别，不改变发布状态、权限或验收；Z免费任务推荐继续使用同一字段。
 
 不要把Series永久写死为10课。
 
