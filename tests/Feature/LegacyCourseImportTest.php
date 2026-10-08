@@ -68,7 +68,8 @@ class LegacyCourseImportTest extends TestCase
         $this->assertSame($content['checks'], $lessons->first()->checks);
         $this->assertStringContainsString($content['checks'][0], $lessons->first()->resources[0]['content']);
         $this->assertFalse(app(CourseAccessService::class)->canAccess($website, $lessons->first()));
-        $this->get('/series/build-a-website/lessons/server-and-ip')->assertOk()->assertSee('lesson-prompt');
+        // A persisted draft cannot fall back to the independently published static preview.
+        $this->get('/series/build-a-website/lessons/server-and-ip')->assertNotFound();
         $this->get('/lab')->assertOk()->assertDontSee($website->title);
     }
 

@@ -31,7 +31,7 @@ class AccountTest extends TestCase
         $this->assertNotSame($oldSession, session()->getId());
         $this->assertNull($user->email_verified_at);
         $this->get('/me')->assertOk()->assertSee('个人中心')->assertSee($user->email)
-            ->assertSee('这些体验记录尚未同步到账号。');
+            ->assertSee('这些验收记录已保存到你的账号');
     }
 
     public function test_invalid_registration_and_duplicate_email_do_not_create_accounts(): void
@@ -185,8 +185,8 @@ class AccountTest extends TestCase
     {
         $this->actingAs(User::factory()->create())
             ->get('/series/build-a-website/lessons/domain?purchased=1&subscription=active')
-            ->assertOk()->assertSee('这一步，正在准备中。')->assertDontSee('lesson-prompt');
-        $this->get('/series/build-a-website/lessons/domain/checklist?purchased=1')->assertForbidden();
+            ->assertNotFound()->assertDontSee('free-prompt');
+        $this->get('/series/build-a-website/lessons/domain/checklist?purchased=1')->assertNotFound();
     }
 
     public function test_account_post_requests_require_csrf_protection_outside_the_test_environment(): void

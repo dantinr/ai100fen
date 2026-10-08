@@ -136,12 +136,13 @@ class QuestionCollectionTest extends TestCase
 
     public function test_navigation_changes_do_not_remove_home_and_course_ufos_or_topic_browsing(): void
     {
+        app(FreeLabInstaller::class)->install();
         foreach (['pop', 'future'] as $theme) {
             config(['themes.active' => $theme]);
             $this->get('/questions?topic=memory')->assertOk()->assertSee('black-hole-nav-link')->assertDontSee('ufo-nav-scene')
                 ->assertSee('data-question-lab', false)->assertDontSee('data-paul-widget', false)->assertSee('规则引导')->assertSee('Agent 为什么忘记目标');
             $this->get('/')->assertOk()->assertSee('data-ufo', false)->assertSee('data-paul-widget', false);
-            $this->get('/series/build-a-website')->assertOk()->assertSee('data-ufo-path', false);
+            $this->get('/series/personal-intro-page')->assertOk()->assertSee('data-ufo-path', false);
         }
     }
 }

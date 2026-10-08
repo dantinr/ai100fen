@@ -21,7 +21,7 @@ if (form) {
                 }
                 const record = await response.json();
                 document.querySelector('[data-free-percent]').textContent = `${record.progress_percent}%`;
-                document.querySelector('[data-free-score]').textContent = record.series_score;
+                document.querySelector('[data-free-score]').textContent = record.series_percent;
                 document.querySelectorAll('[data-lesson-completion]').forEach((mark) => {
                     if (mark.dataset.lessonCompletion === form.dataset.lessonId) mark.hidden = !record.completed;
                 });

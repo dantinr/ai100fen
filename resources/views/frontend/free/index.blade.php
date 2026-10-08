@@ -44,11 +44,11 @@
                 <p><strong>Z：可以从「{{ $match['course']->title }}」开始。</strong><br>{{ $match['reason'] }}</p>
                 <a class="text-link" href="{{ route('free.lesson', [$match['course'], $match['course']->lessons->first()->slug]) }}">开始这个免费任务<i data-lucide="arrow-right"></i></a>
             @empty
-                <p>{{ $category ? 'Z：这个方向暂时没有匹配的免费任务。可以切换方向，或看看更多课程。' : 'Z：目前这三个任务还接不住你的问题。可以先从下面选一个，也可以去看看更多课程方向。' }}</p><a class="text-link" href="{{ route('series.index') }}">看看100分钟课程</a>
+                <p>{{ $category ? 'Z：这个方向暂时没有匹配的免费任务。可以切换方向，或看看更多课程。' : 'Z：目前已发布的任务还接不住你的问题。可以先从下面选一个，也可以去看看更多课程方向。' }}</p><a class="text-link" href="{{ route('series.index') }}">看看100分钟课程</a>
             @endforelse
             </div>
         @endif
     </section>
-    <aside class="free-preview-note"><h2>完整免费，与免费试看有什么不同？</h2><p>这里的任务从开始到最终验收都免费，包含全部已发布步骤和资料。100分钟付费课程的免费试看只开放指定 Lesson；单课程 ¥100，订阅 ¥299/月，购买尚未开放。</p><a class="text-link" href="{{ route('lessons.show', ['slug' => 'build-a-website', 'lessonSlug' => 'server-and-ip']) }}">体验付费课程的免费试看<i data-lucide="arrow-right"></i></a></aside>
+    <aside class="free-preview-note"><h2>完整免费，与免费试看有什么不同？</h2><p>这里的任务从开始到最终验收都免费，包含全部已发布步骤和资料。100分钟付费课程的免费试看只开放指定 Lesson；单课程 ¥100，订阅 ¥299/月，购买尚未开放。</p><a class="text-link" href="{{ route('series.index') }}">查看全部课程<i data-lucide="arrow-right"></i></a></aside>
 </div>
 @endsection

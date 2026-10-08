@@ -2,10 +2,23 @@
 
 namespace Tests\Feature;
 
+use App\Models\CourseSeries;
+use App\Services\LegacyCourseImporter;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ThemeSystemTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        app(LegacyCourseImporter::class)->run();
+        $course = CourseSeries::where('slug', 'build-a-website')->firstOrFail();
+        $course->refresh()->update(['status' => 'published']);
+    }
+
     public function test_default_theme_and_independent_page_variants_render(): void
     {
         config(['themes.active' => 'pop']);
@@ -25,8 +38,8 @@ class ThemeSystemTest extends TestCase
         }
 
         $this->get('/series/build-a-website/lessons/domain?theme=future&is_free=1')
-            ->assertSee('这一步，正在准备中。')->assertDontSee('lesson-prompt');
-        $this->get('/series/build-a-website/lessons/domain/checklist')->assertForbidden();
+            ->assertNotFound()->assertDontSee('free-prompt');
+        $this->get('/series/build-a-website/lessons/domain/checklist')->assertNotFound();
     }
 
     public function test_future_theme_uses_the_same_pages_and_business_behavior(): void
@@ -38,9 +51,9 @@ class ThemeSystemTest extends TestCase
         }
 
         $this->get('/series/build-a-website/lessons/server-and-ip')
-            ->assertSee('data-acceptance', false)->assertSee('lesson-prompt');
+            ->assertSee('data-free-progress', false)->assertSee('free-prompt');
         $this->get('/pricing')->assertSee('100')->assertSee('299')->assertSee('购买暂未开放');
-        $this->get('/series/build-a-website/lessons/domain/checklist')->assertForbidden();
+        $this->get('/series/build-a-website/lessons/domain/checklist')->assertNotFound();
 
         config(['themes.active' => 'pop']);
         $this->get('/?theme=future')->assertSee('data-theme="pop"', false);

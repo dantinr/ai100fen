@@ -194,12 +194,15 @@ class LessonBulkActionsTest extends TestCase
 
     public function test_legacy_preview_and_download_cannot_resurface_a_deleted_lesson(): void
     {
-        $this->course->update(['slug' => 'build-a-website']);
+        $this->course->update(['slug' => 'build-a-website', 'minutes' => 10]);
         $this->first->update(['slug' => 'server-and-ip']);
+        $this->publishCourse();
         $this->get('/series/build-a-website/lessons/server-and-ip')->assertOk();
+        $this->get(route('free.lesson', [$this->course, $this->first->slug]))->assertOk();
         app(LessonBulkActionService::class)->trash($this->admin, [$this->first->id]);
         $this->get('/series/build-a-website/lessons/server-and-ip')->assertNotFound();
         $this->get('/series/build-a-website/lessons/server-and-ip/checklist')->assertNotFound();
+        $this->course->refresh()->update(['status' => 'published']);
         $this->get('/series/build-a-website')->assertOk()->assertViewHas('series', fn ($series) => ! collect($series['lessons'])->contains('slug', 'server-and-ip'));
     }
 

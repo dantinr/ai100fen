@@ -36,7 +36,7 @@
             <button class="button button-primary full-width" type="submit">{{ $register ? '注册并登录' : '登录' }}<i data-lucide="arrow-right"></i></button>
         </form>
         <p class="auth-switch">{{ $register ? '已经有账号？' : '还没有账号？' }} <a href="{{ route($register ? 'login' : 'register') }}">{{ $register ? '直接登录' : '创建账号' }}</a></p>
-        <a class="text-link auth-secondary" href="{{ app(\App\Support\FrontendCatalog::class)->isVisible('build-a-website') ? route('lessons.show', ['slug' => 'build-a-website', 'lessonSlug' => 'server-and-ip']) : route('free.index') }}">先免费体验第一课<i data-lucide="arrow-right"></i></a>
+        <a class="text-link auth-secondary" href="{{ app(\App\Services\CourseCatalog::class)->starter()['url'] ?? route('free.index') }}">先免费体验第一课<i data-lucide="arrow-right"></i></a>
     </div>
 </div>
 @endsection

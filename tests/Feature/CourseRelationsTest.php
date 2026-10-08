@@ -175,21 +175,21 @@ class CourseRelationsTest extends TestCase
         $this->save($free, $archived, reason: 'PRIVATE_ARCHIVED_REASON');
         $this->save($paid, $free, 'prerequisite');
         $lesson = $free->lessons->first();
-        foreach ([route('free.lesson', [$free, $lesson->slug]), route('courses.show', $free)] as $url) {
+        foreach ([route('free.lesson', [$free, $lesson->slug]), route('series.show', $free)] as $url) {
             $this->get($url)->assertOk()->assertSee('下一步课程')->assertSee('继续制作一个完整作品')
                 ->assertSee(route('courses.show', $paid))->assertDontSee('PRIVATE_DRAFT')->assertDontSee('PRIVATE_ARCHIVED');
         }
-        $this->get(route('courses.show', $paid))->assertOk()->assertSee('前置课程')->assertSee($free->title)
-            ->assertSee('完整课程学习与购买暂未开放')->assertDontSee('PRIVATE_PAID');
-        $this->get(route('courses.show', $free))->assertSee(route('free.lesson', [$free, $lesson->slug]));
+        $this->get(route('series.show', $paid))->assertOk()->assertSee('前置课程')->assertSee($free->title)
+            ->assertSee('购买暂未开放')->assertDontSee('PRIVATE_PAID');
+        $this->get(route('series.show', $free))->assertSee(route('lessons.show', [$free, $lesson->slug]));
         config(['themes.active' => 'future']);
-        $this->get(route('courses.show', $free))->assertOk()->assertSee('data-theme="future"', false)->assertSee('下一步课程');
-        $this->get(route('courses.show', $draft))->assertNotFound();
-        $this->get(route('courses.show', $archived))->assertNotFound();
+        $this->get(route('series.show', $free))->assertOk()->assertSee('data-theme="future"', false)->assertSee('下一步课程');
+        $this->get(route('series.show', $draft))->assertNotFound();
+        $this->get(route('series.show', $archived))->assertNotFound();
         $this->get('/lab/'.$paid->slug.'/'.$paid->lessons->first()->slug)->assertNotFound();
         $this->assertDatabaseCount('lesson_progress', 0);
         $paid->update(['status' => 'archived']);
-        $this->get(route('courses.show', $free))->assertDontSee('data-course-relations', false);
+        $this->get(route('series.show', $free))->assertDontSee('data-course-relations', false);
     }
 
     public function test_legacy_details_only_show_relations_for_a_published_source_and_admin_preview_remains_private(): void
@@ -200,7 +200,7 @@ class CourseRelationsTest extends TestCase
         $this->get('/series/build-a-website')->assertOk()->assertSee('推荐课程')->assertSee($free->title)
             ->assertSee('&lt;script&gt;', false)->assertDontSee('<script>alert("x")</script>', false);
         $legacy->update(['status' => 'draft']);
-        $this->get('/series/build-a-website')->assertOk()->assertDontSee('data-course-relations', false);
+        $this->get('/series/build-a-website')->assertNotFound()->assertDontSee('data-course-relations', false);
         $this->get(route('courses.preview', $legacy))->assertRedirect('/login');
         $this->actingAs(User::factory()->create())->get(route('courses.preview', $legacy))->assertForbidden();
         $this->actingAs($this->admin)->get(route('courses.preview', $legacy))->assertOk()->assertSee('管理员预览')

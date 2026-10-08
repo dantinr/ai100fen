@@ -182,14 +182,14 @@ class CourseRecycleBinTest extends TestCase
         $this->assertSame(0, app(LegacyCourseImporter::class)->run()['created']);
         $this->assertSame(1, CourseSeries::onlyTrashed()->where('slug', $website->slug)->count());
         $service->restore($this->admin, $website->fresh());
-        $this->get('/series/build-a-website')->assertOk();
+        $this->get('/series/build-a-website')->assertNotFound();
         $service->trash($this->admin, $website->fresh());
         $service->permanentlyDelete($this->admin, $website->fresh(), $website->slug);
         $this->assertLegacyWebsiteHidden();
         $this->assertSame(0, app(LegacyCourseImporter::class)->run()['created']);
         CourseSeries::create(['slug' => $website->slug, 'title' => '明确新建的网站课程', 'category' => 'create']);
         $this->assertDatabaseMissing('course_catalog_suppressions', ['slug' => $website->slug]);
-        $this->get('/series/build-a-website')->assertOk();
+        $this->get('/series/build-a-website')->assertNotFound();
     }
 
     private function assertLegacyWebsiteHidden(): void
@@ -210,7 +210,7 @@ class CourseRecycleBinTest extends TestCase
         $data = ['related_course_series_id' => $target->id, 'relation_type' => 'next', 'sort_order' => 1];
         app(CourseRelationService::class)->save($this->admin, $source, $data);
         app(CourseDeletionService::class)->trash($this->admin, $target);
-        $this->get(route('courses.show', $source))->assertOk()->assertDontSee('href="'.route('courses.show', $target).'"', false);
+        $this->get(route('series.show', $source))->assertOk()->assertDontSee('href="'.route('courses.show', $target).'"', false);
         $this->get(route('courses.preview', $source))->assertOk();
         try {
             app(CourseRelationService::class)->save($this->admin, $source, array_replace($data, ['relation_type' => 'recommended']));

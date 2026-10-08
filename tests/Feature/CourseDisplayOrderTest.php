@@ -6,7 +6,6 @@ use App\Filament\Resources\CourseSeries\Pages\EditCourseSeries;
 use App\Models\CourseSeries;
 use App\Models\User;
 use App\Services\FreeLabInstaller;
-use App\Support\FrontendCatalog;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -16,25 +15,26 @@ class CourseDisplayOrderTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_preview_lists_keep_the_original_order_until_configured_and_share_live_changes(): void
+    public function test_database_courses_share_live_order_changes_and_exclude_drafts(): void
     {
-        $original = app(FrontendCatalog::class)->all();
-        $originalSlugs = array_column($original, 'slug');
+        app(FreeLabInstaller::class)->install();
+        $courses = CourseSeries::orderBy('id')->get();
+        $originalSlugs = $courses->pluck('slug')->all();
         foreach (['/', '/series'] as $path) {
             $this->get($path)->assertOk()->assertViewHas('series', fn ($courses) => array_column($courses, 'slug') === $originalSlugs);
         }
 
-        $course = CourseSeries::create(['title' => 'PRIVATE edited draft content', 'slug' => 'remix-a-game', 'category' => 'create']);
+        $course = $courses->last();
         $this->assertSame(1000, $course->sort_order);
         $course->update(['sort_order' => 10]);
         CourseSeries::create(['title' => 'PRIVATE unlisted course', 'slug' => 'not-in-preview', 'category' => 'create', 'sort_order' => 0,
             'recommendation_keywords' => ['PRIVATE unlisted keyword']]);
-        $expected = ['remix-a-game', ...array_values(array_diff($originalSlugs, ['remix-a-game']))];
+        $expected = [$course->slug, ...array_values(array_diff($originalSlugs, [$course->slug]))];
         foreach (['/', '/series'] as $path) {
             $this->get($path)->assertOk()->assertDontSee('PRIVATE')
                 ->assertViewHas('series', fn ($courses) => array_column($courses, 'slug') === $expected);
         }
-        $this->get('/series/remix-a-game')->assertViewHas('series', fn ($series) => $series['available'] === false);
+        $this->get('/series/not-in-preview')->assertNotFound();
         $course->update(['sort_order' => 1000]);
         $this->get('/')->assertViewHas('series', fn ($courses) => array_column($courses, 'slug') === $originalSlugs);
     }
@@ -47,13 +47,15 @@ class CourseDisplayOrderTest extends TestCase
         Filament::setCurrentPanel(Filament::getPanel('galaxy'));
         Filament::bootCurrentPanel();
 
-        $course = CourseSeries::create(['title' => 'PRIVATE draft title', 'slug' => 'remix-a-game', 'category' => 'create',
+        app(FreeLabInstaller::class)->install();
+        $course = CourseSeries::first();
+        CourseSeries::create(['title' => 'PRIVATE draft title', 'slug' => 'private-course', 'category' => 'create',
             'description' => 'PRIVATE draft body']);
         $keywords = ['游戏改造', 'Agent 协作', '<script>alert("tag")</script>'];
         $editor = Livewire::test(EditCourseSeries::class, ['record' => $course->slug]);
         $editor->fillForm(['recommendation_keywords' => $keywords])->call('save')->assertHasNoFormErrors();
         $this->assertSame($keywords, $course->fresh()->recommendation_keywords);
-        $this->assertSame('draft', $course->fresh()->status);
+        $this->assertSame('published', $course->fresh()->status);
 
         auth()->logout();
         foreach (['pop', 'future'] as $theme) {
@@ -69,8 +71,7 @@ class CourseDisplayOrderTest extends TestCase
 
         $this->actingAs($admin);
         $editor->fillForm(['recommendation_keywords' => []])->call('save')->assertHasNoFormErrors();
-        $tag = collect(app(FrontendCatalog::class)->all())->firstWhere('slug', $course->slug)['tag'];
-        $this->get('/')->assertViewHas('series', fn ($courses) => collect($courses)->firstWhere('slug', $course->slug)['keywords'] === [$tag]);
+        $this->get('/')->assertViewHas('series', fn ($courses) => collect($courses)->firstWhere('slug', $course->slug)['keywords'] === []);
         $this->assertSame([], $course->fresh()->recommendation_keywords);
     }
 

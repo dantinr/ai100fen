@@ -11,8 +11,7 @@ class CourseRelationPresenter
 {
     public function publicCourses(): Builder
     {
-        return CourseSeries::where('status', 'published')->whereHas('lessons', fn ($query) => $query->where('status', 'published'))
-            ->where(fn ($query) => $query->where('is_free', false)->orWhere(fn ($query) => $query->freeLab()));
+        return app(CourseCatalog::class)->publicCourses();
     }
 
     public function forLegacy(string $slug): array

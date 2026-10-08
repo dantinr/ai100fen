@@ -24,6 +24,8 @@ class CourseCoverTest extends TestCase
         Storage::fake('public');
         app(LegacyCourseImporter::class)->run();
         $series = CourseSeries::where('slug', 'build-a-website')->firstOrFail();
+        foreach ($series->lessons()->get() as $lesson) { $lesson->update(['status' => 'published']); }
+        $series->refresh()->update(['status' => 'published']);
         $this->get('/series/build-a-website')->assertOk()->assertSee('data-course-goal', false);
 
         $this->administrator();
@@ -71,7 +73,9 @@ class CourseCoverTest extends TestCase
         $url = Storage::disk('public')->url($path);
 
         $this->get('/lab')->assertOk()->assertSee($url)->assertSee('free-card-cover', false);
-        $this->get('/courses/'.$series->slug)->assertOk()->assertSee($url)->assertSee('course-overview-cover', false);
+        $this->get('/courses/'.$series->slug)->assertRedirect(route('series.show', $series));
+        $this->get('/series')->assertOk()->assertSee($url);
+        $this->get(route('series.show', $series))->assertOk()->assertSee('data-course-goal', false);
     }
 
     private function administrator(): void

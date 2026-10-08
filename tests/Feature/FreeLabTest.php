@@ -57,7 +57,7 @@ class FreeLabTest extends TestCase
         $course->update(['is_free' => true, 'status' => 'draft']);
         $this->assertFalse($access->canAccess($course, $lesson));
         $this->get("/lab/{$course->slug}/{$lesson->slug}")->assertNotFound();
-        $this->get('/series/build-a-website/lessons/domain/checklist?is_free=1')->assertForbidden();
+        $this->get('/series/build-a-website/lessons/domain/checklist?is_free=1')->assertNotFound();
     }
 
     public function test_lesson_and_resource_are_scoped_to_their_course_and_published_status(): void
@@ -95,7 +95,7 @@ class FreeLabTest extends TestCase
         foreach ([[true], [true, true, true, true], ['yes', true, true], [1 => true, 2 => true, 3 => true]] as $checks) {
             $this->postJson($path, ['checks' => $checks])->assertUnprocessable();
         }
-        $this->postJson($path, ['checks' => [true, true, true]])->assertOk()->assertJson(['progress_percent' => 100, 'completed' => true, 'series_score' => 100]);
+        $this->postJson($path, ['checks' => [true, true, true]])->assertOk()->assertJson(['progress_percent' => 100, 'completed' => true, 'series_percent' => 100]);
         $completed = LessonProgress::first()->completed_at->toISOString();
         $this->travel(1)->hours();
         $this->postJson($path, ['checks' => [true, true, true]])->assertOk();
@@ -116,14 +116,14 @@ class FreeLabTest extends TestCase
         $this->get($path)->assertOk()->assertViewHas('completedLessonIds', []);
         $this->actingAs($alice)->postJson($path.'/progress', ['checks' => [true, true, true]])->assertOk();
         $this->get($path)->assertOk()->assertViewHas('completedLessonIds', [$lesson->id]);
-        $this->get(route('courses.show', $course))->assertOk()->assertViewHas('completedLessonIds', [$lesson->id]);
+        $this->get(route('series.show', $course))->assertOk()->assertViewHas('completedLessonSlugs', [$lesson->slug]);
 
         $this->actingAs($bob)->get($path)->assertOk()->assertViewHas('completedLessonIds', []);
-        $this->get(route('courses.show', $course))->assertOk()->assertViewHas('completedLessonIds', []);
+        $this->get(route('series.show', $course))->assertOk()->assertViewHas('completedLessonSlugs', []);
         $this->actingAs($alice)->postJson($path.'/progress', ['checks' => [true, false, true]])
             ->assertOk()->assertJson(['completed' => false]);
         $this->get($path)->assertOk()->assertViewHas('completedLessonIds', []);
-        $this->get(route('courses.show', $course))->assertOk()->assertViewHas('completedLessonIds', []);
+        $this->get(route('series.show', $course))->assertOk()->assertViewHas('completedLessonSlugs', []);
     }
 
     public function test_paul_recommends_real_relevant_courses_and_handles_unknown_or_unsafe_text(): void
@@ -131,7 +131,7 @@ class FreeLabTest extends TestCase
         foreach (['网页作品' => '做一个能打开的个人介绍网页', '合并订单汇总' => '把几份 CSV 合成一张汇总表', '验证提示词对照实验' => '用对照实验选出更合适的 Prompt'] as $question => $title) {
             $this->get('/lab?q='.urlencode($question))->assertOk()->assertSee('Z：可以从「'.$title.'」开始。');
         }
-        $this->get('/lab?q='.urlencode('修理自行车'))->assertSee('目前这三个任务还接不住');
+        $this->get('/lab?q='.urlencode('修理自行车'))->assertSee('目前已发布的任务还接不住');
         $this->get('/lab?q='.urlencode('<script>alert(1)</script>'))->assertOk()->assertDontSee('<script>alert(1)</script>', false);
         $this->getJson('/lab?q='.str_repeat('x', 301))->assertUnprocessable();
     }
@@ -157,7 +157,7 @@ class FreeLabTest extends TestCase
         $this->assertSame('人工修改后的课程', $course->fresh()->title);
     }
 
-    public function test_series_score_uses_configured_lesson_weights_without_a_ten_lesson_assumption(): void
+    public function test_series_percent_uses_equal_shares_without_a_ten_lesson_assumption(): void
     {
         $user = User::factory()->create();
         $series = CourseSeries::first();
@@ -168,9 +168,9 @@ class FreeLabTest extends TestCase
         $series->refresh()->update(['status' => 'published']); // Review the edited outline before allowing learning.
         $service = app(ProgressService::class);
         $service->save($user, $first, [true, true, true]);
-        $this->assertSame(30, $service->seriesScore($user, $series));
+        $this->assertSame(50, $service->seriesPercent($user, $series));
         $service->save($user, $last, [true, true, true]);
-        $this->assertSame(100, $service->seriesScore($user, $series));
+        $this->assertSame(100, $service->seriesPercent($user, $series));
     }
 
     public function test_publishing_requires_complete_constitution_fields(): void
@@ -195,12 +195,12 @@ class FreeLabTest extends TestCase
         $this->get(route('free.lesson', [$course, $active->slug]))->assertOk()->assertDontSee('old-stage');
         $this->get(route('free.lesson', [$course, $archived->slug]))->assertNotFound();
         app(ProgressService::class)->save($user, $active, [true, true, true]);
-        $this->assertSame(100, app(ProgressService::class)->seriesScore($user, $course));
+        $this->assertSame(100, app(ProgressService::class)->seriesPercent($user, $course));
         $this->assertSame(100, $oldProgress->fresh()->progress_percent);
         $this->assertDatabaseCount('lesson_progress', 2);
     }
 
-    public function test_five_website_lessons_award_twenty_points_each_and_require_final_task_acceptance(): void
+    public function test_five_website_lessons_contribute_twenty_percent_each_and_require_final_task_acceptance(): void
     {
         $course = CourseSeries::create(LegacyCourseDefinitions::constitution()['build-a-website'] + [
             'slug' => 'build-a-website', 'title' => '10分钟搭建.com网站', 'minutes' => 10,
@@ -218,19 +218,19 @@ class FreeLabTest extends TestCase
             ->assertSee('免费学习')->assertSee('data-server-score="0"', false)
             ->assertDontSee('data-availability="purchase"', false);
         foreach ($course->lessons()->get() as $lesson) {
-            $introduction->assertSee(route('free.lesson', [$course, $lesson->slug]), false)
+            $introduction->assertSee(route('lessons.show', [$course, $lesson->slug]), false)
                 ->assertDontSee($lesson->prompt)->assertDontSee($lesson->content);
         }
         $introduction->assertViewHas('series', fn ($series) => count($series['lessons']) === 5
-            && array_column($series['lessons'], 'score') === [20, 40, 60, 80, 100]);
+            && array_column($series['lessons'], 'slug') === array_column(WebsiteSetupLessons::all(), 'slug'));
         $this->get('/')->assertViewHas('series', fn ($courses) => collect($courses)->firstWhere('slug', $course->slug)['is_free'] === true);
         $this->actingAs(User::factory()->create());
         foreach ($course->lessons()->get() as $index => $lesson) {
-            $this->get('/series/build-a-website/lessons/'.$lesson->slug)->assertRedirect(route('free.lesson', [$course, $lesson->slug]));
+            $this->get('/series/build-a-website/lessons/'.$lesson->slug)->assertOk()->assertSee($lesson->prompt);
             $this->get(route('free.lesson', [$course, $lesson->slug]))->assertOk()->assertSee($lesson->title)
                 ->assertViewHas('lessons', fn ($lessons) => $lessons->count() === 5);
             $this->postJson(route('free.lesson', [$course, $lesson->slug]).'/progress', ['checks' => array_fill(0, count($lesson->checks), true)])
-                ->assertOk()->assertJson(['series_score' => ($index + 1) * 20]);
+                ->assertOk()->assertJson(['series_percent' => ($index + 1) * 20]);
             $this->get('/series/build-a-website')->assertOk()
                 ->assertSee('data-server-score="'.(($index + 1) * 20).'"', false)
                 ->assertViewHas('completedLessonSlugs', $course->lessons()->get()->take($index + 1)->pluck('slug')->all());
@@ -241,9 +241,9 @@ class FreeLabTest extends TestCase
         $this->actingAs($learner);
         $last = $course->lessons()->reorder()->orderByDesc('position')->first();
         $this->postJson(route('free.lesson', [$course, $last->slug]).'/progress', ['checks' => [true, true, true, false]])
-            ->assertOk()->assertJson(['completed' => false, 'series_score' => 80]);
+            ->assertOk()->assertJson(['completed' => false, 'series_percent' => 80]);
         $this->postJson(route('free.lesson', [$course, $last->slug]).'/progress', ['checks' => [true, true, true, true]])
-            ->assertOk()->assertJson(['completed' => true, 'series_score' => 100]);
+            ->assertOk()->assertJson(['completed' => true, 'series_percent' => 100]);
         $this->assertDatabaseCount('lesson_progress', 5);
     }
 
@@ -270,7 +270,7 @@ class FreeLabTest extends TestCase
         $this->get('/lab')->assertViewHas('courses', fn ($courses) => $courses->contains('id', $course->id));
     }
 
-    public function test_free_lab_requires_full_weight_and_a_final_acceptance_lesson(): void
+    public function test_free_lab_ignores_legacy_weights_and_cumulative_scores(): void
     {
         $course = CourseSeries::first();
         $lesson = $course->lessons()->first();
@@ -279,8 +279,8 @@ class FreeLabTest extends TestCase
             $lesson->update($incomplete);
             $course->refresh()->update(['status' => 'published']);
             $this->assertSame('published', $course->fresh()->status);
-            $this->get('/lab')->assertViewHas('courses', fn ($courses) => ! $courses->contains('id', $course->id));
-            $this->get(route('free.lesson', [$course, $lesson->slug]))->assertNotFound();
+            $this->get('/lab')->assertViewHas('courses', fn ($courses) => $courses->contains('id', $course->id));
+            $this->get(route('free.lesson', [$course, $lesson->slug]))->assertOk();
         }
     }
 

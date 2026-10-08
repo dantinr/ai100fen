@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\LessonProgress;
-use App\Support\FrontendCatalog;
+use App\Services\CourseCatalog;
+use App\Services\CourseAccessService;
+use App\Services\ProgressService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,14 +16,21 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function show(Request $request, FrontendCatalog $catalog): View
+    public function show(Request $request, CourseCatalog $catalog): View
     {
+        $records = LessonProgress::where('user_id', $request->user()->id)
+            ->whereHas('lesson.series', fn ($query) => $query->where('status', 'published'))
+            ->whereHas('lesson', fn ($query) => $query->where('status', 'published'))
+            ->with('lesson.series')->orderByDesc('updated_at')->get()
+            ->filter(fn ($record) => app(CourseAccessService::class)->canAccess($record->lesson->series, $record->lesson));
         return view('frontend.me', [
             'series' => $catalog->all(), 'user' => $request->user(),
-            'freeProgress' => LessonProgress::where('user_id', $request->user()->id)
-                ->whereHas('lesson.series', fn ($query) => $query->freeLab())
-                ->whereHas('lesson', fn ($query) => $query->where('status', 'published'))
-                ->with('lesson.series')->orderByDesc('updated_at')->get(),
+            'freeProgress' => $records,
+            'courseProgress' => $records->groupBy('lesson.course_series_id')->map(fn ($items) => [
+                'course' => $items->first()->lesson->series,
+                'percent' => app(ProgressService::class)->seriesPercent($request->user(), $items->first()->lesson->series),
+                'lesson' => $items->first()->lesson,
+            ]),
         ]);
     }
 

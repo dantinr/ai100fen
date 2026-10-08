@@ -21,10 +21,9 @@ class LessonsTable
                 TextColumn::make('title')->label('课时')->searchable()->description(fn ($record) => $record->goal),
                 TextColumn::make('series.title')->label('所属课程')->searchable(),
                 TextColumn::make('status')->label('状态')->badge()->formatStateUsing(fn (string $state) => ['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'][$state] ?? $state),
-                TextColumn::make('score')->label('累计分值'),
-                TextColumn::make('points')->label('验收权重'),
+                TextColumn::make('completion_share')->label('完成占比')->state(fn ($record) => $record->trashed() || $record->status === 'archived' ? '—' : round(100 / max(1, $record->series->lessons()->where('status', '!=', 'archived')->count()), 1).'%'),
                 TextColumn::make('minutes')->label('分钟'),
-                IconColumn::make('is_free')->label('免费试看')->boolean(),
+                IconColumn::make('is_free')->label('免费访问')->state(fn ($record) => $record->series->is_free || $record->is_free)->boolean(),
             ])
             ->filters([
                 SelectFilter::make('course_series_id')->label('所属课程')->relationship('series', 'title')->searchable()->preload()

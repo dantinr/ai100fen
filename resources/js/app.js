@@ -162,93 +162,14 @@ document.querySelectorAll('[data-copy]').forEach((button) => {
     });
 });
 
-// Browser progress is a preview record only and never grants access to a lesson.
-// Keep previous course records intact; the five-lesson course starts with server purchase.
-const learningPage = document.querySelector('[data-learning-lesson]');
-const previewPoints = Number(learningPage?.dataset.previewPoints ?? 20);
-const storageKey = 'ai100fen.frontend-progress.v3';
-const acceptanceCount = document.querySelectorAll('[data-learning-lesson] [data-acceptance]').length || 3;
-let progress = { started: false, completed: false, checks: Array(acceptanceCount).fill(false) };
-function loadProgress() {
-    try {
-        const saved = JSON.parse(localStorage.getItem(storageKey));
-        if (saved && typeof saved === 'object') progress = {
-            started: saved.started === true,
-            completed: saved.completed === true,
-            checks: Array.from({ length: acceptanceCount }, (_, index) => saved.checks?.[index] === true),
-        };
-    } catch { /* A blocked or unavailable store keeps the page usable. */ }
-}
-loadProgress();
-function saveProgress() {
-    try { localStorage.setItem(storageKey, JSON.stringify(progress)); }
-    catch { toast('浏览器未允许保存，学习记录仅在当前页面有效'); }
-}
+// Course progress comes exclusively from the authenticated server response.
 function renderProgress() {
-    const score = progress.completed ? previewPoints : 0;
-    document.querySelectorAll('[data-progress-for]').forEach((target) => {
-        const currentScore = target.dataset.serverScore !== undefined
-            ? Number(target.dataset.serverScore)
-            : (target.dataset.progressFor === 'build-a-website' ? score : 0);
-        target.querySelector('[data-score]').textContent = currentScore;
-        const segments = target.querySelector('.progress-segments');
-        [...segments.children].forEach((segment, index) => segment.classList.toggle('filled', index < currentScore / 10));
-        updateUfoProgress(target, currentScore);
+    document.querySelectorAll('[data-progress-for][data-server-score]').forEach((target) => {
+        const percent = Number(target.dataset.serverScore);
+        target.querySelector('[data-score]').textContent = percent;
+        target.querySelectorAll('.progress-segments>span').forEach((segment, index) => segment.classList.toggle('filled', index < percent / 10));
+        updateUfoProgress(target, percent);
     });
-    if (progress.completed) document.querySelectorAll('[data-lesson-row="server-and-ip"]').forEach((row) => {
-        if (row.closest('[data-series]')?.querySelector('[data-server-score]')) return;
-        row.classList.add('is-completed');
-        const mark = row.querySelector('.lesson-completion');
-        if (mark) mark.hidden = false;
-        const state = row.querySelector('.outline-state');
-        if (state) state.textContent = '已完成';
-    });
-    const myPage = document.querySelector('[data-my-progress]');
-    if (myPage) {
-        const website = myPage.querySelector('[data-my-course="build-a-website"]');
-        const hasRecord = Boolean(website && progress.started);
-        myPage.querySelector('[data-total-score]').textContent = hasRecord ? score : 0;
-        myPage.querySelector('[data-started-count]').textContent = hasRecord ? 1 : 0;
-        myPage.querySelector('[data-my-empty]').hidden = hasRecord;
-        myPage.querySelector('[data-my-course-list]').hidden = !hasRecord;
-        if (!website) return;
-        website.hidden = !progress.started;
-        if (progress.completed) {
-            website.querySelector('[data-current-lesson]').textContent = '已完成购买服务器 · 下一步：授权Agent管理服务器（待发布）';
-            website.querySelector('[data-continue-link]').href = '/series/build-a-website/lessons/authorize-agent';
-        }
-    }
-}
-let syncAcceptance;
-if (learningPage) {
-    progress.started = true;
-    saveProgress();
-    const checks = [...learningPage.querySelectorAll('[data-acceptance]')];
-    const complete = learningPage.querySelector('[data-complete-lesson]');
-    function renderAcceptance() {
-        checks.forEach((input, index) => { input.checked = progress.completed || progress.checks[index]; input.disabled = progress.completed; });
-        complete.disabled = progress.completed || !progress.checks.every(Boolean);
-        if (progress.completed) {
-            complete.innerHTML = `<i data-lucide="circle-check"></i>已完成 · ${previewPoints}分`;
-            learningPage.querySelector('[data-completion-hint]').textContent = `第一个${previewPoints}分，已记录。继续把下一步做成。`;
-            createIcons({ icons });
-        }
-    }
-    syncAcceptance = renderAcceptance;
-    checks.forEach((input, index) => input.addEventListener('change', () => { progress.checks[index] = input.checked; saveProgress(); renderAcceptance(); }));
-    complete.addEventListener('click', () => {
-        if (progress.completed || !progress.checks.every(Boolean)) return;
-        progress.completed = true;
-        saveProgress(); renderAcceptance(); renderProgress();
-        toast(`第一个${previewPoints}分，完成！`);
-    });
-    renderAcceptance();
 }
 renderProgress();
-window.addEventListener('pageshow', (event) => {
-    if (event.persisted) { loadProgress(); syncAcceptance?.(); }
-    renderProgress();
-});
-window.addEventListener('storage', (event) => {
-    if (event.key === storageKey) { loadProgress(); syncAcceptance?.(); renderProgress(); }
-});
+window.addEventListener('pageshow', renderProgress);

@@ -48,7 +48,7 @@
                 <span class="text-link">从探索可能开始<i data-lucide="arrow-right" aria-hidden="true"></i></span>
             </a>
         </div>
-        <p class="about-scale-note">“10分钟”用于设计一个小步骤，“100分钟”用于组织一项完整任务，“100分”代表完成并验收自己的成果。这是课程设计的尺度，实际用时会受到前置准备、任务范围和个人基础的影响。</p>
+        <p class="about-scale-note">“10分钟”用于设计一个小步骤，“100分钟”用于组织一项完整任务，“100分”代表完成并验收自己的成果。课程完成度按当前课时数计算为百分比，课数与时长可随任务调整；实际用时会受到前置准备、任务范围和个人基础的影响。</p>
     </section>
 
     <section class="about-section about-story" aria-labelledby="about-why-title">

@@ -23,12 +23,12 @@
         </div>
     </section>
     <section class="catalog-section" aria-label="100分钟课程方向">
-        <div class="catalog-heading"><h2>挑一个感兴趣的任务。</h2><a class="text-link" href="{{ route('series.index') }}">全部100分钟<i data-lucide="arrow-right"></i></a></div>
-        <div class="course-grid">@foreach($series as $course)<x-course-card :course="$course" />@endforeach</div>
+        <div class="catalog-heading"><h2>挑一个感兴趣的任务。</h2><a class="text-link" href="{{ route('series.index') }}">全部课程<i data-lucide="arrow-right"></i></a></div>
+        <div class="course-grid">@forelse($series as $course)<x-course-card :course="$course" />@empty<p>课程正在准备，发布后会显示在这里。</p>@endforelse</div>
     </section>
-    @if(collect($series)->contains('slug', 'build-a-website'))
-    <section class="first-step-band"><div class="first-step-icon"><i data-lucide="play"></i></div><div><span class="eyebrow">先试着做成一小步</span><h2>10分钟搭建.com网站</h2><p>人与 Agent 协作 · 图文试看 · 无需登录</p></div><a class="button button-dark" href="{{ route('lessons.show', ['slug' => 'build-a-website', 'lessonSlug' => 'server-and-ip']) }}">开始免费试看<i data-lucide="arrow-right"></i></a></section>
+    @if($starterTask = app(\App\Services\CourseCatalog::class)->starter())
+    <section class="first-step-band"><div class="first-step-icon"><i data-lucide="play"></i></div><div><span class="eyebrow">先试着做成一小步</span><h2>{{ $starterTask['title'] }}</h2><p>人与 Agent 协作 · 亲自验收 · 无需登录</p></div><a class="button button-dark" href="{{ $starterTask['url'] }}">开始免费学习<i data-lucide="arrow-right"></i></a></section>
     @endif
-    <section class="home-bottom"><div class="home-method"><div class="section-heading"><span class="eyebrow">不是看完了，而是做成了</span><h2>从0分，到自己的100分。</h2></div><div class="method-steps"><div><span class="method-number">01</span><h3>选一个任务</h3><p>从你真正想完成的事情开始。</p></div><div><span class="method-number">02</span><h3>完成一小步</h3><p>给 Agent 明确目标，观察它执行。</p></div><div><span class="method-number">03</span><h3>验收你的结果</h3><p>每完成一步，离做成更近一点。</p></div></div></div><div class="home-live"><div class="section-heading row-heading"><h2>一起解决真实问题</h2><a class="text-link" href="{{ route('live') }}">直播<i data-lucide="arrow-up-right"></i></a></div><span class="live-status"><span class="status-dot"></span>首场直播筹备中</span><h3>把一个网站，从想法做到上线</h3><p>人负责目标与验收，Agent 负责执行。</p><a class="text-link" href="{{ route('live') }}">查看直播安排<i data-lucide="arrow-right"></i></a></div></section>
+    <section class="home-bottom"><div class="home-method"><div class="section-heading"><span class="eyebrow">不是看完了，而是做成了</span><h2>从第一步，到真正做成。</h2></div><div class="method-steps"><div><span class="method-number">01</span><h3>选一个任务</h3><p>从你真正想完成的事情开始。</p></div><div><span class="method-number">02</span><h3>完成一小步</h3><p>给 Agent 明确目标，观察它执行。</p></div><div><span class="method-number">03</span><h3>验收你的结果</h3><p>每完成一步，离做成更近一点。</p></div></div></div><div class="home-live"><div class="section-heading row-heading"><h2>一起解决真实问题</h2><a class="text-link" href="{{ route('live') }}">直播<i data-lucide="arrow-up-right"></i></a></div><span class="live-status"><span class="status-dot"></span>首场直播筹备中</span><h3>把一个网站，从想法做到上线</h3><p>人负责目标与验收，Agent 负责执行。</p><a class="text-link" href="{{ route('live') }}">查看直播安排<i data-lucide="arrow-right"></i></a></div></section>
 </div>
 @endsection

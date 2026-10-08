@@ -18,7 +18,7 @@ export function updateUfoProgress(target, progress) {
     path.dataset.ufoScore = String(score);
     path.style.setProperty('--ufo-progress', String(score / 100));
     path.setAttribute('aria-valuenow', String(score));
-    path.setAttribute('aria-valuetext', `当前完成${score}分，共100分`);
+    path.setAttribute('aria-valuetext', `当前完成${score}%`);
     widget.dataset.progress = String(score);
     path.querySelectorAll('.ufo-path-nodes>span').forEach((node, index) => {
         node.classList.toggle('is-reached', index * 10 <= score);

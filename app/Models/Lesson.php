@@ -47,8 +47,8 @@ class Lesson extends Model
             if ($lesson->exists && $lesson->isDirty('course_series_id')) {
                 throw ValidationException::withMessages(['course_series_id' => '已有课时不能移动到另一门课程。']);
             }
-            if ($lesson->exists && $lesson->isDirty(['checks', 'points', 'score']) && $lesson->progress()->exists()) {
-                throw ValidationException::withMessages(['checks' => '已有学习记录，不能直接改变验收项或分值。请创建新的课时草稿。']);
+            if ($lesson->exists && $lesson->isDirty('checks') && $lesson->progress()->exists()) {
+                throw ValidationException::withMessages(['checks' => '已有学习记录，不能直接改变验收项。请创建新的课时草稿。']);
             }
             foreach (['checks', 'objectives'] as $field) {
                 $items = $lesson->$field;
@@ -79,7 +79,7 @@ class Lesson extends Model
         });
         static::saved(function (self $lesson) {
             // Structural lesson changes require a course review and republish.
-            if ($lesson->wasRecentlyCreated || $lesson->wasChanged(['status', 'points', 'score', 'position'])) {
+            if ($lesson->wasRecentlyCreated || $lesson->wasChanged(['status', 'position'])) {
                 $lesson->series()->where('status', 'published')->update(['status' => 'draft']);
             }
         });

@@ -94,12 +94,7 @@ class CourseSeries extends Model
     {
         $query->where('status', 'published')->where('is_free', true)
             ->whereDoesntHave('lessons', fn (Builder $lessons) => $lessons->whereNotIn('status', ['published', 'archived']))
-            ->whereHas('lessons', fn (Builder $lessons) => $lessons->where('status', 'published'))
-            // Gradual publication is allowed; Free Lab still offers complete tasks.
-            ->where(Lesson::selectRaw('SUM(points)')->whereColumn('course_series_id', 'course_series.id')->where('status', '!=', 'archived'), 100)
-            ->where(Lesson::select('score')->whereColumn('course_series_id', 'course_series.id')
-                ->where('status', 'published')
-                ->orderByDesc('position')->orderByDesc('id')->limit(1), 100);
+            ->whereHas('lessons', fn (Builder $lessons) => $lessons->where('status', 'published'));
     }
 
     public function scopeDisplayOrder(Builder $query): void

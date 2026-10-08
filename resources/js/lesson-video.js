@@ -116,7 +116,7 @@ document.querySelectorAll('[data-lesson-video]').forEach(section => {
             player = new Aliplayer(config, showReady);
             player.on('uiReady', showReady);
             player.on('error', fail);
-            // Watching a video does not submit acceptance or award completion points.
+            // Watching a video does not submit acceptance or increase completion percentage.
         } catch {
             if (!disposed) fail();
         }

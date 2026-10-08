@@ -6,7 +6,7 @@
     </a>
     <div class="course-card-content">
         <div class="course-kicker"><span>{{ $course['tag'] }}</span><span>{{ ($course['is_free'] ?? false) ? '完整免费' : '¥'.$course['price'].' / 门' }}</span></div>
-        <h3><a href="{{ route('series.show', $course['slug']) }}">{{ $course['question'] }}</a></h3>
+        <h3><a href="{{ route('series.show', $course['slug']) }}">{{ $course['title'] }}</a></h3>
         <p>{{ $course['description'] }}</p>
         <div class="course-card-bottom">
             <span class="course-card-keywords" aria-label="课程标签">@foreach($keywords as $keyword)<span class="course-keyword">{{ $keyword }}</span>@endforeach</span>

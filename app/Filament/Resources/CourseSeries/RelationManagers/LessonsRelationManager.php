@@ -35,6 +35,6 @@ class LessonsRelationManager extends RelationManager
         app(CourseOutlineService::class)->reorder(Filament::auth()->user(), $this->getOwnerRecord(), $order);
         $this->resetTable();
         $this->dispatch('course-outline-updated');
-        Notification::make()->title('大纲顺序已保存')->body('请核对分值和最终验收，课程草稿需重新发布。')->success()->send();
+        Notification::make()->title('大纲顺序已保存')->body('请核对课时顺序和最终验收，课程草稿需重新发布。')->success()->send();
     }
 }

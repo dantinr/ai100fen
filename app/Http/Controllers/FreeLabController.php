@@ -30,7 +30,9 @@ class FreeLabController extends Controller
 
     private function lesson(CourseSeries $series, string $slug, CourseAccessService $access): Lesson
     {
-        abort_unless(CourseSeries::freeLab()->whereKey($series->id)->exists(), 404);
+        if (request()->routeIs('free.*')) {
+            abort_unless(CourseSeries::freeLab()->whereKey($series->id)->exists(), 404);
+        }
         $lesson = $series->lessons()->where('slug', $slug)->firstOrFail();
         abort_unless($access->canAccess($series, $lesson), 404);
 
@@ -42,9 +44,10 @@ class FreeLabController extends Controller
         $lesson = $this->lesson($series, $lessonSlug, $access);
         $progress = $request->user() ? LessonProgress::where('user_id', $request->user()->id)->where('lesson_id', $lesson->id)->first() : null;
         $lessons = $series->lessons()->where('status', 'published')->get();
-        $score = $request->user() ? $progressService->seriesScore($request->user(), $series) : 0;
+        $score = $request->user() ? $progressService->seriesPercent($request->user(), $series) : 0;
 
         return view('frontend.free.lesson', compact('series', 'lesson', 'progress', 'lessons', 'score') + [
+            'lessonPercent' => round(100 / max(1, $series->lessons()->where('status', '!=', 'archived')->count()), 1),
             'completedLessonIds' => $request->user() ? $progressService->completedLessonIds($request->user(), $series) : [],
             'relationGroups' => app(CourseRelationPresenter::class)->groups($series),
         ]);
@@ -59,7 +62,7 @@ class FreeLabController extends Controller
         }
         $record = $progress->save($request->user(), $lesson, array_map(fn ($check) => (bool) $check, $data['checks']));
         if ($request->expectsJson()) {
-            return response()->json(['progress_percent' => $record->progress_percent, 'completed' => $record->completed_at !== null, 'series_score' => $progress->seriesScore($request->user(), $series)]);
+            return response()->json(['progress_percent' => $record->progress_percent, 'completed' => $record->completed_at !== null, 'series_percent' => $progress->seriesPercent($request->user(), $series)]);
         }
 
         return back()->with('free-progress-saved', true);
@@ -73,6 +76,34 @@ class FreeLabController extends Controller
 
         return response($file['content'])->header('Content-Type', 'application/octet-stream')
             ->header('Content-Disposition', 'attachment; filename="'.$file['name'].'"')
+            ->header('X-Content-Type-Options', 'nosniff');
+    }
+
+    public function showCourse(Request $request, string $slug, string $lessonSlug, CourseAccessService $access, ProgressService $progress)
+    {
+        return $this->show($request, CourseSeries::where('slug', $slug)->firstOrFail(), $lessonSlug, $access, $progress);
+    }
+
+    public function saveCourse(Request $request, string $slug, string $lessonSlug, CourseAccessService $access, ProgressService $progress)
+    {
+        return $this->save($request, CourseSeries::where('slug', $slug)->firstOrFail(), $lessonSlug, $access, $progress);
+    }
+
+    public function downloadCourse(string $slug, string $lessonSlug, string $resource, CourseAccessService $access)
+    {
+        return $this->download(CourseSeries::where('slug', $slug)->firstOrFail(), $lessonSlug, $resource, $access);
+    }
+
+    public function checklistCourse(string $slug, string $lessonSlug, CourseAccessService $access)
+    {
+        $lesson = $this->lesson(CourseSeries::where('slug', $slug)->firstOrFail(), $lessonSlug, $access);
+        $body = '# '.$lesson->title."：验收清单\n\n".$lesson->goal."\n\n";
+        foreach ($lesson->checks as $check) {
+            $body .= '- [ ] '.$check."\n";
+        }
+
+        return response($body)->header('Content-Type', 'text/markdown; charset=UTF-8')
+            ->header('Content-Disposition', 'attachment; filename="lesson-checklist.md"')
             ->header('X-Content-Type-Options', 'nosniff');
     }
 }

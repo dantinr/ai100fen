@@ -28,7 +28,7 @@ class LessonVideoTest extends TestCase
         $this->get(route('free.lesson', [$course, $lesson->slug]))->assertOk()
             ->assertSee('data-lesson-video', false)->assertSee($source)
             ->assertSee('亲自验收，才算做成')->assertDontSee('演示视频 · 非课程录播');
-        $this->get(route('courses.show', $course))->assertOk()->assertDontSee($source);
+        $this->get(route('series.show', $course))->assertOk()->assertDontSee($source);
         $course->update(['is_free' => false, 'price' => '100.00']);
         $this->get(route('free.lesson', [$course, $lesson->slug]))->assertNotFound()->assertDontSee($source);
         $this->assertDatabaseCount('lesson_progress', 0);

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Lessons\Schemas;
 
 use App\Models\Lesson;
+use App\Models\CourseSeries;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
@@ -23,16 +24,16 @@ class LessonForm
         return $schema
             ->columns(1)->components([
                 Section::make('课时基本信息')->columns(2)->schema([
-                    Select::make('course_series_id')->label('所属课程')->relationship('series', 'title')->searchable()->preload()->required()->disabled(fn (string $operation) => $operation === 'edit'),
+                    Select::make('course_series_id')->label('所属课程')->relationship('series', 'title')->searchable()->preload()->required()->live()->disabled(fn (string $operation) => $operation === 'edit'),
                     TextInput::make('title')->label('课时名称')->required()->maxLength(255),
                     TextInput::make('slug')->label('课时地址标识')->required()->maxLength(150)->regex('/\A[a-z0-9]+(?:-[a-z0-9]+)*\z/')
                         ->rules(fn (Get $get, ?Lesson $record) => [Rule::unique('lessons', 'slug')->where('course_series_id', $get('course_series_id'))->ignore($record?->id)]),
                     Select::make('status')->label('课时状态')->options(['draft' => '草稿', 'published' => '已发布', 'archived' => '已归档'])->default('draft')->required()->live(),
                     TextInput::make('position')->label('大纲顺序')->numeric()->integer()->minValue(1)->maxValue(65535)->required()->default(1),
                     TextInput::make('minutes')->label('预计时长（分钟）')->numeric()->integer()->minValue(1)->maxValue(65535)->required()->default(10),
-                    TextInput::make('score')->label('累计展示分值')->numeric()->integer()->minValue(1)->maxValue(100)->required()->default(10)->helperText('标准课程依次10、20至100；最后一课应验收整个任务。'),
-                    TextInput::make('points')->label('本课验收权重')->numeric()->integer()->minValue(1)->maxValue(100)->required()->default(10)->helperText('标准课时10；单课完整免费任务100。修改大纲、状态或分值后须重新发布课程。'),
-                    Toggle::make('is_free')->label('付费课程的免费试看课时')->default(false)->helperText('完整免费由课程配置决定，此选项只表示单个课时试看。'),
+                    Toggle::make('is_free')->label('付费课程的免费试看课时')->default(false)
+                        ->hidden(fn (Get $get) => (bool) CourseSeries::find($get('course_series_id'))?->is_free)
+                        ->helperText('整门课程免费时，已发布课时自动免费，无需单独设置。'),
                 ]),
                 Section::make('视频播放器')->schema([
                     TextInput::make('video_url')->label('视频地址（可选）')->url()->startsWith('https://')->maxLength(2048)->helperText('填写 HTTPS 直连 HLS / MP4 媒体地址，不是视频网站观看页。'),
@@ -64,7 +65,7 @@ class LessonForm
                         Textarea::make('content')->label('文件文本内容')->required()->rows(6),
                     ]),
                 ]),
-                Section::make('人工验收')->description('已有学习记录的验收项与分值不能直接修改；需要调整时创建新的课时草稿。')->schema([
+                Section::make('人工验收')->description('完成百分比按当前课时数均分。已有学习记录的验收项不能直接修改；需要调整时创建新的课时草稿。')->schema([
                     TagsInput::make('checks')->label('可逐项验证的验收标准')->default([])->required(fn (Get $get) => $get('status') === 'published'),
                 ]),
             ]);

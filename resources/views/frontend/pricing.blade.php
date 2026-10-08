@@ -48,7 +48,7 @@
         </details>
         <details>
             <summary>100分代表什么？<i data-lucide="plus"></i></summary>
-            <p>100分代表一个系列的完成度。每完成并验收一个标准 Lesson，增加10分；完成10个步骤，达到100分。它不是考试成绩，也不是职业认证。</p>
+            <p>AI100分是品牌名称。学习进度按已验收课时数占当前总课时数的百分比动态计算；完成全部步骤并验收真实成果才达到100%。课时数量与时长可按任务调整。</p>
         </details>
         <details>
             <summary>需要先学会编程吗？<i data-lucide="plus"></i></summary>

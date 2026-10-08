@@ -96,7 +96,7 @@ class LessonVideoPosterTest extends TestCase
         $path = route('free.lesson', [$course, $lesson->slug]);
 
         $this->get($path)->assertOk()->assertSee($posterUrl)->assertDontSee($coverUrl);
-        $this->get(route('courses.show', $course))->assertOk()->assertDontSee($posterUrl);
+        $this->get(route('series.show', $course))->assertOk()->assertDontSee($posterUrl);
         $this->administrator();
         $this->get(route('courses.preview', [$course, $lesson->slug]))->assertOk()->assertSee($posterUrl);
         Storage::disk('public')->delete($poster);

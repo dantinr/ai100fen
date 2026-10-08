@@ -19,8 +19,9 @@ Route::get('/lab/{series}/{lessonSlug}/resources/{resource}', [FreeLabController
 Route::get('/series', [FrontendController::class, 'index'])->name('series.index');
 Route::get('/courses/{series}', PublicCourseController::class)->name('courses.show');
 Route::get('/series/{slug}', [FrontendController::class, 'series'])->name('series.show');
-Route::get('/series/{slug}/lessons/{lessonSlug}', [FrontendController::class, 'lesson'])->name('lessons.show');
-Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FrontendController::class, 'checklist'])->name('lessons.checklist');
+Route::get('/series/{slug}/lessons/{lessonSlug}', [FreeLabController::class, 'showCourse'])->name('lessons.show');
+Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FreeLabController::class, 'checklistCourse'])->name('lessons.checklist');
+Route::get('/series/{slug}/lessons/{lessonSlug}/resources/{resource}', [FreeLabController::class, 'downloadCourse'])->name('lessons.resource');
 Route::get('/pricing', [FrontendController::class, 'pricing'])->name('pricing');
 Route::get('/live', [FrontendController::class, 'live'])->name('live');
 Route::get('/live/{session:slug}/enter', [\App\Http\Controllers\LiveEntryController::class, 'enter'])->name('live.enter');
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/questions/{question}', [QuestionController::class, 'show'])->whereNumber('question')->name('questions.show');
     Route::get('/preview/courses/{series}/{lessonSlug?}', CoursePreviewController::class)->name('courses.preview');
     Route::post('/lab/{series}/{lessonSlug}/progress', [FreeLabController::class, 'save'])->middleware('throttle:60,1,free-progress:')->name('free.progress');
+    Route::post('/series/{slug}/lessons/{lessonSlug}/progress', [FreeLabController::class, 'saveCourse'])->middleware('throttle:60,1,free-progress:')->name('lessons.progress');
     Route::get('/me', [ProfileController::class, 'show'])->name('me');
     Route::patch('/me/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/me/password', [ProfileController::class, 'password'])->middleware('throttle:6,1,password:')->name('password.update');

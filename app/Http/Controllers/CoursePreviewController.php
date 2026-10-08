@@ -19,6 +19,7 @@ class CoursePreviewController extends Controller
         return response()->view($lesson ? 'frontend.free.lesson' : 'frontend.preview.course', [
             'series' => $series, 'lessons' => $lessons, 'lesson' => $lesson,
             'isPreview' => true, 'progress' => null, 'score' => 0,
+            'lessonPercent' => round(100 / max(1, $lessons->count()), 1),
             'relationGroups' => app(CourseRelationPresenter::class)->groups($series, preview: true),
         ])->header('Cache-Control', 'private, no-store');
     }
