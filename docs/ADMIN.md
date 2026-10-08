@@ -56,6 +56,8 @@ php artisan admin:set 已注册邮箱
 
 本地已独立执行仅新增nullable `lessons.deleted_at`及索引的迁移，核对既有业务字段数据未变。线上发布须安排维护窗口，由运维备份并审阅后独立执行新增迁移，再验证缓存与页面；常规git pull Hook不自动迁移，仅pull不能完成本次上线。新代码依赖此字段，不要在未迁移状态下开放站点：
 
+2026-10-08已在当前预览服务器独立完成这份迁移（批次11），全部既有业务字段与环境配置校验不变，后台课时回收站已随代码发布。该环境后续无新迁移时继续普通`git pull`，无需重复执行；其他环境仍先审阅并备份。
+
 ```bash
 php artisan migrate --path=database/migrations/2026_10_07_180000_add_lesson_soft_deletes.php --force --no-interaction
 php artisan migrate:status
