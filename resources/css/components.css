@@ -472,6 +472,10 @@ h1,h2,h3 { font-family:var(--font-heading); }
 .free-badge { color:var(--color-text); background:var(--color-accent); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-badge); font-weight:600; }
 .free-task-icon { color:var(--color-text); background:var(--color-primary); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-card); box-shadow:var(--shadow-sm); }
 .free-note,.free-card-meta { color:var(--color-text-muted); }
+.lesson-notes-editor { background:var(--color-bg); color:var(--color-text); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-input); }
+.lesson-notes-editor:focus-visible { outline:3px solid var(--color-secondary); outline-offset:3px; }
+.lesson-notes-editor:disabled { color:var(--color-text-muted); }
+.lesson-notes-meta { color:var(--color-text-muted); }
 .free-question-form input,.free-paul-form input { background:var(--color-bg); color:var(--color-text); border:var(--border-width-default) solid var(--color-border); border-radius:var(--radius-input); }
 .free-question-form input:focus-visible,.free-paul-form input:focus-visible { outline:3px solid var(--color-secondary); outline-offset:3px; }
 .free-recommendations { background:var(--color-surface-alt); border-radius:var(--radius-card); }

@@ -5,6 +5,7 @@ import './paul';
 import './free-lab';
 import './course-share';
 import './lesson-video';
+import './lesson-notes';
 import './question-topics';
 import './question-lab';
 import './live-schedule';

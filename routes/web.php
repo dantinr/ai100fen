@@ -5,6 +5,7 @@ use App\Http\Controllers\CommitHistoryController;
 use App\Http\Controllers\CoursePreviewController;
 use App\Http\Controllers\FreeLabController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\LessonNoteController;
 use App\Http\Controllers\LiveEntryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicCourseController;
@@ -44,6 +45,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::get('/preview/courses/{series}/{lessonSlug?}', CoursePreviewController::class)->name('courses.preview');
     Route::post('/lab/{series}/{lessonSlug}/progress', [FreeLabController::class, 'save'])->middleware('throttle:60,1,free-progress:')->name('free.progress');
     Route::post('/series/{slug}/lessons/{lessonSlug}/progress', [FreeLabController::class, 'saveCourse'])->middleware('throttle:60,1,free-progress:')->name('lessons.progress');
+    Route::put('/series/{series}/lessons/{lessonSlug}/notes', LessonNoteController::class)->middleware('throttle:30,1,lesson-note:')->name('lessons.notes');
     Route::get('/me', [ProfileController::class, 'show'])->name('me');
     Route::get('/me/learning/{progress}', [ProfileController::class, 'history'])->whereNumber('progress')->name('learning.history');
     Route::patch('/me/profile', [ProfileController::class, 'update'])->name('profile.update');

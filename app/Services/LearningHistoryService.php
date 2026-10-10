@@ -42,6 +42,7 @@ class LearningHistoryService
             'lesson_title' => $lesson?->title ?? $snapshot['lesson_title'] ?? '历史课时',
             'course' => $course, 'lesson' => $lesson,
             'progress_percent' => $record->progress_percent, 'completed_at' => $record->completed_at,
+            'notes' => $record->notes,
             'available' => (bool) $available, 'removed' => $removed,
             'notice' => $removed ? '课程已下架' : '课程暂未开放',
             'url' => route('learning.history', $record->id),

@@ -13,6 +13,8 @@ php artisan migrate --path=database/migrations/2026_10_10_140000_preserve_progre
 
 D-060仍使用RESTRICT外键，只有管理员确认最终删除的事务才保存最小快照并解绑原记录，不连带删除进度。迁移本身不更改旧验收数据、不下架课程；存在已解绑历史记录后不可直接rollback，迁移会拒绝丢失历史的回滚。新记录页和个人中心须保持private/no-store；下架记录入口410、越权记录404、公开已删除课程/资料404。同slug新课程不得接管历史进度。
 
+待发布D-061（2026-10-10）：课时私人课堂笔记新增lesson_progress.notes/notes_version/notes_updated_at，本地已备份迁移，服务器仍15份迁移、未发布此项。此批须在维护窗口备份并审阅后独立执行`php artisan migrate --path=database/migrations/2026_10_10_160000_add_notes_to_lesson_progress.php --force --no-interaction`，刷新缓存/FPM后恢复访问并核对旧字段和记录数；不能仅pull而遗漏迁移。Hook仍不迁移，不更改环境变量或真实学习数据；已有非空笔记时迁移拒绝直接rollback。
+
 前端在开发机执行`npm run build`，将`public/build`与源码一起提交、推送。服务器直接使用仓库中的构建产物，不需要Node或手工上传资源。
 
 ## 本地推送

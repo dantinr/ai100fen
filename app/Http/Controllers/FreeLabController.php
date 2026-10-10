@@ -46,11 +46,11 @@ class FreeLabController extends Controller
         $lessons = $series->lessons()->where('status', 'published')->get();
         $score = $request->user() ? $progressService->seriesPercent($request->user(), $series) : 0;
 
-        return view('frontend.free.lesson', compact('series', 'lesson', 'progress', 'lessons', 'score') + [
+        return response()->view('frontend.free.lesson', compact('series', 'lesson', 'progress', 'lessons', 'score') + [
             'lessonPercent' => round(100 / max(1, $series->lessons()->where('status', '!=', 'archived')->count()), 1),
             'completedLessonIds' => $request->user() ? $progressService->completedLessonIds($request->user(), $series) : [],
             'relationGroups' => app(CourseRelationPresenter::class)->groups($series),
-        ]);
+        ])->header('Cache-Control', 'private, no-store');
     }
 
     public function save(Request $request, CourseSeries $series, string $lessonSlug, CourseAccessService $access, ProgressService $progress)

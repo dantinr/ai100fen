@@ -262,6 +262,9 @@ deleted_course_snapshot JSON nullable（D-060，最小名称/ID快照）
 progress_percent      decimal(5,2) default 0
 last_position_seconds int default 0
 completed_at          timestamp nullable
+notes                 text nullable（D-061，纯文本，最多10000字）
+notes_version         unsigned int default 0（D-061，笔记编辑版本）
+notes_updated_at      timestamp nullable（D-061，最近保存时间）
 created_at
 updated_at
 ```
@@ -277,6 +280,14 @@ updated_at
 所有Series均按已验收的已发布课时数÷当前未归档、未删除课时数计算百分比，全部阶段及最终任务验收完成才到100%；课数变化后动态重算，不改写已有记录。Solve依据问题目标状态，Create依据真实成品，Explore依据实验与证据结论，不能将实验失败视为未完成。
 
 D-031已对免费任务实现服务端LessonProgress与清单验收。D-057整门免费与付费课程的免费试看复用同一账号进度；网站旧v1/v2/v3浏览器分值保留但不再显示或自动迁移。付费内容的购买/订阅授权与完整学习仍待实现。
+
+### D-061课堂笔记（当前实现）
+
+复用`(user_id, lesson_id)`唯一记录，不建立重复笔记库。纯文本经Blade转义展示，保留空白及换行；notes/notes_version/notes_updated_at受guard保护，由LessonNoteService明确写入。首次保存建立0%记录（checks为空、completed_at为空），不意味着验收完成；已有记录的验收字段、播放位置与创建时间保持。笔记保存更新独立版本和保存时间，正常updated_at代表最近学习活动；验收保存不改笔记或版本。
+
+认证PUT `/series/{series}/lessons/{lessonSlug}/notes`统一按服务端当前用户保存，不接收笔记ID或客户端归属。课程/课时匹配及公开可学习权限在取内容和事务锁后均检查，已删除、归档、草稿或未获权限内容不可写。沿用用户→课程→课时锁顺序序列化首次保存，notes_version独立于验收状态，旧版本且内容不同返回409；相同内容重试幂等。最大10000字、版本整数、CSRF及30次/分钟限流，JSON回执只返回版本/时间，不返回私人内容；无JS的冲突保留旧输入。
+
+课时详情响应统一private/no-store，只读取本人的进度及笔记；访客禁用编辑，管理员预览不读取真实笔记。D-060最终删除仍保留整条记录和笔记，本人历史入口只读展示，越权404；不通过同slug自动转移。清空并保存只清空笔记，不删除进度。回滚新增字段前若有非空笔记则拒绝执行，服务器迁移独立于pull Hook。
 
 ---
 

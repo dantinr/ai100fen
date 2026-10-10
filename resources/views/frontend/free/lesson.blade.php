@@ -34,7 +34,7 @@
             <p>{{ $series->final_outcome }}</p>
             <span class="free-note">约 {{ $series->minutes }} 分钟 · 图文实践 · 验收后完成100%</span>
             @if(!$isPreview)<x-course-share :url="route('series.show', $series->slug)" :title="$series->title" :text="$series->final_outcome" />@endif
-            <nav class="lesson-quick-nav" aria-label="本课内容">@if($lesson->video_url || (app()->environment('local') && config('player.demo_enabled')))<a href="#lesson-video"><i data-lucide="video"></i>视频</a>@endif<a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a></nav>
+            <nav class="lesson-quick-nav" aria-label="本课内容">@if($lesson->video_url || (app()->environment('local') && config('player.demo_enabled')))<a href="#lesson-video"><i data-lucide="video"></i>视频</a>@endif<a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a><a href="#lesson-notes"><i data-lucide="notebook-pen"></i>课堂笔记</a></nav>
         </div>
         <div class="lesson-hero-art" aria-hidden="true">
             <span class="lesson-art-orbit"></span><span class="lesson-art-orbit lesson-art-orbit-inner"></span>
@@ -50,7 +50,7 @@
         <article class="free-lesson-content">
             @if($hasVideo)
                 <x-lesson-video :source="$lesson->video_url" :poster="$lesson->videoPosterUrl() ?? $series->coverUrl()" :title="$lesson->title" :compact="true" />
-                <nav class="lesson-quick-nav" aria-label="本课内容"><a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a></nav>
+                <nav class="lesson-quick-nav" aria-label="本课内容"><a href="#lesson-steps"><i data-lucide="list-checks"></i>操作步骤</a><a href="#lesson-prompt-section"><i data-lucide="terminal"></i>Prompt</a><a href="#lesson-acceptance"><i data-lucide="circle-check"></i>验收清单</a><a href="#lesson-notes"><i data-lucide="notebook-pen"></i>课堂笔记</a></nav>
             @endif
             <section class="free-panel lesson-goal-panel"><div class="lesson-section-kicker"><i data-lucide="flag"></i>本课的小目标</div>
                 @if($hasVideo)<h2>你要做成什么？</h2>@else<h2 class="lesson-title-with-agent"><span>{{ $lesson->title }}</span><x-lesson-agent-mark :course="$series->slug" :lesson="$lesson->slug" /><x-lesson-completion :completed="!$isPreview && (bool) $progress?->completed_at" :lesson="$lesson->id" /></h2><p class="free-note">第{{ $lessonIndex }}节 · 约{{ $lesson->minutes }}分钟 · 完成占比 {{ $lessonPercent }}%</p><h3>你要做成什么？</h3>@endif
@@ -73,6 +73,7 @@
                     @foreach($lesson->checks as $check)<label class="free-check"><input type="checkbox" disabled><span>{{ $check }}</span></label>@endforeach
                 @else
                 <p>逐项检查实际成果后再勾选。这里只保存你的验收确认，不会自动检查电脑里的文件。</p>
+                <p>本课已验收：<strong data-free-percent>{{ $progress?->progress_percent ?? 0 }}%</strong></p>
                 <form data-free-progress data-lesson-id="{{ $lesson->id }}" action="{{ route($progressRoute, [$series, $lesson->slug]) }}" method="post">
                     @csrf
                     @foreach($lesson->checks as $index => $check)
@@ -89,13 +90,8 @@
                 @endif
             </section>
         </article>
-        <aside class="free-sidebar" aria-label="当前课时">
-            <div class="free-panel lesson-focus-panel">
-                <div class="lesson-objectives-sidebar"><div class="lesson-section-kicker"><i data-lucide="flag"></i>这一课，要做成什么</div><h2>本课目标</h2><x-lesson-objectives :objectives="$lesson->objectives" :goal="$lesson->goal" /></div>
-                <p class="free-note">第{{ $lessonIndex }}节 · 约{{ $lesson->minutes }}分钟 · 完成占比 {{ $lessonPercent }}%</p>
-                @if(!$isPreview)<p>本课已验收：<strong data-free-percent>{{ $progress?->progress_percent ?? 0 }}%</strong></p>@endif
-                <a class="text-link lesson-focus-action" href="#lesson-acceptance">{{ $isPreview ? '查看本课验收' : '去验收本课' }}<i data-lucide="arrow-down"></i></a>
-            </div>
+        <aside class="free-sidebar" aria-label="课堂笔记">
+            <x-lesson-notes :series="$series" :lesson="$lesson" :progress="$progress" :preview="$isPreview" :learning-route="$learningRoute" />
         </aside>
     </div>
     <section class="free-panel lesson-route-panel" aria-labelledby="lesson-course-outline-title">

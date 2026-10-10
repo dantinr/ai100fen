@@ -24,6 +24,12 @@ php artisan admin:set 已注册邮箱
 
 D-059新增可空JSON列，本地及2026-10-10服务器发布已独立备份审阅后执行。其他新环境需执行`php artisan migrate --path=database/migrations/2026_10_10_120000_add_course_series_prerequisites.php --force --no-interaction`；既有数据不改写，git pull Hook不执行迁移。
 
+### 私人课堂笔记（D-061，待服务器发布）
+
+课时前台右侧为学习者自己的文本笔记，管理员不维护或查看他人笔记；课程目标在正文保留。笔记首次保存建立0%学习记录，不能取得完成资格；之后笔记与验收分别维护。可清空文字并保存，不删除学习记录。管理员预览不读取笔记，有记录课时的独立删除/验收项编辑保护保持；课程整体最终删除沿用D-060，保留笔记并在本人历史记录页只读展示。
+
+本地备份并执行`2026_10_10_160000_add_notes_to_lesson_progress.php`，旧业务字段及记录数核对不变。服务器须审阅/备份后独立执行`php artisan migrate --path=database/migrations/2026_10_10_160000_add_notes_to_lesson_progress.php --force --no-interaction`；新代码读取这三个字段，不能只pull而不迁移，部署在维护窗口完成。Hook不自动迁移，不新增环境变量、依赖或管理员授权。有非空笔记时迁移拒绝rollback，避免丢失用户内容。
+
 课程基本信息可上传16:9横向封面（建议1600×900，JPG/PNG/WebP，最大2 MB），可在编辑页裁切或移除。已发布课程更换封面后立即显示；未上传或文件缺失时保留原有海报。封面只存公开图片路径，不影响课程状态、课时权限或进度。课程管理列表会显示缩略图，前台首页、100分钟目录、免费任务列表使用同一封面比例。`/series`介绍页封面显示课程目标及成果清单，使用已有最终成果与完成标准；所有已发布课程读取后台最终成果，所有课程读取数据库公开介绍。上传封面仍用于课程卡片及播放器回退画面。
 
 封面文件放在`storage/app/public/course-covers`，不进入Git。首次使用前以项目用户运行`php artisan storage:link`，确认`public/storage`指向该目录；生产新增字段须审阅`2026_10_02_200000_add_course_series_cover.php`并独立迁移。日常git pull Hook不会自动迁移或创建链接，详见`deploy/README.md`。
