@@ -2,14 +2,16 @@
 
 namespace App\Filament\Support;
 
+use App\Filament\Resources\CourseSeries\Pages\ListCourseSeries;
 use App\Models\CourseSeries;
 use App\Services\CourseDeletionService;
+use Filament\Actions\BulkAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Validation\Rule;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
 class CourseDeletionActions
@@ -44,23 +46,45 @@ class CourseDeletionActions
         return ForceDeleteAction::make()->label('最终删除')->authorize('forceDelete')
             ->modalHeading(fn (CourseSeries $record) => '最终删除“'.$record->title.'”？')
             ->modalDescription('将永久删除课程、全部课时和相关课程连接，无法恢复。有学习记录的课程禁止最终删除；上传封面文件保留。')
-            ->modalSubmitActionLabel('确认最终删除')->successNotificationTitle('课程已最终删除')
-            ->schema([
-                TextInput::make('confirmation')->label('输入课程地址标识确认')->required()
-                    ->helperText(fn (CourseSeries $record) => '请输入：'.$record->slug)
-                    ->rules(fn (CourseSeries $record) => [Rule::in([$record->slug])])
-                    ->validationMessages(['in' => '课程地址标识不一致，请核对后再确认。']),
-            ])
-            ->using(function (CourseSeries $record, array $data, $livewire): bool {
+            ->modalSubmitActionLabel('确认')->successNotificationTitle('课程已最终删除')
+            ->using(function (CourseSeries $record, ForceDeleteAction $action): bool {
                 try {
-                    app(CourseDeletionService::class)->permanentlyDelete(Filament::auth()->user(), $record, $data['confirmation']);
+                    app(CourseDeletionService::class)->permanentlyDelete(Filament::auth()->user(), $record);
                 } catch (ValidationException $exception) {
-                    throw ValidationException::withMessages([
-                        $livewire->getSchema($livewire->getMountedActionSchemaName())->getStatePath().'.confirmation' => $exception->errors()['confirmation'],
-                    ]);
+                    Notification::make()->title('课程未删除')->body(e(implode('；', $exception->validator->errors()->all())))->danger()->send();
+                    $action->halt();
                 }
 
                 return true;
+            });
+    }
+
+    public static function permanentlyDeleteMany(): BulkAction
+    {
+        return BulkAction::make('forceDelete')->label('批量最终删除')->icon('heroicon-o-trash')->color('danger')
+            ->authorize(fn ($livewire) => $livewire instanceof ListCourseSeries && $livewire->activeTab === 'trash' && Filament::auth()->user()?->is_admin === true)
+            ->visible(fn ($livewire) => $livewire instanceof ListCourseSeries && $livewire->activeTab === 'trash')
+            ->requiresConfirmation()
+            ->modalHeading(fn (Collection $records) => '最终删除所选'.$records->count().'门课程？')
+            ->modalDescription('将永久删除所选课程、全部课时和课程连接，无法恢复；上传文件保留。任一课程已有学习记录或选择失效时，整批不删除。')
+            ->modalSubmitActionLabel('确认')
+            ->action(function (Collection $records, BulkAction $action, ListCourseSeries $livewire): void {
+                try {
+                    $selected = array_map('strval', $livewire->selectedTableRecords);
+                    $resolved = array_map('strval', $records->modelKeys());
+                    sort($selected);
+                    sort($resolved);
+                    if ($livewire->isTrackingDeselectedTableRecords || $selected !== $resolved) {
+                        throw ValidationException::withMessages(['confirmation' => '所选课程已变化，请刷新回收站后重新选择；整批未删除。']);
+                    }
+                    $count = app(CourseDeletionService::class)->permanentlyDeleteMany(Filament::auth()->user(), $livewire->selectedTableRecords);
+                } catch (ValidationException $exception) {
+                    Notification::make()->title('批量删除未完成')->body(e(implode('；', $exception->validator->errors()->all())))->danger()->send();
+                    $action->halt();
+                }
+                Notification::make()->title('所选课程已最终删除')->body('共'.$count.'门课程，上传文件保留。')->success()->send();
+                $livewire->deselectAllTableRecords();
+                $action->success();
             });
     }
 }

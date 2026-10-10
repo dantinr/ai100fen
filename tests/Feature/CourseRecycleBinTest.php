@@ -17,7 +17,6 @@ use App\Services\LegacyCourseImporter;
 use Filament\Facades\Filament;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -82,7 +81,7 @@ class CourseRecycleBinTest extends TestCase
         $this->actingAs($learner)->get('/me')->assertViewHas('freeProgress', fn ($records) => $records->contains('id', $progress->id));
     }
 
-    public function test_final_deletion_requires_slug_confirmation_and_removes_only_course_content_and_connections(): void
+    public function test_final_deletion_uses_a_confirmation_modal_and_removes_only_course_content_and_connections(): void
     {
         Storage::fake('public');
         $course = CourseSeries::first();
@@ -97,9 +96,12 @@ class CourseRecycleBinTest extends TestCase
         $lessonIds = $course->lessons()->pluck('id');
         app(CourseDeletionService::class)->trash($this->admin, $course);
         $trash = Livewire::test(ListCourseSeries::class)->set('activeTab', 'trash');
-        $trash->callTableAction('forceDelete', $course, ['confirmation' => 'wrong-slug'])->assertHasTableActionErrors(['confirmation']);
+        $trash->mountTableAction('forceDelete', $course);
         $this->assertDatabaseHas('course_series', ['id' => $course->id]);
-        $trash->unmountTableAction()->callTableAction('forceDelete', $course, ['confirmation' => $course->slug])->assertHasNoTableActionErrors();
+        $action = $trash->instance()->getTable()->getAction('forceDelete')->record($course);
+        $this->assertTrue($action->isConfirmationRequired());
+        $this->assertSame('确认', $action->getModalSubmitActionLabel());
+        $trash->assertDontSee('输入课程地址标识确认')->callMountedTableAction()->assertHasNoTableActionErrors();
         $this->assertDatabaseMissing('course_series', ['id' => $course->id]);
         $this->assertSame(0, Lesson::whereIn('id', $lessonIds)->count());
         $this->assertDatabaseCount('course_relations', 1);
@@ -121,7 +123,7 @@ class CourseRecycleBinTest extends TestCase
         ]);
         app(CourseDeletionService::class)->trash($this->admin, $course);
         Livewire::test(ListCourseSeries::class)->set('activeTab', 'trash')
-            ->callTableAction('forceDelete', $course, ['confirmation' => $course->slug])->assertHasTableActionErrors(['confirmation']);
+            ->callTableAction('forceDelete', $course)->assertNotified('课程未删除');
         $this->assertSoftDeleted($course);
         $this->assertDatabaseHas('lessons', ['id' => $lesson->id]);
         $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id]);
@@ -129,24 +131,16 @@ class CourseRecycleBinTest extends TestCase
         $this->assertDatabaseMissing('course_catalog_suppressions', ['slug' => $course->slug]);
     }
 
-    public function test_a_course_must_enter_the_recycle_bin_before_final_deletion_and_services_validate_confirmation(): void
+    public function test_a_course_must_enter_the_recycle_bin_before_final_deletion(): void
     {
         $course = CourseSeries::first();
         $service = app(CourseDeletionService::class);
         $this->assertFalse(Gate::allows('forceDelete', $course));
         try {
-            $service->permanentlyDelete($this->admin, $course, $course->slug);
+            $service->permanentlyDelete($this->admin, $course);
             $this->fail('Active courses cannot be finally deleted.');
         } catch (AuthorizationException) {
             $this->assertDatabaseHas('course_series', ['id' => $course->id, 'deleted_at' => null]);
-        }
-        $service->trash($this->admin, $course);
-        try {
-            $service->permanentlyDelete($this->admin, $course->fresh(), 'wrong');
-            $this->fail('The service must also validate confirmation.');
-        } catch (ValidationException $exception) {
-            $this->assertArrayHasKey('confirmation', $exception->errors());
-            $this->assertSoftDeleted($course);
         }
     }
 
@@ -163,7 +157,7 @@ class CourseRecycleBinTest extends TestCase
         $trashed = $course->fresh();
         foreach (['restore', 'permanentlyDelete'] as $method) {
             try {
-                $service->$method($ordinary, $trashed, $course->slug);
+                $service->$method($ordinary, $trashed);
                 $this->fail('Ordinary users cannot manage the recycle bin.');
             } catch (AuthorizationException) {
                 $this->assertSoftDeleted($course);
@@ -184,7 +178,7 @@ class CourseRecycleBinTest extends TestCase
         $service->restore($this->admin, $website->fresh());
         $this->get('/series/build-a-website')->assertNotFound();
         $service->trash($this->admin, $website->fresh());
-        $service->permanentlyDelete($this->admin, $website->fresh(), $website->slug);
+        $service->permanentlyDelete($this->admin, $website->fresh());
         $this->assertLegacyWebsiteHidden();
         $this->assertSame(0, app(LegacyCourseImporter::class)->run()['created']);
         CourseSeries::create(['slug' => $website->slug, 'title' => '明确新建的网站课程', 'category' => 'create']);

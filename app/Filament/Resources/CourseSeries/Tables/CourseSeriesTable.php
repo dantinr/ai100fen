@@ -22,6 +22,7 @@ class CourseSeriesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->selectCurrentPageOnly()
             ->reorderable('sort_order', fn ($livewire) => $livewire->activeTab !== 'trash')
             ->authorizeReorder(fn () => Filament::auth()->user()?->is_admin === true)
             ->reorderRecordsTriggerAction(fn (Action $action, bool $isReordering) => $action->tooltip($isReordering ? '完成排序' : '拖动调整课程展示顺序'))
@@ -68,6 +69,9 @@ class CourseSeriesTable
                 CourseDeletionActions::trash(),
                 CourseDeletionActions::restore(),
                 CourseDeletionActions::permanentlyDelete(),
+            ])
+            ->toolbarActions([
+                CourseDeletionActions::permanentlyDeleteMany(),
             ])
             ->defaultSort('sort_order');
     }

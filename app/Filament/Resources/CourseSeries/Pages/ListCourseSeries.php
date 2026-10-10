@@ -17,6 +17,19 @@ class ListCourseSeries extends ListRecords
 {
     protected static string $resource = CourseSeriesResource::class;
 
+    public function deselectAllTableRecords(): void
+    {
+        $this->selectedTableRecords = [];
+        $this->isTrackingDeselectedTableRecords = false;
+        parent::deselectAllTableRecords();
+    }
+
+    public function updatedActiveTab(): void
+    {
+        parent::updatedActiveTab();
+        $this->deselectAllTableRecords();
+    }
+
     public function getTabs(): array
     {
         return [

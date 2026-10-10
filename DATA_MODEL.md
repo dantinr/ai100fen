@@ -187,7 +187,7 @@ Series.is_free开放该系列全部已发布Lesson，不要求修改Lesson.is_fr
 
 迁移`2026_10_04_010000_add_course_recycle_bin`增加可空且有索引的`course_series.deleted_at`，所有既有记录初始为null；Lesson和LessonProgress结构不变。CourseSeries使用SoftDeletes，正常查询与路由绑定排除回收站课程，后台回收站显式onlyTrashed。软删除不改写课时、记录或关系；恢复统一为draft，需重新发布。
 
-最终删除事务锁课程与课时，校验管理员、回收站状态、完整slug及该课程全部课时（含归档及D-055软删除课时）不存在任何LessonProgress。条件满足后经CourseRelationService清理出入向连接、永久删除全部课时，最后forceDelete课程；条件失败保持全部记录。现有外键仍restrictOnDelete，不改为自动级联，学习记录不能因删除课程被连带删除。上传封面文件不删除。
+最终删除事务锁课程与课时，校验当前管理员、回收站状态及该课程全部课时（含归档及D-055软删除课时）不存在任何LessonProgress。D-058按用户要求取消slug输入，单门及批量都由确认弹窗触发；批量只处理明确选择的ID，检查选择完整性并逐课授权，任一失败整批回滚。条件满足后经CourseRelationService清理出入向连接、永久删除全部课时，最后forceDelete课程；条件失败保持全部记录。现有外键仍restrictOnDelete，不改为自动级联，学习记录不能因删除课程被连带删除。上传封面文件不删除；没有新增字段或迁移。
 
 `course_catalog_suppressions`只含slug（varchar150主键）、created_at、updated_at；保存已最终删除slug，阻止旧静态目录/兼容路由和安装命令重新显示或导入，不保存课程内容或个人信息。管理员明确新建同slug课程时删除标记。自动导入同时检查withTrashed记录和该表。回收站课程也不参与课时管理、展示排序、关系目标选择、Free Lab/推荐和学习资料访问；原学习记录仍保留，重新发布后可继续读取。
 

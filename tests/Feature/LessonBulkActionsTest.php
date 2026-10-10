@@ -23,8 +23,11 @@ class LessonBulkActionsTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private CourseSeries $course;
+
     private Lesson $first;
+
     private Lesson $second;
 
     protected function setUp(): void
@@ -155,7 +158,7 @@ class LessonBulkActionsTest extends TestCase
         $service = app(LessonBulkActionService::class);
         $service->trash($this->admin, [$this->first->id]);
         app(CourseDeletionService::class)->trash($this->admin, $this->course);
-        app(CourseDeletionService::class)->permanentlyDelete($this->admin, $this->course->fresh(), $this->course->slug);
+        app(CourseDeletionService::class)->permanentlyDelete($this->admin, $this->course->fresh());
         $this->assertDatabaseMissing('lessons', ['id' => $this->first->id]);
         $this->assertDatabaseMissing('lessons', ['id' => $this->second->id]);
         $this->assertDatabaseMissing('course_series', ['id' => $this->course->id]);
@@ -169,7 +172,7 @@ class LessonBulkActionsTest extends TestCase
             'checks' => [false], 'progress_percent' => 0]);
         app(CourseDeletionService::class)->trash($this->admin, $this->course);
         try {
-            app(CourseDeletionService::class)->permanentlyDelete($this->admin, $this->course->fresh(), $this->course->slug);
+            app(CourseDeletionService::class)->permanentlyDelete($this->admin, $this->course->fresh());
             $this->fail('Historical progress must block final deletion.');
         } catch (ValidationException) {
             $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id]);
