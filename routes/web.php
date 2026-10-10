@@ -5,6 +5,7 @@ use App\Http\Controllers\CommitHistoryController;
 use App\Http\Controllers\CoursePreviewController;
 use App\Http\Controllers\FreeLabController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\LiveEntryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicCourseController;
 use App\Http\Controllers\QuestionController;
@@ -24,8 +25,8 @@ Route::get('/series/{slug}/lessons/{lessonSlug}/checklist', [FreeLabController::
 Route::get('/series/{slug}/lessons/{lessonSlug}/resources/{resource}', [FreeLabController::class, 'downloadCourse'])->name('lessons.resource');
 Route::get('/pricing', [FrontendController::class, 'pricing'])->name('pricing');
 Route::get('/live', [FrontendController::class, 'live'])->name('live');
-Route::get('/live/{session:slug}/enter', [\App\Http\Controllers\LiveEntryController::class, 'enter'])->name('live.enter');
-Route::get('/live/{session:slug}/replay', [\App\Http\Controllers\LiveEntryController::class, 'replay'])->name('live.replay');
+Route::get('/live/{session:slug}/enter', [LiveEntryController::class, 'enter'])->name('live.enter');
+Route::get('/live/{session:slug}/replay', [LiveEntryController::class, 'replay'])->name('live.replay');
 Route::get('/questions', QuestionTopicsController::class)->name('questions');
 Route::post('/questions/recommendations', [QuestionController::class, 'recommend'])->middleware('throttle:20,1,question-recommend:')->name('questions.recommend');
 Route::get('/commits', CommitHistoryController::class)->name('commits');
@@ -44,6 +45,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
     Route::post('/lab/{series}/{lessonSlug}/progress', [FreeLabController::class, 'save'])->middleware('throttle:60,1,free-progress:')->name('free.progress');
     Route::post('/series/{slug}/lessons/{lessonSlug}/progress', [FreeLabController::class, 'saveCourse'])->middleware('throttle:60,1,free-progress:')->name('lessons.progress');
     Route::get('/me', [ProfileController::class, 'show'])->name('me');
+    Route::get('/me/learning/{progress}', [ProfileController::class, 'history'])->whereNumber('progress')->name('learning.history');
     Route::patch('/me/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/me/password', [ProfileController::class, 'password'])->middleware('throttle:6,1,password:')->name('password.update');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

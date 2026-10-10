@@ -4,6 +4,15 @@
 
 最近发布：2026-10-08，D-057动态完成百分比、数据库课程唯一来源、整门免费继承，以及累计后台课时多选/批量操作；详情见本文末尾。当前全部13份迁移已执行，无新迁移的日常更新继续普通`git pull`。
 
+待发布（2026-10-10，D-059/D-060）：课程编辑项新增课前准备，以及有学习记录课程最终删除后保留历史与下架提示。此批包含两份新迁移，不能仅靠pull完成上线；本地已执行，服务器尚未迁移或发布。运维审阅、备份并在维护窗口内pull后，独立执行以下两条，再刷新配置/路由缓存、解除维护并验证后台编辑、个人中心、本人历史入口及公开课程访问。既有Hook不会迁移、删除课程或清理进度。
+
+```sh
+php artisan migrate --path=database/migrations/2026_10_10_120000_add_course_series_prerequisites.php --force --no-interaction
+php artisan migrate --path=database/migrations/2026_10_10_140000_preserve_progress_after_course_deletion.php --force --no-interaction
+```
+
+D-060仍使用RESTRICT外键，只有管理员确认最终删除的事务才保存最小快照并解绑原记录，不连带删除进度。迁移本身不更改旧验收数据、不下架课程；存在已解绑历史记录后不可直接rollback，迁移会拒绝丢失历史的回滚。新记录页和个人中心须保持private/no-store；下架记录入口410、越权记录404、公开已删除课程/资料404。同slug新课程不得接管历史进度。
+
 前端在开发机执行`npm run build`，将`public/build`与源码一起提交、推送。服务器直接使用仓库中的构建产物，不需要Node或手工上传资源。
 
 ## 本地推送

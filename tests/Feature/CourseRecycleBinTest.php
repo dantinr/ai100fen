@@ -65,7 +65,8 @@ class CourseRecycleBinTest extends TestCase
         $this->get(route('free.lesson', [$course, $lesson->slug]))->assertNotFound();
         $this->postJson(route('free.lesson', [$course, $lesson->slug]).'/progress', ['checks' => [true, true, true]])->assertNotFound();
         $this->get(route('free.resource', [$course, $lesson->slug, $lesson->resources[0]['name']]))->assertNotFound();
-        $this->actingAs($learner)->get('/me')->assertOk()->assertViewHas('freeProgress', fn ($records) => $records->isEmpty());
+        $this->actingAs($learner)->get('/me')->assertOk()->assertSee('课程已下架')
+            ->assertViewHas('freeProgress', fn ($records) => $records->contains('id', $progress->id));
 
         $this->actingAs($this->admin);
         $trash = Livewire::test(ListCourseSeries::class)->set('activeTab', 'trash');
@@ -112,23 +113,28 @@ class CourseRecycleBinTest extends TestCase
         $this->assertSame(2, app(FreeLabInstaller::class)->install() + CourseSeries::count());
     }
 
-    public function test_courses_with_learning_records_cannot_be_finally_deleted_and_keep_all_dependencies(): void
+    public function test_courses_with_learning_records_can_be_finally_deleted_without_losing_progress(): void
     {
         $course = CourseSeries::first();
         $lesson = $course->lessons()->first();
         $progress = LessonProgress::create(['user_id' => User::factory()->create()->id, 'lesson_id' => $lesson->id,
             'checks' => [false, false, false], 'progress_percent' => 0]);
+        $before = $progress->fresh()->getAttributes();
         $edge = app(CourseRelationService::class)->save($this->admin, $course, [
             'related_course_series_id' => CourseSeries::whereKeyNot($course->id)->first()->id, 'relation_type' => 'next', 'sort_order' => 1,
         ]);
         app(CourseDeletionService::class)->trash($this->admin, $course);
         Livewire::test(ListCourseSeries::class)->set('activeTab', 'trash')
-            ->callTableAction('forceDelete', $course)->assertNotified('课程未删除');
-        $this->assertSoftDeleted($course);
-        $this->assertDatabaseHas('lessons', ['id' => $lesson->id]);
-        $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id]);
-        $this->assertDatabaseHas('course_relations', ['id' => $edge->id]);
-        $this->assertDatabaseMissing('course_catalog_suppressions', ['slug' => $course->slug]);
+            ->callTableAction('forceDelete', $course)->assertNotified('课程已最终删除');
+        $this->assertDatabaseMissing('course_series', ['id' => $course->id]);
+        $this->assertDatabaseMissing('lessons', ['id' => $lesson->id]);
+        $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id, 'lesson_id' => null, 'progress_percent' => 0]);
+        $this->assertSame($course->title, $progress->fresh()->deleted_course_snapshot['course_title']);
+        foreach (['checks', 'progress_percent', 'last_position_seconds', 'completed_at', 'created_at', 'updated_at', 'user_id'] as $field) {
+            $this->assertSame($before[$field], $progress->fresh()->getAttributes()[$field]);
+        }
+        $this->assertDatabaseMissing('course_relations', ['id' => $edge->id]);
+        $this->assertDatabaseHas('course_catalog_suppressions', ['slug' => $course->slug]);
     }
 
     public function test_a_course_must_enter_the_recycle_bin_before_final_deletion(): void

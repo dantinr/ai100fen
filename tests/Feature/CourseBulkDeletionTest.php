@@ -89,7 +89,7 @@ class CourseBulkDeletionTest extends TestCase
         $this->assertSame(0, app(FreeLabInstaller::class)->install());
     }
 
-    public function test_progress_on_a_later_course_including_a_trashed_lesson_rolls_back_the_entire_batch(): void
+    public function test_progress_on_a_trashed_lesson_is_preserved_when_the_entire_course_batch_is_deleted(): void
     {
         $lesson = $this->second->lessons()->first();
         $lesson->delete();
@@ -100,15 +100,38 @@ class CourseBulkDeletionTest extends TestCase
         ]);
         $this->trashCourses();
         Livewire::test(ListCourseSeries::class)->set('activeTab', 'trash')
-            ->callTableBulkAction('forceDelete', [$this->first, $this->second])->assertNotified('批量删除未完成')
-            ->assertSet('selectedTableRecords', [(string) $this->first->id, (string) $this->second->id]);
+            ->callTableBulkAction('forceDelete', [$this->first, $this->second])->assertNotified('所选课程已最终删除')
+            ->assertSet('selectedTableRecords', []);
+        foreach ([$this->first, $this->second] as $course) {
+            $this->assertDatabaseMissing('course_series', ['id' => $course->id]);
+            $this->assertDatabaseMissing('lessons', ['course_series_id' => $course->id]);
+            $this->assertDatabaseHas('course_catalog_suppressions', ['slug' => $course->slug]);
+        }
+        $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id, 'lesson_id' => null, 'progress_percent' => 0]);
+        $this->assertSame($lesson->title, $progress->fresh()->deleted_course_snapshot['lesson_title']);
+        $this->assertDatabaseMissing('course_relations', ['id' => $edge->id]);
+    }
+
+    public function test_failure_on_a_later_course_rolls_back_deleted_content_and_detached_history(): void
+    {
+        $lesson = $this->first->lessons()->first();
+        $progress = LessonProgress::create(['user_id' => $this->admin->id, 'lesson_id' => $lesson->id, 'checks' => [false], 'progress_percent' => 0]);
+        $this->trashCourses();
+        $this->partialMock(CourseRelationService::class, function ($mock) {
+            $mock->shouldReceive('removeForDeletedCourse')->andReturnUsing(function (User $user, CourseSeries $course) {
+                if ($course->id === $this->second->id) {
+                    throw ValidationException::withMessages(['confirmation' => '模拟关联清理失败']);
+                }
+            });
+        });
+        Livewire::test(ListCourseSeries::class)->set('activeTab', 'trash')
+            ->callTableBulkAction('forceDelete', [$this->first, $this->second])->assertNotified('批量删除未完成');
         foreach ([$this->first, $this->second] as $course) {
             $this->assertSoftDeleted($course);
             $this->assertDatabaseHas('lessons', ['course_series_id' => $course->id]);
             $this->assertDatabaseMissing('course_catalog_suppressions', ['slug' => $course->slug]);
         }
-        $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id, 'progress_percent' => 0]);
-        $this->assertDatabaseHas('course_relations', ['id' => $edge->id]);
+        $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id, 'lesson_id' => $lesson->id, 'deleted_course_snapshot' => null]);
     }
 
     public function test_invalid_missing_and_restored_selections_never_partially_delete(): void

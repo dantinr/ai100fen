@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\CourseSeries;
-use App\Models\LessonProgress;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -43,8 +42,15 @@ class CourseDeletionService
             $course = $this->lockCourse($course);
             Gate::forUser($user->refresh())->authorize('forceDelete', $course);
             $lessons = $course->lessons()->withTrashed()->lockForUpdate()->get();
-            if (LessonProgress::whereIn('lesson_id', $lessons->modelKeys())->exists()) {
-                throw ValidationException::withMessages(['confirmation' => '此课程已有学习记录，不能最终删除；请保留在回收站或恢复课程。']);
+            foreach ($lessons as $lesson) {
+                // Preserve history without changing checks, completion or learning timestamps.
+                DB::table('lesson_progress')->where('lesson_id', $lesson->id)->update([
+                    'lesson_id' => null,
+                    'deleted_course_snapshot' => json_encode([
+                        'course_id' => $course->id, 'course_title' => $course->title, 'course_slug' => $course->slug,
+                        'lesson_id' => $lesson->id, 'lesson_title' => $lesson->title, 'lesson_slug' => $lesson->slug,
+                    ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
+                ]);
             }
             // Keep a slug-only marker so legacy arrays and install commands cannot recreate deleted content.
             DB::table('course_catalog_suppressions')->updateOrInsert(['slug' => $course->slug], [

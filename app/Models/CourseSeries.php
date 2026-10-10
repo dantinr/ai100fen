@@ -21,13 +21,13 @@ class CourseSeries extends Model
 
     protected $attributes = [
         'user_intent' => '', 'final_outcome' => '', 'completion_criteria' => '[]',
-        'agent_role' => '[]', 'human_judgment_required' => '[]', 'recommendation_keywords' => '[]',
+        'agent_role' => '[]', 'human_judgment_required' => '[]', 'recommendation_keywords' => '[]', 'prerequisites' => '[]',
         'minutes' => 100, 'price' => 100, 'is_free' => false, 'status' => 'draft', 'sort_order' => 1000,
     ];
 
     protected function casts(): array
     {
-        return ['is_free' => 'boolean', 'price' => 'decimal:2', 'sort_order' => 'integer', 'objectives' => 'array', 'completion_criteria' => 'array', 'agent_role' => 'array', 'human_judgment_required' => 'array', 'recommendation_keywords' => 'array'];
+        return ['is_free' => 'boolean', 'price' => 'decimal:2', 'sort_order' => 'integer', 'objectives' => 'array', 'prerequisites' => 'array', 'completion_criteria' => 'array', 'agent_role' => 'array', 'human_judgment_required' => 'array', 'recommendation_keywords' => 'array'];
     }
 
     protected static function booted(): void
@@ -43,7 +43,7 @@ class CourseSeries extends Model
             if (! in_array($series->status, ['draft', 'published', 'archived'], true)) {
                 throw ValidationException::withMessages(['status' => '请选择有效的课程状态。']);
             }
-            foreach (['completion_criteria', 'agent_role', 'human_judgment_required', 'recommendation_keywords', 'objectives'] as $field) {
+            foreach (['completion_criteria', 'agent_role', 'human_judgment_required', 'recommendation_keywords', 'objectives', 'prerequisites'] as $field) {
                 $items = $series->$field;
                 if ($items !== null && (! is_array($items) || ! array_is_list($items) || collect($items)->contains(fn ($item) => ! is_string($item) || trim($item) === ''))) {
                     throw ValidationException::withMessages([$field => '请填写有效的具体事项清单。']);

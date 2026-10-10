@@ -175,19 +175,25 @@ Series.is_free开放该系列全部已发布Lesson，不要求修改Lesson.is_fr
 
 迁移`2026_10_02_120000_add_course_admin_and_theme_settings`只增加列与表，不改写课程、用户或进度记录：
 
-- `course_series.description`：nullable text，Markdown课程介绍；`objectives`：nullable JSON字符串数组，课程目标清单。沿用六项宪章字段，不以目标清单代替最终验收。
+- `course_series.description`：nullable text，Markdown课程简介；`objectives`：nullable JSON字符串数组，阶段成果清单。D-059后台“课程目标”复用`final_outcome`，不新增重复目标字段；沿用六项宪章字段，不以阶段清单代替最终验收。
 - `lessons.objectives`：nullable JSON字符串数组；`content`：nullable longtext，Markdown正文；`video_url`：nullable text，校验HTTPS链接，D-053在可访问课时页通过Aliplayer内嵌播放（HLS/MP4等直连媒体地址），公开介绍页不输出播放地址。无新增视频字段，PlayAuth/签名及DRM未实现；本地演示片源不入库、不代替真实录播。`goal`仍是课时最终目标，`steps`仍是有序标题/正文数组，作为可编辑课时大纲；不新增重复outline表或字段。
 - 课程大纲直接按未归档Lesson.position/id读取标题、目标、状态与当前完成占比；后台课时计数和排序集合同样排除归档课。后台排序服务授权、锁课程与课时、校验完整未归档ID集合及所属关系，不允许跨课程排序。主课时列表默认未归档，可切换归档筛选；管理员明确指定归档课地址仍可只读预览。
 - `lessons.video_poster`：nullable varchar(255)，由非破坏性迁移`2026_10_05_010000_add_lesson_video_poster`新增。保存public磁盘`lesson-video-posters/`下JPG/PNG/WebP图片路径；后台单图上传、16:9裁剪、最大2 MB，模型拒绝外部URL、路径穿越或其他目录/类型。可访问课时及管理员预览优先使用该图，未设置或文件缺失时回退课程封面，本地演示最后回退默认演示图。移除、更换或最终删除课程均保留原上传文件，不修改课时发布状态、验收或进度；封面是公开展示图片，不作为受保护的视频/资料附件。
 - 草稿的旧非空文本列保存空字符串，JSON清单保存空数组，新增扩展字段可以为空；数据库不必放宽旧约束。按D-047，课程发布需完整定义与至少一个已发布课时；D-057取消全部分值门槛。单课发布仍校验目标、步骤、Prompt与验收。课时结构/状态变更后课程退回草稿，需重新发布。
-- 课时已有LessonProgress时禁止直接修改checks，所有已有课时禁止移到另一课程；不删除或重置学习记录。旧points/score不再有业务效力。后台归档通过status实现。D-050课程删除使用独立deleted_at回收站；D-055增加课时批量软删除与恢复，任何学习记录阻止该批删除，不提供课时最终删除。只有没有任何学习记录的回收站课程可经管理员确认整体最终删除。
+- 课时已有LessonProgress时禁止直接修改checks，所有已有课时禁止移到另一课程；不删除或重置学习记录。旧points/score不再有业务效力。后台归档通过status实现。D-050课程删除使用独立deleted_at回收站；D-055增加课时批量软删除与恢复，任何学习记录阻止该批删除，不提供课时最终删除。D-060允许有学习记录的回收站课程经管理员确认整体最终删除，保留验收数据及名称快照；课时独立删除保护不变。
 - `theme_settings`：id、nullable theme、timestamps。只管理id=1的全站配置；null表示跟随APP_THEME，白名单来自config/themes.php，后台显式选择优先，非法值回退注册表默认。尚未迁移时前台继续用环境配置。不是用户偏好表；新增主题及Token仍通过代码登记。
+
+### D-059课程编辑与课前准备（当前实现）
+
+迁移`2026_10_10_120000_add_course_series_prerequisites`只新增`course_series.prerequisites`（nullable JSON有序字符串数组），不迁移、解析或改写旧简介、课程关系与学习记录。模型按array转换，拒绝非字符串或空白事项；空值展示为空清单。后台“课前准备”存工具、账号、文件等准备事项，公开CourseCatalog读取该字段并复用原准备区域，不回退静态内容。
+
+八项常用内容对应title、cover、description、final_outcome、recommendation_keywords、prerequisites，以及course_relations的prerequisite/next。前置和后续在表单内编排，保留关联ID、理由与排序，写入仍经CourseRelationService；没有新增重复关系列，recommended与其他课程不受影响。课程属性及两个关系类型整单事务保存，共享图锁优先；锁定的服务器快照拒绝过时表单覆盖外部关联修改。取消移除不改变数据，确认移除后仍须保存；只删连接，不删课程或进度。主要类别、状态、定价、展示排序及宪章定义移入可折叠区域，发布校验不变。
 
 ### D-050课程回收站（当前实现）
 
 迁移`2026_10_04_010000_add_course_recycle_bin`增加可空且有索引的`course_series.deleted_at`，所有既有记录初始为null；Lesson和LessonProgress结构不变。CourseSeries使用SoftDeletes，正常查询与路由绑定排除回收站课程，后台回收站显式onlyTrashed。软删除不改写课时、记录或关系；恢复统一为draft，需重新发布。
 
-最终删除事务锁课程与课时，校验当前管理员、回收站状态及该课程全部课时（含归档及D-055软删除课时）不存在任何LessonProgress。D-058按用户要求取消slug输入，单门及批量都由确认弹窗触发；批量只处理明确选择的ID，检查选择完整性并逐课授权，任一失败整批回滚。条件满足后经CourseRelationService清理出入向连接、永久删除全部课时，最后forceDelete课程；条件失败保持全部记录。现有外键仍restrictOnDelete，不改为自动级联，学习记录不能因删除课程被连带删除。上传封面文件不删除；没有新增字段或迁移。
+D-060替代旧学习记录禁令：最终删除事务锁课程与全部课时（含归档及D-055软删除课时），校验当前管理员及回收站状态；先为全部LessonProgress保存最小名称/ID快照并解绑lesson_id，不删除验收记录。D-058按用户要求取消slug输入，单门及批量都由确认弹窗触发；批量只处理明确选择的ID，检查选择完整性并逐课授权，任一失败整批回滚。条件满足后经CourseRelationService清理出入向连接、永久删除全部课时，最后forceDelete课程；条件失败保持全部记录。课时外键仍restrictOnDelete，不改为自动级联；D-060迁移仅放宽为nullable，以便在删除服务保存快照后明确解绑。学习记录不能因删除课程被连带删除，上传封面文件不删除。
 
 `course_catalog_suppressions`只含slug（varchar150主键）、created_at、updated_at；保存已最终删除slug，阻止旧静态目录/兼容路由和安装命令重新显示或导入，不保存课程内容或个人信息。管理员明确新建同slug课程时删除标记。自动导入同时检查withTrashed记录和该表。回收站课程也不参与课时管理、展示排序、关系目标选择、Free Lab/推荐和学习资料访问；原学习记录仍保留，重新发布后可继续读取。
 
@@ -195,7 +201,7 @@ Series.is_free开放该系列全部已发布Lesson，不要求修改Lesson.is_fr
 
 迁移`2026_10_07_180000_add_lesson_soft_deletes`为lessons增加nullable timestamp `deleted_at`及索引，既有课时初始null，不改写状态、内容或进度。Lesson使用SoftDeletes，deleted_at禁止公开批量赋值；常规Eloquent查询、课程关联和路由排除软删除课时。主课时列表onlyTrashed显示回收站，不提供编辑或最终删除；恢复复用原ID和slug，状态统一draft，原上传文件保留。归档仍使用status，两者不混用；旧静态目录同时过滤匹配课程/slug的删除课时，避免再次开放试看或清单下载。
 
-批量管理通过LessonBulkActionService：管理员权限重新查询、参数/失效选择校验、所属课程及课时行锁、逐课Gate授权和模型发布校验、整批事务；课时有任何学习记录时阻止整批软删除。常规大纲、课时计数、完整免费筛选和进度分母不包含软删除课时，状态/结构变化后课程退回草稿，恢复也须审核后分别发布。课程最终删除显式withTrashed检查课时进度并清理全部课时，既有restrictOnDelete外键不变。
+批量管理通过LessonBulkActionService：管理员权限重新查询、参数/失效选择校验、所属课程及课时行锁、逐课Gate授权和模型发布校验、整批事务；课时有任何学习记录时阻止整批软删除。常规大纲、课时计数、完整免费筛选和进度分母不包含软删除课时，状态/结构变化后课程退回草稿，恢复也须审核后分别发布。D-060课程最终删除显式withTrashed为全部课时进度保存快照、解绑后清理课时；独立课时删除仍保留进度保护，nullable课时外键继续restrictOnDelete。
 
 下列Lesson字段列表仍包含尚未实现的长期设计，以D-031、D-034、D-055及D-057当前字段为准。
 
@@ -238,10 +244,21 @@ order_no: 1..10
 
 ## 5. lesson_progress
 
+### D-060删除后的学习记录（当前实现）
+
+迁移`2026_10_10_140000_preserve_progress_after_course_deletion`增加`deleted_course_snapshot`（nullable JSON），并将lesson_id改为nullable unsigned bigint。课时外键保留RESTRICT，user_id外键及`(user_id, lesson_id)`唯一索引不变；不能直接级联删除进度。多个解绑历史记录的lesson_id为null，仍保留独立的原记录ID。
+
+快照仅含course_id/course_title/course_slug/lesson_id/lesson_title/lesson_slug，不保留正文、Prompt、代码或资料。CourseDeletionService在同一课程/课时锁事务内生成快照并明确解绑，再清理课程内容；任一失败全部回滚。checks、progress_percent、last_position_seconds、completed_at、created_at、updated_at和user_id不改动，不用重新计算历史课程完成百分比。快照字段受guard保护，不由公开进度请求写入；活跃内容与正常进度计算仍使用真实课时ID。
+
+LearningHistoryService只查询当前用户记录，并以显式withTrashed读取最小课程/课时元信息；不会改变正常学习关系或授权。`/me/learning/{progress}`按本人查找记录，普通用户及管理员都不能越权读取他人历史；删除后HTTP 410显示课程已下架，其他暂不可访问内容不跳转学习。记录页与个人中心private/no-store，不渲染已删除正文。恢复并发布可继续原ID进度；最终删除后即使复用slug也不绑定新课。
+
+本地迁移前保存私有表结构/进度备份，迁移后旧字段与业务记录数保持一致。线上由运维独立审阅及执行，Hook不迁移或清理记录。存在已解绑历史记录时down显式拒绝回滚，不能通过重新设置非空列或删除快照丢失历史数据。
+
 ```text
 id
 user_id              bigint fk
-lesson_id             bigint fk
+lesson_id             bigint fk nullable（D-060）
+deleted_course_snapshot JSON nullable（D-060，最小名称/ID快照）
 progress_percent      decimal(5,2) default 0
 last_position_seconds int default 0
 completed_at          timestamp nullable

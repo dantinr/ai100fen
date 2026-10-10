@@ -164,21 +164,18 @@ class LessonBulkActionsTest extends TestCase
         $this->assertDatabaseMissing('course_series', ['id' => $this->course->id]);
     }
 
-    public function test_course_final_deletion_cannot_ignore_progress_on_a_trashed_lesson(): void
+    public function test_course_final_deletion_preserves_progress_on_a_trashed_lesson(): void
     {
         app(LessonBulkActionService::class)->trash($this->admin, [$this->first->id]);
-        // Simulate historical or out-of-band data; final deletion must still inspect all lessons.
+        // Historical records for trashed lessons also need a retained snapshot.
         $progress = LessonProgress::create(['lesson_id' => $this->first->id, 'user_id' => User::factory()->create()->id,
             'checks' => [false], 'progress_percent' => 0]);
         app(CourseDeletionService::class)->trash($this->admin, $this->course);
-        try {
-            app(CourseDeletionService::class)->permanentlyDelete($this->admin, $this->course->fresh());
-            $this->fail('Historical progress must block final deletion.');
-        } catch (ValidationException) {
-            $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id]);
-            $this->assertDatabaseHas('lessons', ['id' => $this->first->id]);
-            $this->assertSoftDeleted($this->course);
-        }
+        app(CourseDeletionService::class)->permanentlyDelete($this->admin, $this->course->fresh());
+        $this->assertDatabaseHas('lesson_progress', ['id' => $progress->id, 'lesson_id' => null]);
+        $this->assertSame($this->first->title, $progress->fresh()->deleted_course_snapshot['lesson_title']);
+        $this->assertDatabaseMissing('lessons', ['id' => $this->first->id]);
+        $this->assertDatabaseMissing('course_series', ['id' => $this->course->id]);
     }
 
     public function test_archived_lessons_remain_visible_in_recycle_bin_and_parent_trash_blocks_restore(): void

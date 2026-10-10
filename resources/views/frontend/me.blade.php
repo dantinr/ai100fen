@@ -8,7 +8,7 @@
     <div class="me-section-title"><h2>我的学习进度</h2><a class="text-link" href="{{ route('series.index') }}">开始一个新任务<i data-lucide="plus"></i></a></div>
     <p class="free-note">进度按当前课程课时数动态计算。增减课时后比例会变化，已保存的验收记录保留。</p>
     @forelse($courseProgress as $entry)
-        <article class="free-progress-row"><div><h3><a href="{{ route('series.show', $entry['course']->slug) }}">{{ $entry['course']->title }}</a></h3><p>最近学习：{{ $entry['lesson']->title }}</p><x-ufo-progress :series="$entry['course']->slug" :score="$entry['percent']" /></div><a class="button button-dark" href="{{ route('lessons.show', ['slug' => $entry['course']->slug, 'lessonSlug' => $entry['lesson']->slug]) }}">继续学习<i data-lucide="arrow-right"></i></a></article>
+        <article class="free-progress-row"><div><h3><a href="{{ $entry['available'] ? route('series.show', $entry['course']->slug) : $entry['url'] }}">{{ $entry['course_title'] }}</a></h3><p>最近学习：{{ $entry['lesson_title'] }}</p>@if($entry['available'])<x-ufo-progress :series="$entry['course']->slug" :score="$entry['percent']" />@else<span class="free-badge">{{ $entry['notice'] }}</span><p class="free-note">学习和验收记录已保留。</p>@endif</div><a class="button button-dark" href="{{ $entry['url'] }}">{{ $entry['available'] ? '继续学习' : '查看记录' }}<i data-lucide="arrow-right"></i></a></article>
     @empty
         <div class="me-empty"><x-ufo-widget class="ufo-empty" /><h2>从第一步开始。</h2><p>完成课时验收并保存后，进度会显示在这里。</p><a class="button button-primary" href="{{ app(\App\Services\CourseCatalog::class)->starter()['url'] ?? route('series.index') }}">开始学习<i data-lucide="arrow-right"></i></a></div>
     @endforelse

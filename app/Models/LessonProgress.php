@@ -9,11 +9,11 @@ class LessonProgress extends Model
 {
     protected $table = 'lesson_progress';
 
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'deleted_course_snapshot'];
 
     protected function casts(): array
     {
-        return ['checks' => 'array', 'completed_at' => 'datetime'];
+        return ['checks' => 'array', 'completed_at' => 'datetime', 'deleted_course_snapshot' => 'array'];
     }
 
     public function lesson(): BelongsTo

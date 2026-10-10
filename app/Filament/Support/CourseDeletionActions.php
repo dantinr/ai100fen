@@ -45,7 +45,7 @@ class CourseDeletionActions
     {
         return ForceDeleteAction::make()->label('最终删除')->authorize('forceDelete')
             ->modalHeading(fn (CourseSeries $record) => '最终删除“'.$record->title.'”？')
-            ->modalDescription('将永久删除课程、全部课时和相关课程连接，无法恢复。有学习记录的课程禁止最终删除；上传封面文件保留。')
+            ->modalDescription('将永久删除课程内容、全部课时和课程连接，无法恢复。用户学习记录及课程/课时名称的历史快照保留，原学习入口提示课程已下架；上传文件保留。')
             ->modalSubmitActionLabel('确认')->successNotificationTitle('课程已最终删除')
             ->using(function (CourseSeries $record, ForceDeleteAction $action): bool {
                 try {
@@ -66,7 +66,7 @@ class CourseDeletionActions
             ->visible(fn ($livewire) => $livewire instanceof ListCourseSeries && $livewire->activeTab === 'trash')
             ->requiresConfirmation()
             ->modalHeading(fn (Collection $records) => '最终删除所选'.$records->count().'门课程？')
-            ->modalDescription('将永久删除所选课程、全部课时和课程连接，无法恢复；上传文件保留。任一课程已有学习记录或选择失效时，整批不删除。')
+            ->modalDescription('将永久删除所选课程内容、全部课时和课程连接，无法恢复；用户学习记录、名称快照及上传文件保留。选择失效或保存失败时整批不删除。')
             ->modalSubmitActionLabel('确认')
             ->action(function (Collection $records, BulkAction $action, ListCourseSeries $livewire): void {
                 try {

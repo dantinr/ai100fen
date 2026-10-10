@@ -19,6 +19,7 @@ class CourseCatalog
         if (! Schema::hasTable('course_series')) {
             return [];
         }
+
         return $this->publicCourses()->displayOrder()->with(['lessons' => fn ($query) => $query
             ->where('status', 'published')->select(['id', 'course_series_id', 'slug', 'title', 'position', 'goal', 'minutes', 'is_free'])])
             ->get()->map(fn ($course) => $this->present($course))->all();
@@ -63,9 +64,11 @@ class CourseCatalog
             'category_label' => $labels[$course->category],
             'tag' => $course->recommendation_keywords[0] ?? $labels[$course->category],
             'keywords' => $course->recommendation_keywords ?? [], 'cover_url' => $course->coverUrl(),
-            'image' => match ($course->category) { 'solve' => 'spreadsheet', 'explore' => 'analysis', default => 'website' },
+            'image' => match ($course->category) {
+                'solve' => 'spreadsheet', 'explore' => 'analysis', default => 'website'
+            },
             'available' => true, 'is_free' => $course->is_free, 'price' => $course->price,
-            'prerequisites' => [], 'deliverables' => $course->completion_criteria,
+            'prerequisites' => $course->prerequisites ?? [], 'deliverables' => $course->completion_criteria,
             'lessons' => $lessons,
         ];
     }

@@ -13,6 +13,72 @@ use Illuminate\Validation\ValidationException;
 
 class CourseRelationService
 {
+    public function snapshot(CourseSeries $course, string $type): string
+    {
+        return hash('sha256', $course->courseRelations()->where('relation_type', $type)->reorder('id')
+            ->get(['id', 'related_course_series_id', 'sort_order', 'description'])->toJson());
+    }
+
+    public function sync(User $user, CourseSeries $course, string $type, array $rows, string $snapshot): void
+    {
+        $user = $user->fresh();
+        abort_unless($user, 403);
+        Gate::forUser($user)->authorize('update', $course);
+        abort_unless(in_array($type, ['prerequisite', 'next'], true), 422);
+
+        DB::transaction(function () use ($user, $course, $type, $rows, $snapshot) {
+            CourseSeries::withTrashed()->orderBy('id')->lockForUpdate()->firstOrFail();
+            abort_unless(CourseSeries::whereKey($course->id)->exists(), 404);
+            if ($snapshot !== $this->snapshot($course, $type)) {
+                throw ValidationException::withMessages(['' => '课程关联已被更新，请刷新页面后再保存。']);
+            }
+            $rows = Validator::make(['rows' => $rows], [
+                'rows' => ['array'],
+                'rows.*' => ['array:id,related_course_series_id,sort_order,description'],
+                'rows.*.id' => ['nullable', 'integer'],
+                'rows.*.related_course_series_id' => ['required', 'integer', 'distinct'],
+                'rows.*.sort_order' => ['required', 'integer', 'min:0', 'max:999999'],
+                'rows.*.description' => ['nullable', 'string', 'max:500'],
+            ])->validate()['rows'];
+            $existing = $course->courseRelations()->where('relation_type', $type)->lockForUpdate()->get()->keyBy('id');
+            $kept = [];
+            foreach ($rows as $index => $row) {
+                if (filled($row['id'] ?? null)) {
+                    if (! $existing->has($row['id']) || in_array((int) $row['id'], $kept, true)) {
+                        throw ValidationException::withMessages(['rows.'.$index.'.related_course_series_id' => '关联已失效或不属于当前课程。']);
+                    }
+                    $kept[] = (int) $row['id'];
+                }
+            }
+            foreach ($existing as $relation) {
+                if (! in_array($relation->id, $kept, true)) {
+                    $this->remove($user, $course, $relation);
+                }
+            }
+            foreach ($rows as $index => $row) {
+                $relation = $existing->get($row['id'] ?? null);
+                if ($relation && (int) $row['related_course_series_id'] === $relation->related_course_series_id
+                    && (int) $row['sort_order'] === $relation->sort_order
+                    && ($row['description'] ?? null) === $relation->description) {
+                    continue;
+                }
+                try {
+                    $this->save($user, $course, [
+                        'related_course_series_id' => $row['related_course_series_id'],
+                        'relation_type' => $type, 'sort_order' => $row['sort_order'],
+                        'description' => $row['description'] ?? null,
+                    ], $relation);
+                } catch (ValidationException $exception) {
+                    $errors = [];
+                    foreach ($exception->errors() as $field => $messages) {
+                        $errors['rows.'.$index.'.'.$field] = $messages;
+                    }
+                    throw ValidationException::withMessages($errors);
+                }
+            }
+        }, 3);
+    }
+
     public function save(User $user, CourseSeries $course, array $data, ?CourseRelation $relation = null): CourseRelation
     {
         Gate::forUser($user)->authorize('update', $course);
