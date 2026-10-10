@@ -22,7 +22,7 @@ php artisan admin:set 已注册邮箱
 
 “课前准备”按回车添加工具、账号、文件等事项；“前置课程”用于关联建议先完成的课程，两者分别保存。公开课程页复用现有“开始之前，准备好”区域显示准备清单，未填写不展示。不会从旧课程简介自动提取或更改既有内容。
 
-D-059新增可空JSON列，本地已执行；服务器上线前需由运维独立审阅并执行`php artisan migrate --path=database/migrations/2026_10_10_120000_add_course_series_prerequisites.php --force --no-interaction`。既有数据不改写，git pull Hook不执行迁移。
+D-059新增可空JSON列，本地及2026-10-10服务器发布已独立备份审阅后执行。其他新环境需执行`php artisan migrate --path=database/migrations/2026_10_10_120000_add_course_series_prerequisites.php --force --no-interaction`；既有数据不改写，git pull Hook不执行迁移。
 
 课程基本信息可上传16:9横向封面（建议1600×900，JPG/PNG/WebP，最大2 MB），可在编辑页裁切或移除。已发布课程更换封面后立即显示；未上传或文件缺失时保留原有海报。封面只存公开图片路径，不影响课程状态、课时权限或进度。课程管理列表会显示缩略图，前台首页、100分钟目录、免费任务列表使用同一封面比例。`/series`介绍页封面显示课程目标及成果清单，使用已有最终成果与完成标准；所有已发布课程读取后台最终成果，所有课程读取数据库公开介绍。上传封面仍用于课程卡片及播放器回退画面。
 
@@ -150,7 +150,7 @@ D-057替代D-056：所有课程大纲读取数据库已发布、未删除课时�
 
 删除后个人中心仍显示学习与验收记录，标注“课程已下架”，点击“查看记录”进入仅本人可访问的提示页（HTTP 410）；其他用户和管理员不能通过公开记录入口查看他人记录。原公开课程、正文、下载与进度提交地址仍不可访问。恢复为草稿时提示暂未开放，重新发布后入口继续原课时；最终删除无法恢复内容，即使新建同slug课程，历史记录也不会绑定新内容。不提供课程完成百分比的虚假重算，保留原课时验收进度。
 
-D-060迁移`2026_10_10_140000_preserve_progress_after_course_deletion.php`新增nullable JSON快照并将lesson_id改为可空，仍保留RESTRICT外键和活跃课时的唯一约束。已在本地备份表结构与记录后执行，旧验收字段与业务记录数校验一致。服务器由运维独立审阅和备份后执行`php artisan migrate --path=database/migrations/2026_10_10_140000_preserve_progress_after_course_deletion.php --force --no-interaction`；Hook不迁移、不自动删除课程。若部署上一批课程编辑功能，还需执行D-059准备字段迁移。存在已解绑历史记录时禁止回滚这份迁移，避免丢失历史数据。
+D-060迁移`2026_10_10_140000_preserve_progress_after_course_deletion.php`新增nullable JSON快照并将lesson_id改为可空，仍保留RESTRICT外键和活跃课时的唯一约束。本地及2026-10-10服务器发布均已备份后执行，旧业务字段与记录数校验一致，服务器全部15份迁移Ran。其他新环境须独立审阅和备份后执行`php artisan migrate --path=database/migrations/2026_10_10_140000_preserve_progress_after_course_deletion.php --force --no-interaction`，并执行D-059准备字段迁移；Hook不迁移、不自动删除课程。存在已解绑历史记录时禁止回滚这份迁移，避免丢失历史数据。
 
 公开目录只查询数据库未删除记录；最终删除保留仅含slug/时间的屏蔽标记。课程导入和免费任务安装跳过回收站及已最终删除slug，不会自动重建；如管理员明确重新创建同slug课程，会清除标记。恢复课程请使用恢复按钮，不能以导入命令代替。
 
